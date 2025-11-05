@@ -1,0 +1,516 @@
+/********************************************
+ * 1) GLOBAL & BODY STYLES
+ *********************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-size: 0.83vw;
+}
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: #e0e8ef; /* Fallback background */
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/********************************************
+ * 2) APPLET CONTAINER (16:9 Aspect Ratio)
+ *********************************************/
+.applet-container {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  width: 100%; /* Max width for the applet */
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background-color: #6ca0dc; /* Fallback if image fails */
+  background-image: url("../assets/BG.jpg"); /* Ensure path is correct */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  gap: 8px;
+}
+
+/********************************************
+ * 3) TITLE BAR
+ *********************************************/
+.titleBar {
+  background: rgba(0, 0, 0, 0.15); /* More subtle background */
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  padding: 10px 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/********************************************
+ * 4) TOP MARQUEE
+ *********************************************/
+.top-marquee {
+  position: absolute;
+  top: 0;
+  left: 15.725vw; /* Starts at the right edge of logo (1vw + 14.725vw) */
+  right: 0; /* Extends to right edge of screen */
+  height: 5vh; /* 5% of viewport height */
+  background-color: rgba(0, 0, 0, 0.35); /* Black with 35% opacity */
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.top-marquee marquee {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 2vw;
+  line-height: 5vh;
+}
+
+/********************************************
+ * 5) LOGO IMAGE
+ *********************************************/
+.logo-image {
+  position: relative;
+  width: 14.725vw; /* 22.5% smaller than 19vw (19 * 0.775 = 14.725) */
+  height: auto;
+  /* top: 1vw; */
+  left: 1vw;
+  z-index: 30; /* Increased to bring in front of marquee */
+  margin-bottom: 0.5vh;
+}
+
+/********************************************
+ * 6) MAIN LAYOUT (Replaces .assets)
+ *********************************************/
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  gap: 15px; /* Gap between left and right panels */
+  position: relative;
+}
+
+.left-panel-anchor {
+  width: 25%; /* Min width */
+  position: relative;
+  display: flex;
+  flex-direction: column; /* Bubble on top, character below */
+  gap: 24px;
+  justify-content: flex-end; /* Aligns character to bottom, bubble grows upwards */
+  display: none;
+}
+
+.character-display {
+  width: auto; /* Adjust size of kid image */
+  height: 50%;
+  /* margin: 0 auto;
+  align-self: center;
+  margin-top: auto; */
+}
+
+#characterImageElement {
+  width: auto;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.speech-bubble-container {
+  width: 100%;
+  position: relative; /* For z-indexing if necessary */
+  z-index: 1;
+  padding: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  max-height: 48%;
+  /* flex-grow: 1; */
+}
+
+/* CONTEXT BOX as SPEECH BUBBLE */
+.contextBox {
+  background: rgba(255, 255, 255, 0.92); /* Semi-transparent white for bubble */
+  padding: 1rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.5rem;
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  /* overflow-y: auto; */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.contextBox::after {
+  /* Speech bubble tail */
+  content: "";
+  position: absolute;
+  bottom: -20px; /* Pulls the tail down to point from bottom of bubble */
+  right: 20%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.92); /* Match bubble background */
+  border-bottom: 0;
+  border-left-width: 15px; /* Adjust for tail shape */
+  border-right-width: 15px;
+}
+
+/* Content sections inside speech bubble */
+.contextBox .context-section {
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
+  line-height: 1.4;
+
+  opacity: 1 !important; /* Ensure they are visible */
+  display: block !important; /* Ensure they are visible */
+  border-radius: 0;
+}
+.contextBox .context-section:last-child {
+  margin-bottom: 0;
+}
+.contextBox .context-section h2 {
+  font-size: 2.3vw; /* MODIFIED FONT SIZE (Original Value) */
+  color: #4169e1; /* Theme color */
+  margin-bottom: 0.8vw;
+  font-weight: 500;
+}
+.contextBox .context-section div > p,
+.contextBox .context-section ul {
+  font-size: 2vw; /* MODIFIED FONT SIZE (Original Value for p and ul) */
+  margin-bottom: 8px;
+  color: #444;
+}
+.contextBox .context-section p strong {
+  color: #222;
+  font-weight: 600;
+}
+
+.right-panel-content {
+  flex: 1; /* Takes remaining space */
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Prevents flexbox overflow issues */
+}
+
+/********************************************
+ * 5) WORKING AREA CONTAINER (Frosted Glass)
+ *********************************************/
+.workingArea-container {
+  flex: 1; /* Fill the right-panel-content */
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.1rem;
+  background-color: rgba(77, 86, 110, 0.55); /* Darker frosted glass */
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  overflow: hidden; /* Important for border-radius and backdrop-filter */
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Subtle border */
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.upperControls,
+.lowerControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem; /* Adjusted padding */
+  gap: 12px; /* Adjusted gap */
+  color: #e0e0e0; /* Light text color for dark background */
+  /* MODIFIED FONT SIZE (Original Value) */
+
+  position: relative;
+  transition: background-color 0.3s ease;
+  flex-wrap: wrap;
+  background-color: transparent; /* No background, on frosted panel */
+  box-shadow: none; /* Remove original shadow */
+}
+
+.upperControls:hover,
+.lowerControls:hover {
+  background-color: rgba(255, 255, 255, 0.03); /* Very subtle hover */
+}
+
+/********************************************
+ * 6) WORKING AREA CONTENT
+ *********************************************/
+.workingArea {
+  flex: 1;
+  border: 1px solid rgba(180, 190, 220, 0.3); /* Lighter border */
+  border-radius: 12px;
+  background-color: rgba(
+    41,
+    45,
+    58,
+    0.7
+  ); /* Dark background for canvas for contrast */
+  margin: 8px 0;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+.workingArea:hover {
+  border-color: rgba(255, 165, 0, 0.6); /* Orange highlight on hover */
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+
+/********************************************
+ * 8) BUTTONS
+ *********************************************/
+.btn {
+  min-height: 3.5vw; /* Adjusted */
+  min-width: 3vw; /* Adjusted */
+  padding: 0.5vw 1.5vw; /* Adjusted */
+  border: 1px solid transparent;
+  border-radius: 50px; /* Slightly more rounded */
+  font-size: 2.5vw; /* MODIFIED FONT SIZE (Original Value) */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* Default text color */
+}
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(251, 192, 45, 0.4),
+    inset 0 2px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1), 0 4px 0px rgba(206, 148, 0, 0.6);
+}
+.btn-primary {
+  background: linear-gradient(
+    145deg,
+    #fdbe35,
+    #fba92d
+  ); /* Yellow gradient background */
+  box-shadow: 0 7px 4px rgba(251, 169, 45, 0.3),
+    inset 0 2px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1), 0 4px 0px rgba(206, 141, 0, 0.6);
+  text-shadow: 0px 1px 2px rgba(175, 144, 5, 0.89);
+  color: rgb(51, 51, 51);
+}
+.btn-primary:hover {
+  background-color: #e67e00;
+}
+.btn-primary:active {
+  background: linear-gradient(
+    145deg,
+    #fba92d,
+    #f9a825
+  ); /* Darken the gradient */
+  translate: 0 3px;
+  box-shadow: 0 4px 8px rgba(251, 155, 45, 0.3),
+    /* Reduce the shadow to make it look closer to the ground */ inset 0 2px 3px
+      rgba(0, 0, 0, 0.3); /* Make inner shadow more prominent */
+}
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2); /* Light, semi-transparent */
+  color: #f0f0f0;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.4;
+  color: white;
+}
+
+/********************************************
+ * 9) STEP COUNTER
+ *********************************************/
+.step-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1vw;
+  height: 4vh;
+  padding: 0.4vw 1vw;
+  border-radius: 2vw;
+  background-color: rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0.1vw 0.3vw rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.step-counter .dot {
+  width: 1vw; /* Adjusted */
+  height: 1vw; /* Adjusted */
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3); /* Dimmed dots */
+  transition: all 0.3s ease;
+}
+.step-counter .dot.active {
+  background-color: #ffc107; /* Active dot yellow/orange */
+  transform: scale(1.25);
+  box-shadow: 0 0 0.5vw #ffc107;
+}
+.step-counter .dot:hover:not(.active) {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+/********************************************
+ * 13) RESPONSIVE ADJUSTMENTS
+ *********************************************/
+/* Overlay fullscreen */
+
+#fullscreenOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); /* Optional fallback */
+  /* --- Animation Start State --- */
+  opacity: 0;
+  transform: scale(0.1);
+  pointer-events: none; /* Prevent interaction when hidden */
+  z-index: 30;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#fullscreenOverlay.show {
+  /* --- Animation End State --- */
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto; /* Allow interaction when visible */
+}
+.bgInOverlay {
+  background-image: url("../assets/BG.jpg");
+  transition: none !important;
+}
+#fullscreenOverlay img {
+  position: absolute;
+  height: 80%;
+  left: 10%;
+  top: 22%;
+}
+
+/* Bubble to the left of the image */
+#leftBubble {
+  margin: 1rem;
+  font-size: 2vw;
+  position: absolute;
+  right: 20%;
+  top: 20%;
+  transform: translateY(-50%);
+  width: 30%;
+  background-color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  border-radius: 2rem;
+}
+
+#rightBubble {
+  margin: 1rem;
+  font-size: 2rem;
+  position: absolute;
+  right: 8%;
+  bottom: 20%;
+  transform: translateY(-50%);
+  width: 30%;
+
+  border: 0.3rem solid yellow;
+
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* Image styling */
+#startButton {
+  position: absolute;
+  bottom: 5%;
+  left: 50%;
+  translate: -50% 0;
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+/********************************************
+ * 10) WELCOME SLIDE
+ *********************************************/
+.welcome-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 15;
+}
+
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3vw;
+  text-align: center;
+  padding: 4vw;
+}
+
+.welcome-desc {
+  font-size: calc(2vw + 2vh);
+  font-weight: 600;
+  color: #65c1ff;
+  max-width: 60%;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.welcome-start-btn {
+  padding: 1.5vw 4vw;
+  min-width: auto;
+  min-height: auto;
+}
+
+.main-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  position: relative;
+}
+
+.main-content.hidden {
+  display: none;
+}
+
+.welcome-slide.hidden {
+  display: none;
+}

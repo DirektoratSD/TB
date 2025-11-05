@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title id="html_title">3 digit question</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/applet.css" />
+    <script src="js/confetti.min.js"></script>
+  </head>
+  <body>
+    <div class="applet-container">
+      <div class="top-marquee">
+        <marquee behavior="scroll" direction="left">Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</marquee>
+      </div>
+      <img src="assets/logo.png" alt="Logo" class="logo-image" />
+      <div id="fullscreenOverlay">
+        <img src="assets/kid_normal.png" alt="" />
+        <div class="rightArrowBubble" id="leftBubble">
+          <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ab
+            repellat amet eos id deserunt expedita doloribus nobis
+          </p>
+        </div>
+        <button class="btn btn-primary pulse-highlight-btn" id="startButton">
+          Next
+        </button>
+      </div>
+      <div class="main-layout">
+        <div id="welcomeSlide" class="welcome-slide">
+          <div class="welcome-content">
+            <p class="welcome-desc">{{welcome_text.description}}</p>
+            <button
+              class="btn btn-primary welcome-start-btn"
+              id="welcomeStartButton"
+              >{{welcome_text.button_text}}
+            </button>
+          </div>
+        </div>
+        <div id="mainContent" class="main-content hidden">
+          <div class="left-panel-anchor">
+            <div class="speech-bubble-container">
+              <div class="contextBox" id="contextBox">
+                <div class="context-section"></div>
+              </div>
+            </div>
+            <div class="character-display">
+              <img
+                src="assets/caveNormal.png"
+                alt="Character"
+                id="characterImageElement"
+              />
+            </div>
+          </div>
+
+          <div class="right-panel-content">
+            <div></div>
+            <div class="workingArea-container">
+              <div class="upperControls">
+                <img src="assets/faceChar.png" alt="" />
+                <p></p>
+              </div>
+              <div class="workingArea">
+                <div id="applet">
+                  <div id="box-container">
+                    <div class="widget-container" id="hundred-widget">
+                      <div class="arrowContainer ac1">
+                        <div class="arrow-indicator-container left-dir">
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                        </div>
+                      </div>
+                      <div class="main-card">
+                        <div class="number-tab">0</div>
+                        <div class="inner-card">
+                          <div class="pill-badge">Hundreds</div>
+                          <div class="squares-container"></div>
+                          <div class="controls">
+                            <button
+                              class="control-btn btn-press"
+                              id="hundreds-minus"
+                            >
+                              -
+                            </button>
+                            <button
+                              class="control-btn btn-press"
+                              id="hundreds-plus"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+                        <div class="flex items-center justify-center w-full">
+                          <p class="text-display">Hundreds</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="widget-container" id="ten-widget">
+                      <div class="arrowContainer ac1">
+                        <div class="arrow-indicator-container left-dir">
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                        </div>
+                      </div>
+
+                      <div class="main-card">
+                        <div class="number-tab">0</div>
+
+                        <div class="inner-card">
+                          <div class="pill-badge">Tens</div>
+                          <div class="squares-container"></div>
+                          <div class="controls">
+                            <button
+                              class="control-btn btn-press"
+                              id="tens-minus"
+                            >
+                              -
+                            </button>
+                            <button
+                              class="control-btn btn-press"
+                              id="tens-plus"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p class="text-display">Tens</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="widget-container" id="unit-widget">
+                      <div class="arrowContainer ac1">
+                        <div class="arrow-indicator-container left-dir">
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                          <div class="arrow-head"></div>
+                        </div>
+                      </div>
+
+                      <div class="main-card">
+                        <div class="number-tab">0</div>
+
+                        <div class="inner-card">
+                          <div class="pill-badge">Ones</div>
+                          <div class="squares-container"></div>
+                          <div class="controls">
+                            <button
+                              id="units-minus"
+                              class="control-btn btn-press"
+                            >
+                              -
+                            </button>
+                            <button
+                              id="units-plus"
+                              class="control-btn btn-press"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p class="text-display">Ones</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="statements">
+                    <div class="comment"></div>
+                  </div>
+                  <div id="submitContainer">
+                    <button class="btn btn-primary" id="submitButton">
+                      Submit
+                    </button>
+                  </div>
+                  <img src="assets/kid_happy.png" alt="" id="charHead" />
+                </div>
+              </div>
+              <div class="lowerControls">
+                <button
+                  class="btn btn-secondary"
+                  id="prevButton"
+                  disabled
+                ></button>
+                <div class="step-counter" id="stepCounter"></div>
+                <button class="btn btn-primary" id="nextButton"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="activity-complete-overlay" class="overlay-container">
+      <div class="overlay-content">
+        <div class="overlay-character">
+          <img src="assets/kid_happy.png" alt="Happy Character" />
+        </div>
+        <div class="overlay-text">
+          <h1>Activity Complete!</h1>
+          <p>
+            Great job! If you want to try again, click the "Start Over" button.
+          </p>
+          <button id="start-over-btn" class="btn btn-primary">
+            Start Over
+          </button>
+        </div>
+      </div>
+    </div>
+    <script src="js/rootText.js"></script>
+    <script src="js/texts.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/widget.js"></script>
+    <script src="js/applet.js"></script>
+  </body>
+</html>

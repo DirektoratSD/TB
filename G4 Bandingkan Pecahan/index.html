@@ -1,0 +1,2470 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1366, initial-scale=1.0">
+  <title>Applet Navigasi Wadah Air</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    /* Fixed canvas scaling wrappers */
+    #scaler {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+      /* background: #121212; */
+      background-size: cover;
+      background-color: #121212;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    #scale-wrapper {
+      width: 1366px;
+      height: 768px;
+      background-image: url('./assets/DarkBG.jpg');
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transform-origin: top left;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Remove all media queries and responsive units, convert to px */
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: 'Roboto', 'Segoe UI', sans-serif;
+    }
+
+    body,
+    html {
+      width: 100vw;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .scale-container {
+      width: 1366px;
+      height: 768px;
+      /* background: #121212; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .scale-wrapper {
+      aspect-ratio: unset;
+      width: 1366px;
+      height: 768px;
+      max-height: none;
+      max-width: none;
+      /* background: #121212; */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .applet-canvas {
+      width: 1366px;
+      height: 768px;
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .applet-container {
+      width: 1366px;
+      height: 768px;
+      max-height: none;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      margin: 0 auto;
+      overflow: hidden;
+      background-color: transparent;
+      /* border: 1px solid #2a2a2a; */
+      border-radius: 16px;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+.applet-container {
+  position: relative;
+}
+
+/* TemanBelajar Logo Position */
+.tb-logo {
+  position: absolute;
+  z-index: 10000;
+  left:0.3rem
+}
+
+.tb-logo img {
+  height: 2rem;
+  width: auto;
+  pointer-events: none;
+}
+
+/* Marquee Banner */
+.marquee-banner {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 5vh;
+  background: rgba(0, 0, 0, 0.35);
+  color: white;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 9998;
+  pointer-events: none;
+}
+
+.marquee-content {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee-scroll 30s linear infinite;
+  padding-left: 100%;
+  font-size: 1.2rem;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+    .assets {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: auto;
+      height: 768px;
+      max-height: none;
+      background-color: transparent;
+    }
+
+    .workingArea-container {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      background-color: transparent;
+      overflow: auto;
+      min-height: 0;
+      height: 768px;
+    }
+
+    .workingArea {
+      flex: 1 1 auto;
+      border: none;
+      border-radius: 16px;
+      background-color: transparent;
+      margin: 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      min-height: 0;
+      min-width: 0;
+      overflow: auto;
+      height: 768px;
+    }
+
+    .feedback-area {
+      width: 100%;
+      min-height: 56px;
+      background: #29293a;
+      color: #fff;
+      border-radius: 16px 16px 0 0;
+      padding: 18px 32px 12px 32px;
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .content-screen {
+      display: flex;
+      width: 100%;
+      height: 527px;
+      position: relative;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .question-label {
+      font-size: 40px;
+      font-weight: regular;
+      color: #4fc3f7;
+      margin-bottom: 20px;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .step-label {
+      font-size: 32px;
+      font-weight: regular;
+      color: #fdbe35;
+      margin-bottom: 32px;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .container-row {
+      display: flex;
+      flex-direction: row;
+      gap: 80px;
+      flex-wrap: nowrap;
+      margin: 0 auto;
+      min-width: 0;
+      min-height: 0;
+      align-items: center;
+      padding: 0 32px;
+      position:absolute
+    }
+
+    .fraction-buttons-col,
+    .comparison-buttons-col {
+      flex: 0 0 90px;
+      max-width: 120px;
+      min-width: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      margin: 0 8px;
+    }
+
+    .lowerControls {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 24px;
+      /* padding: 16px 12px 0 12px; */
+      width: 100%;
+      position: static;
+      z-index: 10;
+      flex-shrink: 0;
+      min-height: 60px;
+    }
+
+    .navigation {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      flex-shrink: 0;
+      min-height: 40px;
+    }
+
+    .nav-btn {
+      min-width: 180px;
+      padding: 18px 35px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(145deg, #FFD166, #FF9F40);
+      box-shadow: 0 8px 0px #E67E22, 0 15px 30px rgba(0, 0, 0, 0.4), inset 0 2px 0px rgba(255, 255, 255, 0.3);
+      text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+      margin: 0 6px;
+    }
+
+
+    .nav-btn:hover,
+    .nav-btn:focus {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 0px #E67E22, 0 20px 40px rgba(0, 0, 0, 0.5), inset 0 2px 0px rgba(255, 255, 255, 0.4);
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      background: #666;
+    }
+
+    .progress-container {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    .progress-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .progress-dot.active {
+      background-color: #ffc107;
+      transform: scale(1.25);
+      box-shadow: 0 0 5px #ffc107;
+    }
+
+    .progress-dot.completed {
+      background-color: #4CAF50;
+    }
+
+    .container-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 16px;
+      padding: 12px;
+      border-radius: 24px;
+    }
+
+    .water-container {
+      width: 220px;
+      height: 419px;
+      position: relative;
+      overflow: visible;
+      margin: 0 8px;
+      background: none;
+      border: none;
+      box-shadow: none;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .beaker-img {
+      width: 340px;
+      height: 419px;
+      display: block;
+      position: absolute;
+      left: -55px;
+      bottom: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .water {
+      position: absolute;
+      left: 25px;
+      bottom: 30px;
+      width: 170px;
+      background: #005193;
+      z-index: 0;
+      border-radius: 0 0 25px 25px;
+      overflow: hidden;
+      opacity: 0.85;
+      transition: height 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .water::after {
+      content: '';
+      position: absolute;
+      top: -15px;
+      left: 0;
+      width: 100%;
+      height: 15px;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent, rgba(255, 255, 255, 0.5), transparent);
+      border-radius: 100% 100% 0 0;
+      animation: cartoon-wave 3s infinite ease-in-out;
+    }
+
+    .division-markers {
+      position: absolute;
+      left: -30px;
+      width: 170px;
+      height: 419px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .division-marker {
+      position: absolute;
+      width: 75%;
+      /* height: 6px; */
+      left: 70px;
+      /* margin-bottom: 9.6px; */
+      z-index: 3;
+      border-top: 4.4px dashed #F59E0A;
+    }
+
+    .division-numbers {
+      position: absolute;
+      left: 120px;
+      width: 32px;
+      height: 419px;
+      pointer-events: none;
+      z-index: 4;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .beaker-disabled {
+      /* no opacity here – it would fade the water too */
+      pointer-events: none;
+    }
+
+    /* kill any previous overlay/veil that was hiding the water */
+    .beaker-disabled::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* dim the glass only */
+    .beaker-disabled .beaker-img {
+      filter: grayscale(1) brightness(.55) contrast(.85);
+      opacity: .75;
+    }
+
+    /* keep the water readable */
+    .beaker-disabled .water {
+      filter: none !important;
+      opacity: .9 !important;
+      /* visible like your 2nd image */
+      box-shadow: none !important;
+    }
+
+    .beaker-disabled .water::after {
+      /* soften the wave highlight a bit */
+      opacity: .35;
+    }
+
+    /* fade markers & numbers */
+    .beaker-disabled .division-marker {
+      border-top-color: rgba(255, 255, 255, .18);
+    }
+
+    .beaker-disabled .division-number {
+      color: rgba(255, 255, 255, .38);
+    }
+
+
+
+    .division-number {
+      position: absolute;
+      left: 50%;
+      width: 48px;
+      transform: translateX(-50%);
+      font-size: 1.7rem;
+      font-weight: regular;
+      color: #fff;
+      /* text-shadow: 0 2px 8px #00e1ff, 0 0px 2px #000; */
+      z-index: 4;
+      text-align: center;
+    }
+
+    .fraction-buttons-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      min-width: 90px;
+    }
+
+    .fraction-btn {
+      background: #29293a;
+      border: 2px solid #fdbe35;
+      border-radius: 12px;
+      padding: 18px 24px;
+      min-width: 60px;
+      min-height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: border 0.2s, background 0.2s;
+      font-size: 32px;
+      font-weight: regular;
+      color: #fff;
+      margin: 0 0 0 0;
+      position: relative;
+    }
+
+    .fraction-btn.selected,
+    .fraction-btn.correct {
+      border: 2px solid #4CAF50;
+      background: #1e3d1e;
+      color: #4CAF50;
+    }
+
+    .fraction-btn.incorrect {
+      border: 2px solid #e53935;
+      background: #3a2323;
+      color: #e53935;
+      animation: shake 0.4s;
+    }
+
+    .fraction-btn .fraction-display {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 32px;
+    }
+
+    .fraction-btn .numerator {
+      font-size: 44px;
+      font-weight: regular;
+    }
+
+    .fraction-btn .fraction-line {
+      width: 32px;
+      height: 2px;
+      background: #fff;
+      margin: 2px 0;
+    }
+
+    .fraction-btn .denominator {
+      font-size: 44px;
+      font-weight: regular;
+    }
+
+    .comparison-buttons-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      min-width: 90px;
+    }
+
+    .comparison-btn {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      border: 2px solid #444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0;
+      color: #1565c0;
+      font-weight: regular;
+      letter-spacing: 1px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      cursor: pointer;
+      transition: background 0.2s, border 0.2s, box-shadow 0.2s;
+      outline: none;
+      padding: 0;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .comparison-btn:hover,
+    .comparison-btn:focus {
+      background: #bbdefb;
+      border-color: #1976d2;
+      box-shadow: 0 4px 16px rgba(21, 101, 192, 0.18);
+    }
+
+    .comparison-btn:active {
+      background: #1976d2;
+      color: #fff;
+      border-color: #1565c0;
+    }
+
+    .comparison-btn.correct {
+      background: #1e3d1e !important;
+      border: 2px solid #4CAF50 !important;
+      color: #4CAF50 !important;
+      box-shadow: 0 0 24px 0 #4CAF50;
+    }
+
+    .comparison-btn.incorrect {
+      border: 2px solid #e53935 !important;
+      background: #3a2323 !important;
+      color: #e53935 !important;
+      animation: shake 0.4s;
+    }
+
+    .container-outline-only .water-container {
+      border: none !important;
+      background: none !important;
+      box-shadow: none !important;
+      position: relative;
+    }
+
+    .container-outline-only .water {
+      border-radius: 0 0 34px 34px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3), inset 0 0 30px rgba(255, 255, 255, 0.1);
+      background: #005193;
+      border-left: 4px solid #fdbe35;
+      border-right: 4px solid #fdbe35;
+      /* border-bottom: 8px solid #fdbe35; */
+    }
+
+    /* .container-outline-only .division-marker {
+      background-color: #fdbe35 !important;
+      box-shadow: 0 0 8px #fdbe35;
+    } */
+    /* .container-outline-only .division-number {
+      color: #fdbe35 !important;
+      text-shadow: 0 2px 8px #fdbe35, 0 0px 2px #000;
+    } */
+    /* Overlay and intro screens */
+    #introScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 1366px;
+      height: 768px;
+      background: rgba(18, 18, 18, 0.98);
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s;
+    }
+
+    .intro-dialogue-box {
+      background: #fff;
+      color: #222;
+      border-radius: 24px;
+      padding: 32px 40px;
+      font-size: calc(0.25rem + 25px);
+      font-weight: regular;
+      margin-bottom: 32px;
+      border: 3px solid #b3e5fc;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      text-align: center;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .intro-heading {
+      font-size: 4rem;
+      font-weight: regular;
+      text-align: center;
+      line-height: 1.2;
+      color: #0277bd;
+      text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      margin: 0;
+    }
+
+    .intro-subtext {
+      font-size: 2rem;
+      font-weight: regular;
+      text-align: center;
+      color: #546e7a;
+      margin: 0;
+    }
+
+    .intro-cavy-img {
+      width: 220px !important;
+      height: auto;
+      margin-bottom: 32px;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.18));
+    }
+
+    .intro-start-btn {
+      padding: 1.2vh 3vw;
+      border: none;
+      border-radius: 3vw;
+      font-size: calc(0.5rem + 1.25vw);
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(145deg, #ffb74d, #f57c00);
+      box-shadow: 0 0.5vh 0px #bf360c;
+    }
+
+    .intro-start-btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.05);
+    }
+
+
+    #overlayScreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 1366px;
+      height: 768px;
+      background: rgba(18, 18, 18, 0);
+      z-index: 2000;
+      display: none;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.3s;
+      gap: 25px;
+    }
+
+    .overlay-dialogue-box {
+      background: #fff;
+      color: #546e7a;
+      border-radius: 32px;
+      padding: 32px 40px;
+      font-size: calc(0.25rem + 25px) !important;
+      font-weight: regular;
+      border: 3px solid #b3e5fc;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+      text-align: center;
+      max-width: 800px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .overlay-heading {
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1.2;
+      color: #0277bd;
+      /* text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3); */
+      margin: 0;
+    }
+
+    .overlay-subtext {
+      font-size: 1.8rem;
+      font-weight: regular;
+      text-align: center;
+      color: #546e7a;
+      margin: 0;
+    }
+
+    .overlay-dialogue-box::after {
+      content: '';
+      position: absolute;
+      top: -6%;
+      right: 377px;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border: 20px solid transparent;
+      border-bottom-color: #b3e5fc;
+      border-top: 0;
+    }
+
+    .overlay-cavy-img {
+      width: 240px !important;
+      height: auto;
+      filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.18));
+      border-radius: 50%;
+      background: #f0f0f0;
+      /* padding: 15px; */
+    }
+
+    .overlay-btn {
+      padding: 0.5rem 2.3rem;
+      border: none;
+      border-radius: 3vw;
+      font-size: 2.3rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: white;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      background: linear-gradient(145deg, #ffb74d, #f57c00);
+      box-shadow: 0 0.5rem 0rem #bf360c;
+      /* margin-top: 30px; */
+    }
+
+
+
+    .overlay-btn:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.05);
+    }
+
+/* hide the default overlay tail when we use the transparent style */
+.overlay-dialogue-box.transparent::after {
+  content: none !important;
+  border: 0 !important;
+}
+
+    .water-highlight {
+      position: absolute;
+      left: -14px;
+      bottom: 3.8vh;
+      width: 260.5px;
+      background: rgba(190, 205, 234, 0.7);
+      border-radius: 0 0 25px 25px;
+      pointer-events: none;
+      z-index: 2;
+      transition: opacity 0.3s;
+      opacity: 0;
+    
+    }
+
+    .water-highlight.active {
+      opacity: 1;
+    }
+
+    .fraction-buttons-col.answered .fraction-btn {
+      display: none;
+    }
+
+    .fraction-buttons-col.answered .fraction-btn.correct {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      font-size: 40px;
+      min-width: 90px;
+      min-height: 110px;
+      box-shadow: 0 0 24px 0 #fdbe35;
+      z-index: 1;
+      animation: grow-center 0.3s;
+    }
+
+    @keyframes grow-center {
+      0% {
+        transform: scale(1);
+      }
+
+      80% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1.15);
+      }
+    }
+
+    .comparison-buttons-col.answered .comparison-btn {
+      display: none;
+    }
+
+    .comparison-buttons-col.answered .comparison-btn.correct {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto 0;
+      font-size: 44px;
+      min-width: 70px;
+      min-height: 70px;
+      /* box-shadow: 0 0 24px 0 #fdbe35; */
+      z-index: 1;
+      animation: grow-center 0.3s;
+    }
+
+    .feedback-bubble {
+      display: flex;
+      align-items: flex-start;
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      padding: 24px 40px 24px 24px;
+      /* margin-bottom: 18px; */
+      min-height: 90px;
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+      box-sizing: border-box;
+    }
+
+    .feedback-cavy-head {
+      width: 90px !important;
+      height: 90px !important;
+      object-fit: contain;
+      margin-right: 18px;
+      margin-left: 0;
+      flex-shrink: 0;
+      margin-top: -12px;
+      z-index: 2;
+    }
+
+    .feedback-bubble-text {
+      color: #546e7a;
+      font-size: 1.5rem;
+      font-weight: regular;
+      line-height: 1.3;
+      letter-spacing: 0.2px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      min-height: 60px;
+      word-break: break-word;
+      text-align: left;
+    }
+
+    /* Fraction display styling for feedback text */
+    .feedback-bubble-text .fraction-display {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin: 0 5px;
+    }
+
+    .feedback-bubble-text .numerator,
+    .feedback-bubble-text .denominator {
+      font-size: 1.8rem;
+      font-weight: regular;
+      color: #546e7a;
+      line-height: 1;
+    }
+
+    .feedback-bubble-text .fraction-line {
+      width: 30px;
+      height: 3px;
+      background-color: #546e7a;
+      margin: 3px 0;
+    }
+
+    .feedback-bubble-tail {
+      position: absolute;
+      left: 60px;
+      bottom: -24px;
+      width: 0;
+      height: 0;
+      border-top: 24px solid #fff;
+      border-left: 24px solid transparent;
+      border-right: 24px solid transparent;
+      z-index: 1;
+    }
+
+    .feedback-row {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      /* margin-bottom: 14px; */
+      margin-top: 20px;
+    }
+
+    .feedback-cavy-head {
+      /* padding-top: 20px; */
+      flex: 0 0 15%;
+      max-width: 20%;
+      width: 20%;
+      height: 90px !important;
+      object-fit: contain;
+      margin-right: -12px;
+      z-index: 2;
+    }
+
+    .feedback-bubble {
+      flex: 1 1 80%;
+      max-width: 80%;
+      position: relative;
+      background: #fff;
+      border-radius: 32px;
+      border: 3px solid #b3e5fc;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+      padding: 24px 40px 24px 24px;
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+    }
+
+    .feedback-bubble::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -23px;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-right: 20px solid #b3e5fc;
+    }
+
+    /* Center the result row and make it fill the working area */
+#resultDataRow {
+  display:flex;                /* JS will flip this to flex */
+  flex: 1 1 auto;              /* take available space in .content-screen */
+  align-items:flex-end;        /* vertical center */
+  justify-content: center;     /* horizontal center */
+  gap: 28px;
+  align-self: center;
+}
+
+/* Nice, consistent sizes for the middle stack+symbol */
+.result-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:flex-end;
+}
+
+.result-symbol {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #1e3d1e;
+  border: 3px solid #4CAF50;
+  color: #4CAF50;
+  font-size: 40px;
+  font-weight: 900;
+  box-shadow: 0 0 24px #4CAF50;
+  margin-bottom: 3rem;
+}
+
+/* Tile style used inside the result cards */
+.result-tile {
+  width: 12rem;
+  height: 3.6rem;
+  margin: 10px 0;
+  border-radius: 10px;
+  background: #8db7ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #1b2a44;
+  box-shadow: 0 4px 10px rgba(0,0,0,.25);
+}
+/* when showing stacked tiles, hide the beaker graphics but keep their space */
+.result-mode .beaker-img,
+.result-mode .division-markers,
+.result-mode .division-numbers,
+.result-mode .water,
+.result-mode .water-highlight {
+  visibility: hidden;   /* keeps layout/gap */
+  pointer-events: none;
+}
+/* make the overlay body transparent (no white card) */
+.overlay-dialogue-box.transparent {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  max-width: none;      /* let us use full width */
+}
+
+/* layout wrapper that mimics your slide */
+.teach-wrap {
+  width: 1160px;        /* tuned to your 1366×768 stage */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* top row: left bubble + right panel aligned to the right */
+.teach-row {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* push the right panel all the way to the right */
+.teach-right {
+  margin-left: auto;
+}
+
+/* lets us absolutely position the avatar under the bubble */
+.bubble-wrap { position: relative; }
+.teach-avatar {
+  position: absolute;
+  top: calc(100% + 14px);          /* just below the tail */
+  left: 56px;                      /* same x as the tail */
+  transform: translateX(-50%);     /* center on the tail point */
+  width: 180px;                    /* size as you like */
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+}
+
+/* Teaching panel (right side) */
+.teach-panel {
+  background:#202735;
+  border-radius:20px;
+  padding:1rem 1rem;
+  display:flex;
+  align-items:flex-start;
+  gap:22px;
+  width:32rem
+}
+
+/* One vertical stack */
+.stack {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+}
+
+/* Top “denominator” bar */
+.stack-header {
+  width:93px;
+  height:36px;
+  border-radius:8px;
+  background:#3b4254;
+  color:#cfd8ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
+  font-size:22px;
+  letter-spacing:.5px;
+  box-shadow:0 3px 8px rgba(0,0,0,.25);
+}
+
+/* Each row 3/2/1 */
+.stack-slot {
+  width:5.4rem;
+  height:2.4rem;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:900;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+
+/* Filled vs empty look */
+.stack-slot.filled {
+  background:#8db7ff;
+  color:#1b2a44;
+}
+
+.stack-slot.empty {
+  background:#2b3347;
+  color:#6b7a99;
+  border:2px dashed #6b7a99;
+}
+
+/* hide the tail when overlay is transparent (you already added this) */
+.overlay-dialogue-box.transparent::after { content:none!important; border:0!important; }
+
+/* Panel wrapper */
+
+
+/* Fixed total height: row height scales with denominator */
+.teach-tower{ --tower-h: 360px; }
+.teach-tower-frame{
+  position:relative;
+   height:var(--tower-h); 
+   width:11.5rem;
+  padding:8px 10px; border-radius:8px;
+  border:3px solid rgba(255,255,255,.35); background:rgba(0,0,0,.25);
+}
+
+/* Each row */
+.teach-tower-row{
+  position:relative; display:flex; align-items:center;
+  margin:6px 0; /* keep a little gap between rows */
+}
+
+/* The “tile” area that the number sits on */
+.teach-tile{
+  flex:1; 
+  height:calc(var(--tower-h) / var(--rows) - 12px);  /* 12px ≈ vertical margins */
+ 
+   box-shadow:0 4px 10px rgba(0,0,0,.25);
+  position:relative;
+   display:flex; 
+   align-items:center; 
+   justify-content:center;
+}
+
+/* Numbers INSIDE the tile */
+.teach-num{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-weight:900;  font-size:1.5rem; letter-spacing:.5px;
+}
+
+/* Filled vs empty look + number colors */
+.teach-tower-row.is-filled .teach-tile{ 
+  background:#005193; }
+.teach-tower-row.is-filled .teach-num{
+   color:#fff; 
+   opacity:1; }
+
+.teach-tower-row.is-empty .teach-tile{ 
+  background:#2b3347; 
+ }
+.teach-tower-row.is-empty .teach-num{ color:#b9c1d9; opacity:.8; }
+
+/* Dotted guide above the top filled level */
+.teach-guide-dots{
+  position:absolute; 
+  left:8px; 
+  right:8px; 
+  top:-6px;
+  border-top:4px dotted #fff; 
+  opacity:.9;
+  display: none;
+}
+
+/* Green operator pill */
+.teach-op{
+  width:72px;height:72px;border-radius:50%;
+  background:#18351b;color:#4CAF50;border:3px solid #4CAF50;
+  box-shadow:0 0 16px #4CAF50;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:34px;margin:0 18px;
+}
+ .result-symbol {
+      width: 88px;
+      height: 88px;
+    }
+     .symbol-badge {
+  position: relative;
+  top: 26vh;              /* move upward (tweak value as needed) */
+  border-radius: 50%;
+  background: #1e3d1e;
+  box-shadow: 0 0 24px 0 #4CAF50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.3s ease;
+}
+
+  .symbol-badge img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+  transform: translateY(-2px); /* fine-tune vertical alignment */
+}
+
+  .symbol-badge1 {
+  position: relative;
+  border-radius: 50%;
+  background: #1e3d1e;
+  box-shadow: 0 0 24px 0 #4CAF50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.3s ease;
+}
+
+  .symbol-badge1 img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+  transform: translateY(-2px); 
+ }
+ .extra-line {
+  position: absolute;
+  left: -14px;                 /* same as your water alignment */
+  width:260.5px;               /* same as your beaker inner width */
+  bottom: 0;                   /* JS will adjust exact position */
+  height: 4px;
+  background: #ff3b3b;
+  box-shadow: 0 0 10px rgba(255,59,59,0.9), 0 0 2px rgba(255,59,59,0.9);
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;                  /* above highlight */
+}
+.extra-line.active {
+  opacity: 1;
+}
+  </style>
+</head>
+
+<body>
+  <div class="marquee-banner">
+    <div class="marquee-content">Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</div>
+  </div>
+  <div id="scaler">
+    <div id="scale-wrapper">
+      <div id="overlayScreen">
+        <button class="overlay-btn" id="overlayBtn">Lanjut</button>
+        <div class="overlay-dialogue-box" id="overlayDialogue">
+          <div id="overlayText"></div>
+        </div>
+        <img src="assets/Cavy.png" alt="Cavy" class="overlay-cavy-img" id="overlayImg" />
+      </div>
+      <div id="introScreen">
+        <div class="intro-dialogue-box">
+          <h1 class="intro-heading">Hai! Siap membandingkan pecahan?</h1>
+          <p class="intro-subtext">Klik <b>Mulai</b> untuk memulai!</p>
+        </div>
+        <button class="intro-start-btn" id="introStartBtn">Mulai</button>
+        <img src="assets/Cavy.png" alt="Cavy" class="intro-cavy-img" />
+      </div>
+      <div class="scale-container">
+        <div class="scale-wrapper">
+          <div class="applet-canvas">
+            <div class="applet-container">
+                  <div class="tb-logo">
+        <img src="assets/temanbelajarsingeline2.png" alt="Teman Belajar" />
+      </div>
+              <div class="assets">
+                <div class="workingArea-container">
+                  <div class="workingArea">
+                    <div class="feedback-row">
+                      <img src="assets/Deete_Neutral_Q.png" alt="Cavy" class="feedback-cavy-head" />
+                      <div class="feedback-bubble">
+                        <div class="feedback-bubble-text" id="feedbackArea"></div>
+                      </div>
+                    </div>
+                    <div class="content-screen" id="screen1">
+                      <!-- Baris data hasil (disembunyikan secara default; ditampilkan pada langkah data) -->
+                      <div id="resultDataRow"
+                        style="display:none; gap:28px;  justify-content:center; position:absolute;">
+                        <div class="result-card" id="resultLeftCard"></div>
+                        <div class="result-symbol" id="resultSymbol"></div>
+                        <div class="result-card" id="resultRightCard"></div>
+                      </div>
+
+                      <div class="container-row">
+                        <div class="fraction-buttons-col" id="fractionButtonsLeft"></div>
+                        <div class="container-wrapper">
+                          <div class="water-container">
+                            <img src="assets/beaker2.png" class="beaker-img" alt="Gelas Ukur" />
+                            <div class="water-highlight" id="waterHighlight1"></div>
+                            <div class="extra-line" id="extraLine1"></div>  <!-- ADD -->
+                            <div class="water" id="water1"></div>
+                            <div class="division-markers" id="division-markers1"></div>
+                            <div class="division-numbers" id="division-numbers1"></div>
+                          </div>
+                        </div>
+                        <div class="comparison-buttons-col">
+                          <button class="comparison-btn">&gt;</button>
+                          <button class="comparison-btn">=</button>
+                          <button class="comparison-btn">&lt;</button>
+                        </div>
+                        <div class="container-wrapper">
+                          <div class="water-container">
+                            <img src="assets/beaker2.png" class="beaker-img" alt="Gelas Ukur" />
+                            <div class="water-highlight" id="waterHighlight2"></div>
+                            <div class="extra-line" id="extraLine2"></div>  <!-- ADD -->
+                            <div class="water" id="water2"></div>
+                            <div class="division-markers" id="division-markers2"></div>
+                            <div class="division-numbers" id="division-numbers2"></div>
+                          </div>
+                        </div>
+                        <div class="fraction-buttons-col" id="fractionButtonsRight"></div>
+                      </div>
+                    </div>
+                    <div class="lowerControls">
+                      <div class="navigation">
+                        <button class="nav-btn" id="prevButton">Sebelumnya</button>
+                        <div class="progress-container" id="progressContainer"></div>
+                        <button class="nav-btn" id="nextButton">Berikutnya</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ====== AUDIO FEEDBACK ======
+    const audioCorrect = new Audio('assets/sfx/correct.mp3');
+    const audioWrong = new Audio('assets/sfx/wrong.mp3');
+    const audioClick = new Audio('assets/sfx/click.mp3');
+
+    function playCorrectSound() { audioCorrect.currentTime = 0; audioCorrect.play(); }
+    function playWrongSound() { audioWrong.currentTime = 0; audioWrong.play(); }
+    function playClickSound() { audioClick.currentTime = 0; audioClick.play(); }
+    // ====== ALUR BERBASIS DATA: intro, question, custom, final ======
+   
+   // --- pembantu untuk membangun HTML panel pengajaran ---
+// Numbers INSIDE each row/tile; dotted guide just above the last filled level
+const stackHtml = (total, fill) => {
+  const rows = [];
+  for (let lvl = total; lvl >= 1; lvl--) {
+    const filled = lvl <= fill;
+    const guide  = (lvl === fill + 1);
+    rows.push(`
+      <div class="teach-tower-row ${filled ? 'is-filled' : 'is-empty'}">
+        <div class="teach-tile">
+          <span class="teach-num">${lvl}</span>
+        </div>
+        ${guide ? '<div class="teach-guide-dots"></div>' : ''}
+      </div>
+    `);
+  }
+  return `
+    <div class="teach-tower" style="--rows:${total}">
+      <div class="teach-tower-frame">${rows.join('')}</div>
+    </div>
+  `;
+};
+
+const fracHtml = (n, d) => `
+  <div style="display:flex;flex-direction:column;align-items:center;color:#fff;line-height:1;">
+    <div style="font-size:48px">${n}</div>
+    <div style="width:64px;height:3px;background:#fff;margin:6px 0;"></div>
+    <div style="font-size:48px">${d}</div>
+  </div>
+`;
+
+// Menara tinggi seperti referensimu
+const towerHtml = (total, fill, {showGuide=true} = {}) => {
+  const rows = [];
+  for (let lvl = total; lvl >= 1; lvl--) {
+    const filled = lvl <= fill;
+    const guide  = showGuide && lvl === fill + 1;
+    rows.push(`
+      <div class="teach-tower-row ${filled ? 'is-filled' : 'is-empty'}">
+        <span class="teach-tower-num">${lvl}</span>
+        <div class="teach-tile"></div>
+        ${guide ? '<div class="teach-guide-dots"></div>' : ''}
+      </div>
+    `);
+  }
+  return `
+    <div class="teach-tower">
+      <div class="teach-tower-frame">
+        ${rows.join('')}
+      </div>
+    </div>
+  `;
+};
+
+// Panel penuh: penjelasan + tumpukan di atas, baris pecahan di bawah
+const TEACH_NUMERATOR_HTML = `
+  <div class="teach-wrap">
+    <div class="teach-row">
+      <!-- Gelembung dialog + avatar -->
+      <div class="bubble-wrap">
+        <div style="max-width:620px;background:#4a4f57;color:#fff;border-radius:22px;padding:22px 26px;position:relative;">
+          <div style="font-size:1.7rem;line-height:1.25;">
+            Saat dua pecahan punya <b style="color:#ffd166;">pembilang yang sama</b> (bagian terisi sama),
+            pecahan dengan <b style="color:#ffd166;">penyebut lebih kecil</b> (jumlah bagian total lebih sedikit) nilainya <b>lebih besar</b>.
+          </div>
+          <div style="position:absolute;left:56px;bottom:-18px;width:0;height:0;
+                      border-top:18px solid #4a4f57;border-left:18px solid transparent;
+                      border-right:18px solid transparent;"></div>
+        </div>
+        <img src="assets/Deete_Neutral_Q.png" alt="" class="teach-avatar"/>
+      </div>
+
+      <!-- Panel pengajaran kanan -->
+      <div class="teach-right teach-panel teach-panel--towers">
+        ${stackHtml(4, 2)}
+          <div class="symbol-badge" id="resultBadge">
+    <img id="resultSymbol" src="assets/less than.png" alt="lesser than">
+  </div>
+        ${stackHtml(3, 2)}
+      </div>
+    </div>
+
+    <!-- Panel pecahan bawah -->
+    <div style="
+    background:#202735;
+    border-radius:28px;
+    padding:2rem 8rem;
+    display:flex;
+    align-items:center;
+    gap:28px;align-self:flex-end;">
+      ${fracHtml(2,4)}
+      <div class="symbol-badge1" id="resultBadge">
+    <img id="resultSymbol" src="assets/less than.png" alt="lesser than">
+  </div>
+      ${fracHtml(2,3)}
+    </div>
+  </div>
+`;
+
+const TEACH_NUMERATOR_HTML2 = `
+  <div class="teach-wrap">
+    <div class="teach-row">
+      <div class="bubble-wrap">
+        <div style="max-width:620px;background:#4a4f57;color:#fff;border-radius:22px;padding:22px 26px;position:relative;">
+          <div style="font-size:28px;line-height:1.25;">
+            Saat dua pecahan punya <b style="color:#ffd166;">pembilang yang sama</b> (bagian terisi sama),
+            pecahan dengan <b style="color:#ffd166;">penyebut lebih kecil</b> (bagian total lebih sedikit) <b>lebih besar</b>.
+            <br/><br/>
+            Jadi dengan 4 bagian terisi: <b>4/7 &lt; 4/5</b>.
+          </div>
+          <div style="position:absolute;left:56px;bottom:-18px;width:0;height:0;
+                      border-top:18px solid #4a4f57;border-left:18px solid transparent;
+                      border-right:18px solid transparent;"></div>
+        </div>
+        <img src="assets/Deete_Neutral_Q.png" alt="" class="teach-avatar"/>
+      </div>
+
+      <div class="teach-right teach-panel teach-panel--towers">
+        ${stackHtml(7, 4)}
+        <div style="
+          font-size:34px;
+          font-weight:900;
+          background:#18351b;
+          color:#4CAF50;
+          width:64px;
+          height:64px;
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          border:3px solid #4CAF50;
+          box-shadow:0 0 16px #4CAF50;">&lt;</div>
+        ${stackHtml(5, 4)}
+      </div>
+    </div>
+
+    <div style="background:#202735;border-radius:28px;padding:18px 26px;
+                display:flex;align-items:center;gap:28px;align-self:flex-end;">
+      ${fracHtml(4,7)}
+      <div style="
+        font-size:34px;
+        font-weight:900;
+        background:#18351b;
+        color:#4CAF50;
+        width:64px;
+        height:64px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:3px solid #4CAF50;
+        box-shadow:0 0 16px #4CAF50;">&lt;</div>
+      ${fracHtml(4,5)}
+    </div>
+  </div>
+`;
+
+const TEACH_NUMERATOR_HTML3 = `
+  <div class="teach-wrap">
+    <div class="teach-row">
+      <div class="bubble-wrap">
+        <div style="max-width:620px;background:#4a4f57;color:#fff;border-radius:22px;padding:22px 26px;position:relative;">
+          <div style="font-size:28px;line-height:1.25;">
+            Saat dua pecahan punya <b style="color:#ffd166;">pembilang yang sama</b> (bagian terisi sama),
+            pecahan dengan <b style="color:#ffd166;">penyebut lebih kecil</b> (bagian total lebih sedikit) <b>lebih besar</b>.
+            Di sini, keduanya punya 2 bagian terisi: <b>2/5 &gt; 2/7</b>.
+          </div>
+          <div style="position:absolute;left:56px;bottom:-18px;width:0;height:0;
+                      border-top:18px solid #4a4f57;border-left:18px solid transparent;
+                      border-right:18px solid transparent;"></div>
+        </div>
+        <img src="assets/Deete_Neutral_Q.png" alt="" class="teach-avatar"/>
+      </div>
+
+      <div class="teach-right teach-panel teach-panel--towers">
+        ${stackHtml(5, 2)}
+        <div style="
+          font-size:34px;
+          font-weight:900;
+          background:#18351b;
+          color:#4CAF50;
+          width:64px;
+          height:64px;
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          border:3px solid #4CAF50;
+          box-shadow:0 0 16px #4CAF50;">&gt;</div>
+        ${stackHtml(7, 2)}
+      </div>
+    </div>
+
+    <div style="background:#202735;border-radius:28px;padding:18px 26px;
+                display:flex;align-items:center;gap:28px;align-self:flex-end;">
+      ${fracHtml(2,5)}
+      <div style="
+        font-size:34px;
+        font-weight:900;
+        background:#18351b;
+        color:#4CAF50;
+        width:64px;
+        height:64px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:3px solid #4CAF50;
+        box-shadow:0 0 16px #4CAF50;">&gt;</div>
+      ${fracHtml(2,7)}
+    </div>
+  </div>
+`;
+
+const TEACH_NUMERATOR_HTML4 = `
+  <div class="teach-wrap">
+    <div class="teach-row">
+      <div class="bubble-wrap">
+        <div style="max-width:620px;background:#4a4f57;color:#fff;border-radius:22px;padding:22px 26px;position:relative;">
+          <div style="font-size:28px;line-height:1.25;">
+            Saat dua pecahan punya <b style="color:#ffd166;">pembilang yang sama</b> (bagian terisi sama),
+            pecahan dengan <b style="color:#ffd166;">penyebut lebih kecil</b> (bagian total lebih sedikit) <b>lebih besar</b>.
+            <br/><br/>
+            Di sini keduanya punya 5 bagian terisi: <b>5/9 &lt; 5/6</b>.
+          </div>
+          <div style="position:absolute;left:56px;bottom:-18px;width:0;height:0;
+                      border-top:18px solid #4a4f57;border-left:18px solid transparent;
+                      border-right:18px solid transparent;"></div>
+        </div>
+        <img src="assets/Deete_Neutral_Q.png" alt="" class="teach-avatar"/>
+      </div>
+
+      <div class="teach-right teach-panel teach-panel--towers">
+        ${stackHtml(9, 5)}
+        <div style="
+          font-size:34px;
+          font-weight:900;
+          background:#18351b;
+          color:#4CAF50;
+          width:64px;
+          height:64px;
+          border-radius:50%;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          border:3px solid #4CAF50;
+          box-shadow:0 0 16px #4CAF50;">&lt;</div>
+        ${stackHtml(6, 5)}
+      </div>
+    </div>
+
+    <div style="background:#202735;border-radius:28px;padding:18px 26px;
+                display:flex;align-items:center;gap:28px;align-self:flex-end;">
+      ${fracHtml(5,9)}
+      <div style="
+        font-size:34px;
+        font-weight:900;
+        background:#18351b;
+        color:#4CAF50;
+        width:64px;
+        height:64px;
+        border-radius:50%;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border:3px solid #4CAF50;
+        box-shadow:0 0 16px #4CAF50;">&lt;</div>
+      ${fracHtml(5,6)}
+    </div>
+  </div>
+`;
+
+    const flow = [
+      { type: 'intro',
+       heading: "Hai! Siap membandingkan pecahan?", 
+       subtext: "Sekarang saatnya mengeksplorasi cara membandingkan pecahan ketika pembilang tetap tetapi penyebut berubah—dan menentukan mana yang lebih besar, lebih kecil, atau sama.",
+        img: "assets/Deete_Neutral_Q.png", button: "Mulai" },
+      {
+        type: 'question',
+       fractionsLeft: [
+      { num: 1, den: 4 }, { num: 2, den: 4 }, { num: 2, den: 3 }
+    ],
+    fractionsRight: [
+      { num: 3, den: 4 }, { num: 2, den: 3 }, { num: 1, den: 3 }
+    ],
+    leftFill: 2, rightFill: 2, leftDiv: 4, rightDiv: 3,
+         steps: [
+   {
+        type: 'leftFraction',
+        correctIndex: 1,
+        message: "Pecahan mana yang mewakili bagian terisi pada gelas kiri? Ketuk jawaban yang benar.",
+        correctMessage: "Bagus! Gelas kiri terisi 2 dari 4 bagian.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+          { type: 'rightFraction', correctIndex: 1,
+        message: "Sekarang, pecahan mana yang mewakili bagian terisi pada gelas kanan? Ketuk jawaban yang benar.",
+        correctMessage: "Pilihan tepat! Itu persis banyaknya bagian terisi pada gelas kanan.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+          { type: 'comparison', correctIndex: 2,
+        message: "Bandingkan kedua pecahan dan pilih simbol yang benar",
+        correctMessage: "Keren! Kalian benar. 2/4 lebih kecil daripada 2/3.",
+        incorrectMessages: [
+         "Belum tepat. Perhatikan seberapa banyak setiap gelas ukur terisi, lalu coba lagi."
+        ]
+       },
+        ],
+      },
+      {
+  type: 'custom',
+  img: 'assets/Deete_Neutral_Q.png',
+  button: 'Berikutnya',
+  html: TEACH_NUMERATOR_HTML
+},
+  { type: 'custom', 
+  heading: "Kalian Hebat!", 
+  subtext: "Ayo lanjutkan dan banding beberapa pecahan lagi biar kalian makin paham!", 
+  img: "assets/Deete_Neutral_Q.png", button: "Lanjut" },
+
+      // Pertanyaan 2
+      {
+        type: 'question',
+        fractionsLeft: [
+      { num: 1, den: 7 }, { num: 3, den: 7 }, { num: 4, den: 7 }
+    ],
+    fractionsRight: [
+      { num: 4, den: 5 }, { num: 2, den: 5 }, { num: 1, den: 5 }
+    ],
+    leftFill: 4, rightFill: 4, leftDiv: 7, rightDiv: 5,
+        steps: [
+        {
+        type: 'leftFraction',
+        correctIndex: 2,
+        message: "Pecahan mana yang mewakili bagian terisi pada gelas kiri? Ketuk jawaban yang benar.",
+        correctMessage: "Bagus! Gelas kiri terisi 4 dari 7 bagian.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'rightFraction', correctIndex: 0,
+        message: "Sekarang, pecahan mana yang mewakili bagian terisi pada gelas kanan? Ketuk jawaban yang benar.",
+        correctMessage: "Pilihan tepat! Itu persis banyaknya bagian terisi pada gelas kanan.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'comparison', correctIndex: 2,
+        message: "Bandingkan kedua pecahan dan pilih simbol yang benar",
+        correctMessage: "Kerja bagus! Kalian melihatnya — 4 dari 7 lebih kecil daripada 4 dari 5.",
+        incorrectMessages: [
+         "Belum tepat. Perhatikan seberapa banyak setiap gelas ukur terisi, lalu coba lagi."
+        ]
+       },
+    ],
+      
+      },
+       
+        
+      // Pertanyaan 3
+      {
+        type: 'question',
+        fractionsLeft: [
+      { num: 3, den: 5 }, { num: 4, den: 6 }, { num: 2, den: 5 }
+    ],
+    fractionsRight: [
+      { num: 4, den: 6 }, { num: 2, den: 7 }, { num: 1, den: 7 }
+    ],
+    leftFill: 2, rightFill: 2, leftDiv: 5, rightDiv: 7,
+        steps: [
+        {
+        type: 'leftFraction',
+        correctIndex: 2,
+        message: "Pecahan mana yang mewakili bagian terisi pada gelas kiri? Ketuk jawaban yang benar.",
+        correctMessage: "Bagus! Gelas kiri terisi 2 dari 5 bagian.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'rightFraction', correctIndex: 1,
+        message: "Sekarang, pecahan mana yang mewakili bagian terisi pada gelas kanan? Ketuk jawaban yang benar.",
+        correctMessage: "Pilihan tepat! Itu persis banyaknya bagian terisi pada gelas kanan.",
+        incorrectMessages: [
+         "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'comparison', correctIndex: 0,
+        message: "Bandingkan kedua pecahan dan pilih simbol yang benar",
+        correctMessage: "Kerja bagus! Kalian melihatnya. 2 dari 5 lebih besar daripada 2 dari 7.",
+        incorrectMessages: [
+         "Belum tepat. Perhatikan seberapa banyak setiap gelas ukur terisi, lalu coba lagi."
+        ]
+       },
+    ],
+    },
+   
+      // Pertanyaan 4
+      {
+        type: 'question',
+        fractionsLeft: [
+      { num: 5, den: 9 }, { num: 4, den: 9 }, { num: 3, den: 9 }
+    ],
+    fractionsRight: [
+      { num: 3, den: 6 }, { num: 5, den: 6 }, { num: 1, den: 7 }
+    ],
+    leftFill: 5, rightFill: 5, leftDiv: 9, rightDiv: 6,
+        steps: [
+        {
+        type: 'leftFraction',
+        correctIndex: 0,
+        message: "Pecahan mana yang mewakili bagian terisi pada gelas kiri? Ketuk jawaban yang benar.",
+        correctMessage: "Bagus! Gelas kiri terisi 5 dari 9 bagian.",
+        incorrectMessages: [
+        "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'rightFraction', correctIndex: 1,
+        message: "Sekarang, pecahan mana yang mewakili bagian terisi pada gelas kanan? Ketuk jawaban yang benar.",
+        correctMessage: "Pilihan tepat! Itu persis banyaknya bagian terisi pada gelas kanan.",
+        incorrectMessages: [
+       "Coba lagi, periksa berapa banyak bagian sama besar yang dibagi pada gelas kimia, dan berapa banyak bagian yang terisi!"
+        ]
+      },
+      { type: 'comparison', correctIndex: 2,
+        message: "Bandingkan kedua pecahan dan pilih simbol yang benar",
+        correctMessage: "Kerja bagus! Kalian melihatnya. 5 dari 6 lebih besar daripada 5 dari 9.",
+        incorrectMessages: [
+         "Belum tepat. Perhatikan seberapa banyak setiap gelas ukur terisi, lalu coba lagi."
+        ]
+       },
+    ],
+    },
+     
+    
+       {
+        type: 'custom',
+        heading: "Kerja yang luar biasa!",
+        subtext: "Sekarang kalian sudah belajar cara membandingkan pecahan dengan memeriksa pembilang dan penyebutnya!",
+        img: "assets/Deete_Neutral_Q.png",
+        hideButton: true
+      },
+
+    ];
+    let currentFlowIndex = 0;
+    let currentStep = 0;
+    let answered = false;
+    let wrongAttempt = 0;
+    let answeredLeftIndex = null;
+    let answeredRightIndex = null;
+    let answeredComparisonIndex = null;
+
+    // Elemen DOM
+    const progressContainer = document.getElementById('progressContainer');
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+    const stepLabel = document.getElementById('stepLabel');
+    const questionLabel = document.getElementById('questionLabel');
+    const feedbackArea = document.getElementById('feedbackArea');
+    const overlayScreen = document.getElementById('overlayScreen');
+    const overlayDialogue = document.getElementById('overlayDialogue');
+    const overlayText = document.getElementById('overlayText');
+    const overlayImg = document.getElementById('overlayImg');
+    const overlayBtn = document.getElementById('overlayBtn');
+ 
+    function showOverlayScreen(type, heading, subtext, img, buttonLabel, onClick, hideButton = false, html = null) {
+  overlayImg.src = img;
+
+  if (html) {
+    overlayText.innerHTML = html;
+    overlayDialogue.classList.add('transparent');
+    overlayImg.style.display = 'none';
+  } else {
+    overlayText.innerHTML = `<h1 class="overlay-heading">${heading}</h1><p class="overlay-subtext">${subtext}</p>`;
+    overlayDialogue.classList.remove('transparent');
+    overlayImg.style.display = '';
+  }
+
+  if (hideButton) {
+  overlayBtn.style.display = 'none';
+  overlayBtn.onclick = null;
+} else {
+  overlayBtn.style.display = '';
+  overlayBtn.textContent = buttonLabel || 'Continue';
+  overlayBtn.onclick = () => {
+    playClickSound();            // <-- add HERE
+    overlayScreen.style.display = 'none';
+    if (onClick) onClick();
+  };
+}
+
+
+  overlayScreen.style.display = 'flex';
+}
+
+    function formatFeedbackText(text) {
+      // Ganti "a/b" menjadi tampilan pecahan
+      return text.replace(/(\d+)\/(\d+)/g, (match, numerator, denominator) => {
+        return `<div class="fraction-display" style="display: inline-flex; vertical-align: middle; margin: 0 5px;">
+      <div class="numerator">${numerator}</div>
+      <div class="fraction-line"></div>
+      <div class="denominator">${denominator}</div>
+    </div>`;
+      });
+    }
+
+    function handleIncorrect(step) {
+      const msgs = step.incorrectMessages || ["Coba lagi!"];
+      const text = msgs[Math.min(wrongAttempt, msgs.length - 1)];
+      feedbackArea.innerHTML = formatFeedbackText(text);
+      wrongAttempt++;
+    }
+
+    function renderFractionButtons(side, containerId, correctIndex, isAnswered, isActive, step) {
+      const q = flow[currentFlowIndex];
+      const col = document.getElementById(containerId);
+      col.innerHTML = '';
+      let answeredIndex = side === 'left' ? answeredLeftIndex : answeredRightIndex;
+      if (answeredIndex !== null && answeredIndex !== undefined) {
+        col.classList.add('answered');
+        const fractions = side === 'left' ? q.fractionsLeft : q.fractionsRight;
+        const frac = fractions[answeredIndex];
+        const btn = document.createElement('button');
+        btn.className = 'fraction-btn correct';
+        btn.innerHTML = `<div class="fraction-display">
+      <div class="numerator">${frac.num}</div>
+      <div class="fraction-line"></div>
+      <div class="denominator">${frac.den}</div>
+    </div>`;
+        btn.disabled = true;
+        col.appendChild(btn);
+        return;
+      } else {
+        col.classList.remove('answered');
+      }
+      const fractions = side === 'left' ? q.fractionsLeft : q.fractionsRight;
+      fractions.forEach((frac, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'fraction-btn';
+        btn.innerHTML = `<div class="fraction-display">
+      <div class="numerator">${frac.num}</div>
+      <div class="fraction-line"></div>
+      <div class="denominator">${frac.den}</div>
+    </div>`;
+        if (isAnswered) {
+          if (idx === correctIndex) btn.classList.add('correct');
+        }
+        btn.disabled = !isActive || isAnswered;
+        if (!isActive) btn.style.opacity = 0.5;
+        btn.addEventListener('click', () => {
+          if (answered || !isActive) return;
+          if (idx === correctIndex) {
+            playCorrectSound();
+            btn.classList.add('correct');
+            feedbackArea.innerHTML = formatFeedbackText(step.correctMessage || 'Benar! Keren.');
+            answered = true;
+            nextButton.disabled = false;
+            if (side === 'left') answeredLeftIndex = idx;
+            if (side === 'right') answeredRightIndex = idx;
+            renderFractionButtons(side, containerId, correctIndex, true, false, step);
+          } else {
+            playWrongSound();
+            btn.classList.add('incorrect');
+            handleIncorrect(step);
+            setTimeout(() => btn.classList.remove('incorrect'), 500);
+          }
+        });
+        col.appendChild(btn);
+      });
+    }
+
+    function showComparisonHint(leftFill, leftDiv, rightFill, rightDiv) {
+      const minFill = Math.min(leftFill / leftDiv, rightFill / rightDiv);
+      const h1 = document.getElementById('waterHighlight1');
+      const h2 = document.getElementById('waterHighlight2');
+      const heightReduction = 0.15;
+      h1.style.height = (minFill * 100 * (1 - heightReduction)) + '%';
+      h2.style.height = (minFill * 100 * (1 - heightReduction)) + '%';
+      h1.classList.add('active');
+      h2.classList.add('active');
+      setTimeout(() => {
+        h1.classList.remove('active');
+        h2.classList.remove('active');
+      }, 5000);
+    }
+
+    function syncHighlightToWater(waterId, highlightId) {
+  const water = document.getElementById(waterId);
+  const hl    = document.getElementById(highlightId);
+  const cs    = getComputedStyle(water);
+
+  // ensure CSS (not inline) controls left/width
+  hl.style.removeProperty('left');
+  hl.style.removeProperty('width');
+
+  // keep bottom and corner radius in sync
+  hl.style.bottom = cs.bottom;
+  hl.style.borderBottomLeftRadius  = cs.borderBottomLeftRadius;
+  hl.style.borderBottomRightRadius = cs.borderBottomRightRadius;
+}
+const HIGHLIGHT_THICKNESS_PX = 265; // your desired band thickness (max)
+const EXTRA_LINE_THICKNESS = 4;
+function showComparisonHintPersistent(leftFill, leftDiv, rightFill, rightDiv, thicknessPx = HIGHLIGHT_THICKNESS_PX){
+  // sync both sides
+  syncHighlightToWater('water1','waterHighlight1');
+  syncHighlightToWater('water2','waterHighlight2');
+
+  const h1 = document.getElementById('waterHighlight1');
+  const h2 = document.getElementById('waterHighlight2');
+
+  const l1 = document.getElementById('extraLine1');
+  const l2 = document.getElementById('extraLine2');
+
+  const w1 = document.getElementById('water1');
+  const w2 = document.getElementById('water2');
+
+  const cs1 = getComputedStyle(w1);
+  const cs2 = getComputedStyle(w2);
+  
+  const hWater1    = parseFloat(cs1.height);
+  const hWater2    = parseFloat(cs2.height);
+  const baseBottom1= parseFloat(cs1.bottom);
+  const baseBottom2= parseFloat(cs2.bottom);
+
+  const band = Math.min(thicknessPx, Math.min(hWater1, hWater2));
+
+  h1.style.height = band + 'px';
+  h2.style.height = band + 'px';
+
+  const lineBottom1 = baseBottom1 + band - (EXTRA_LINE_THICKNESS / 2);
+  const lineBottom2 = baseBottom2 + band - (EXTRA_LINE_THICKNESS / 2);
+  l1.style.bottom  = lineBottom1 + 'px';
+  l2.style.bottom  = lineBottom2 + 'px';
+
+ 
+  h1.classList.add('active');
+  h2.classList.add('active');
+
+  l1.classList.add('active'); 
+  l2.classList.add('active');
+}
+
+
+function clearComparisonHint(){
+  ['waterHighlight1','waterHighlight2','extraLine1','extraLine2'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.classList.remove('active');
+    if(id.startsWith('waterHighlight')) el.style.height = '0px';
+  });
+}
+
+
+    function renderComparisonButtons(correctIndex, isAnswered, isActive, step) {
+      const col = document.querySelector('.comparison-buttons-col');
+      col.innerHTML = '';
+      const images = [
+        'assets/greater than.png',
+        'assets/equal.png',
+        'assets/less than.png'
+      ];
+      const q = flow[currentFlowIndex];
+      if (answeredComparisonIndex !== null && answeredComparisonIndex !== undefined) {
+        col.classList.add('answered');
+        const btn = document.createElement('button');
+        btn.className = 'comparison-btn correct';
+        btn.innerHTML = `<img src="${images[answeredComparisonIndex]}" alt="simbol perbandingan" style="width:100%;height:100%;object-fit:contain;" />`;
+        btn.disabled = true;
+        col.appendChild(btn);
+        return;
+      } else {
+        col.classList.remove('answered');
+      }
+      images.forEach((img, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'comparison-btn';
+        btn.innerHTML = `<img src="${img}" alt="simbol perbandingan" style="width:100%;height:100%;object-fit:contain;" />`;
+        if (isAnswered) {
+          if (idx === correctIndex) btn.classList.add('correct');
+        }
+        btn.disabled = !isActive || isAnswered;
+        if (!isActive) btn.style.opacity = 0.5;
+        btn.addEventListener('click', () => {
+          clearComparisonHint();
+
+          if (answered || !isActive) return;
+          if (idx === correctIndex) {
+            playCorrectSound();
+            btn.classList.add('correct');
+            feedbackArea.innerHTML = formatFeedbackText(step.correctMessage || 'Benar! Keren.');
+            answered = true;
+            nextButton.disabled = false;
+            answeredComparisonIndex = idx;
+            renderComparisonButtons(correctIndex, true, false, step);
+          } else {
+            playWrongSound();
+            btn.classList.add('incorrect');
+            handleIncorrect(step);
+            showComparisonHintPersistent(q.leftFill, q.leftDiv, q.rightFill, q.rightDiv);
+            setTimeout(() => btn.classList.remove('incorrect'), 500);
+          }
+        });
+        col.appendChild(btn);
+      });
+    }
+
+    function setBeakerDisabled(side, disabled) {
+      const waterEl = document.getElementById(side === 'left' ? 'water1' : 'water2');
+      const wrapper = waterEl.parentElement;
+      if (disabled) {
+        wrapper.classList.add('beaker-disabled');
+      } else {
+        wrapper.classList.remove('beaker-disabled');
+        waterEl.style.opacity = '0.85';
+      }
+    }
+
+    function setupContainer(waterId, markersId, numbersId, divisions, filled) {
+      const water = document.getElementById(waterId);
+      const divisionMarkers = document.getElementById(markersId);
+      const divisionNumbers = document.getElementById(numbersId);
+      const parent = water.parentElement;
+
+      const beakerHeight = 419;
+      const beakerWidth = 220;
+
+      const overlayLeft = -31;
+      const overlayWidth = 290;
+      const overlayBottom = 20;
+
+      const maxFillRatio = 0.92;
+
+      const availableHeight = (beakerHeight - overlayBottom) * maxFillRatio;
+
+      const fillHeight = Math.round((filled / divisions) * availableHeight);
+      water.style.height = fillHeight + 'px';
+      water.style.width = overlayWidth + 'px';
+      water.style.left = overlayLeft + 'px';
+      water.style.bottom = overlayBottom + 'px';
+
+      divisionMarkers.innerHTML = '';
+      divisionNumbers.innerHTML = '';
+      for (let i = 1; i < divisions; i++) {
+        const marker = document.createElement('div');
+        marker.className = 'division-marker';
+        marker.style.bottom = Math.round((i / divisions) * availableHeight + overlayBottom) + 'px';
+        marker.style.left = '0px';
+        marker.style.width = overlayWidth + 'px';
+        divisionMarkers.appendChild(marker);
+      }
+      for (let i = divisions; i >= 1; i--) {
+        const num = document.createElement('div');
+        num.className = 'division-number';
+        num.textContent = i;
+        let bottomPosition = Math.round(((i - 0.5) / divisions) * availableHeight + overlayBottom - 14);
+        if (divisions === 9) {
+          bottomPosition -= 5;
+        }
+        num.style.bottom = bottomPosition + 'px';
+        num.style.left = '0px';
+        divisionNumbers.appendChild(num);
+      }
+    }
+
+function renderResultData(leftFill, rightFill) {
+  const row   = document.getElementById('resultDataRow');
+  const left  = document.getElementById('resultLeftCard');
+  const right = document.getElementById('resultRightCard');
+  const sym   = document.getElementById('resultSymbol');
+
+  const buildStack = (n) => {
+    const tiles = [];
+    for (let i = n; i >= 1; i--) {
+      tiles.push(`<div class="result-tile">${i}</div>`);
+    }
+    return tiles.join('');
+  };
+
+  left.innerHTML  = buildStack(leftFill);
+  right.innerHTML = buildStack(rightFill);
+
+  let s = '>';
+  if (leftFill === rightFill) s = '=';
+  else if (leftFill < rightFill) s = '&lt;';
+  sym.innerHTML = s;
+
+  const sampleTile = (left.querySelector('.result-tile') || right.querySelector('.result-tile'));
+  if (sampleTile) {
+    const tileRect = sampleTile.getBoundingClientRect();
+    const cs = getComputedStyle(sampleTile);
+    const tileH = tileRect.height;
+    const tileGap = parseFloat(cs.marginTop) + parseFloat(cs.marginBottom);
+
+    const maxCount = Math.max(leftFill, rightFill);
+    const cardHeight = maxCount * (tileH + tileGap);
+  } else {
+    left.style.height  = '';
+    right.style.height = '';
+  }
+
+  row.style.display = 'flex';
+}
+
+    function updateStep() {
+      const item = flow[currentFlowIndex];
+      if (item.type !== 'question') return;
+      const q = item;
+
+      const screen = document.getElementById('screen1');
+      screen.classList.remove('result-mode');
+
+      const step = q.steps[currentStep];
+      document.getElementById('resultDataRow').style.display = 'none';
+      const containerRow = document.querySelector('.container-row');
+      const water1Wrapper = document.getElementById('water1').parentElement;
+      const water2Wrapper = document.getElementById('water2').parentElement;
+      if (step.type === 'resultData') {
+        document.getElementById('fractionButtonsLeft').style.display = '';
+        document.getElementById('fractionButtonsRight').style.display = '';
+        document.querySelector('.comparison-buttons-col').style.display = 'none';
+
+        renderFractionButtons('left', 'fractionButtonsLeft', q.steps.find(s => s.type === 'leftFraction').correctIndex, true, false, step);
+        renderFractionButtons('right', 'fractionButtonsRight', q.steps.find(s => s.type === 'rightFraction').correctIndex, true, false, step);
+
+        document.getElementById('water1').parentElement.style.display = '';
+        document.getElementById('water2').parentElement.style.display = '';
+        screen.classList.add('result-mode');
+
+        feedbackArea.innerHTML = formatFeedbackText(step.message || '');
+        renderResultData(q.leftFill, q.rightFill);
+
+        nextButton.disabled = false;
+        return;
+      }
+      else {
+        document.getElementById('water1').parentElement.style.display = '';
+        document.getElementById('water2').parentElement.style.display = '';
+      }
+
+      if (step.type === 'messageOnly') {
+        water1Wrapper.classList.add('container-outline-only');
+        water2Wrapper.classList.add('container-outline-only');
+      } else {
+        water1Wrapper.classList.remove('container-outline-only');
+        water2Wrapper.classList.remove('container-outline-only');
+      }
+
+      setupContainer('water1', 'division-markers1', 'division-numbers1', q.leftDiv, q.leftFill);
+      setupContainer('water2', 'division-markers2', 'division-numbers2', q.rightDiv, q.rightFill);
+
+      progressContainer.innerHTML = '';
+      for (let i = 0; i < q.steps.length; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (i === currentStep ? ' active' : '') + (i < currentStep ? ' completed' : '');
+        progressContainer.appendChild(dot);
+      }
+      prevButton.disabled = (currentStep === 0);
+      nextButton.disabled = true;
+      wrongAttempt = 0;
+      answered = false;
+      if (currentStep === 0) {
+        answeredLeftIndex = null;
+        answeredRightIndex = null;
+        answeredComparisonIndex = null;
+      }
+
+      setBeakerDisabled('left', false);
+      setBeakerDisabled('right', false);
+
+      if (step.type === 'leftFraction') {
+        setBeakerDisabled('right', true);
+      }
+
+      if (step.type === 'rightFraction') {
+        // setBeakerDisabled('left', true);
+      }
+
+      if (step.type === 'waterSummary') {
+        document.getElementById('fractionButtonsLeft').style.display = 'none';
+        document.getElementById('fractionButtonsRight').style.display = 'none';
+        document.querySelector('.comparison-buttons-col').style.display = 'none';
+        feedbackArea.innerHTML = formatFeedbackText(step.message || '');
+        nextButton.disabled = false;
+      } else if (step.type === 'messageOnly') {
+        document.getElementById('fractionButtonsLeft').style.display = '';
+        document.getElementById('fractionButtonsRight').style.display = '';
+        document.querySelector('.comparison-buttons-col').style.display = '';
+        feedbackArea.innerHTML = formatFeedbackText(step.message || '');
+        nextButton.disabled = false;
+        document.getElementById('water1').parentElement.classList.add('container-outline-only');
+        document.getElementById('water2').parentElement.classList.add('container-outline-only');
+        renderFractionButtons('left', 'fractionButtonsLeft', -1, true, false, step);
+        renderFractionButtons('right', 'fractionButtonsRight', -1, true, false, step);
+        renderComparisonButtons(-1, true, false, step);
+        return;
+      } else {
+        document.getElementById('fractionButtonsLeft').style.display = '';
+        document.getElementById('fractionButtonsRight').style.display = '';
+        document.querySelector('.comparison-buttons-col').style.display = '';
+      }
+      feedbackArea.innerHTML = formatFeedbackText(step.message || '');
+      renderFractionButtons('left', 'fractionButtonsLeft', step.type === 'leftFraction' ? step.correctIndex : -1, false, step.type === 'leftFraction', step);
+      renderFractionButtons('right', 'fractionButtonsRight', step.type === 'rightFraction' ? step.correctIndex : -1, false, step.type === 'rightFraction', step);
+      renderComparisonButtons(step.type === 'comparison' ? step.correctIndex : -1, false, step.type === 'comparison', step);
+    }
+
+    function renderFlow() {
+      const item = flow[currentFlowIndex];
+      document.getElementById('introScreen').style.display = 'none';
+      document.querySelector('.assets').style.display = 'none';
+      overlayScreen.style.display = 'none';
+      if (item.type === 'intro' || item.type === 'custom' || item.type === 'final') {
+        showOverlayScreen(
+          item.type,
+          item.heading,
+          item.subtext,
+          item.img,
+          item.button || 'Lanjut',
+          item.hideButton ? null : () => {
+            currentFlowIndex++;
+            currentStep = 0;
+            renderFlow();
+          },
+          item.hideButton === true,
+          item.html || null
+        );
+      } else if (item.type === 'question') {
+        document.querySelector('.assets').style.display = '';
+        updateStep();
+      }
+    }
+
+    function nextStepOrOverlay() {
+      const item = flow[currentFlowIndex];
+      if (item.type !== 'question') return;
+
+      const q = item;
+
+      if (currentStep < q.steps.length - 1) {
+        currentStep++;
+        updateStep();
+        return;
+      }
+
+      currentFlowIndex++;
+      currentStep = 0;
+
+      const nextItem = flow[currentFlowIndex];
+
+      document.querySelector('.assets').style.display = 'none';
+
+      if (nextItem && (nextItem.type === 'custom' || nextItem.type === 'final' || nextItem.type === 'intro')) {
+        showOverlayScreen(
+          nextItem.type,
+          nextItem.heading,
+          nextItem.subtext,
+          nextItem.img,
+          nextItem.button || 'Lanjut',
+          nextItem.hideButton ? null : () => {
+            currentFlowIndex++;
+            currentStep = 0;
+            renderFlow();
+          },
+          nextItem.hideButton === true,
+          nextItem.html || null
+        );
+      } else {
+        renderFlow();
+      }
+    }
+
+    nextButton.onclick = function () {
+      playClickSound();
+      nextStepOrOverlay();
+    };
+    prevButton.onclick = function () {
+      playClickSound();
+      if (currentStep > 0) {
+        currentStep--;
+        updateStep();
+      } else if (currentFlowIndex > 0) {
+        currentFlowIndex--;
+        if (flow[currentFlowIndex].type === 'question') {
+          currentStep = flow[currentFlowIndex].steps.length - 1;
+          renderFlow();
+        } else {
+          currentStep = 0;
+          renderFlow();
+        }
+      }
+    };
+
+    for (let i = 0; i < flow.length; i++) {
+  const item = flow[i];
+  if (item.type !== 'question') continue;
+
+  // Check for the specific question (you can adjust conditions as needed)
+  const isTargetQuestion =
+    item.leftDiv === 4 &&
+    item.rightDiv === 3 &&
+    Array.isArray(item.fractionsLeft) &&
+    item.fractionsLeft.some(f => f.num === 2 && f.den === 4) &&
+    item.fractionsRight.some(f => f.num === 2 && f.den === 3);
+
+  if (!isTargetQuestion) continue; // skip others
+
+  // avoid duplicates if rerun
+  const alreadyHasMessageOnly = item.steps.some(s => s.type === 'messageOnly');
+  if (!alreadyHasMessageOnly) {
+    item.steps.push({
+      type: 'messageOnly',
+     message:
+        'Apakah kalian memperhatikan? \nKedua pecahan memiliki jumlah bagian terisi yang sama, ' +
+        'tetapi pecahan dengan jumlah bagian total lebih sedikit nilainya lebih besar, ' +
+        'karena setiap bagiannya lebih besar.'
+    });
+  }
+}
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFlow();
+      // Position marquee after content is loaded
+      setTimeout(positionMarquee, 100);
+    });
+
+    // ====== LOGIKA SKALA ======
+    function scaleApp() {
+      const baseWidth = 1366;
+      const baseHeight = 768;
+      const scaleX = window.innerWidth / baseWidth;
+      const scaleY = window.innerHeight / baseHeight;
+      const scale = Math.min(scaleX, scaleY);
+      const wrapper = document.getElementById('scale-wrapper');
+      wrapper.style.transform = `scale(${scale})`;
+      wrapper.style.left = `${(window.innerWidth - baseWidth * scale) / 2}px`;
+      wrapper.style.top = `${(window.innerHeight - baseHeight * scale) / 2}px`;
+      
+      // Position marquee from logo's right edge to screen's right edge
+      positionMarquee();
+    }
+    
+    function positionMarquee() {
+      const logo = document.querySelector('.tb-logo');
+      const marquee = document.querySelector('.marquee-banner');
+      if (logo && marquee) {
+        const logoRect = logo.getBoundingClientRect();
+        const logoRightEdge = logoRect.right;
+        marquee.style.left = `${logoRightEdge}px`;
+      }
+    }
+    
+    window.addEventListener('resize', scaleApp);
+    window.addEventListener('load', scaleApp);
+  </script>
+</body>
+
+
+</html>
