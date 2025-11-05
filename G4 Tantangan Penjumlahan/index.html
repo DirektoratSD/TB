@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Learning Applet</title>
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- React Local Files -->
+    <script src="js/n3f8q5w0.js"></script>
+    <script src="js/z9v4c7l2.js"></script>
+    <!-- GSAP Animation Library -->
+    <script src="js/b6j1r8h4.js"></script>
+    <!-- Note: For production, consider downloading babel.min.js from https://unpkg.com/@babel/standalone/babel.min.js -->
+</head>
+<body>
+    <div class="marquee-container">
+        <div class="marquee-content">
+            <span class="marquee-text">Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</span>
+        </div>
+    </div>
+    <div id="root"></div>
+
+    <!-- Application Configuration -->
+    <script>
+        // Default language configuration - change this to set the default language
+        const APP_CONFIG = {
+            defaultLanguage: 'id' // Change to 'id' for Indonesian, 'en' for English
+        };
+        
+        // Set the HTML lang attribute dynamically
+        document.documentElement.lang = APP_CONFIG.defaultLanguage;
+    </script>
+
+    <!-- Data and Constants -->
+    <script src="js/constants.js"></script>
+    <script src="js/data.js"></script>
+    
+    <!-- React Components (using React.createElement, no Babel needed) -->
+    <script src="js/components/DialogueBox.js"></script>
+    <script src="js/components/SecondDialogBox.js"></script>
+    <script src="js/components/AnimatedSign.js"></script>
+    <script src="js/a5u3y9k7.js"></script>
+    <script src="js/d2i6o0s8.js"></script>
+    <script src="js/components/Header.js"></script>
+    <script src="js/components/CharacterPanel.js"></script>
+    <script src="js/components/InteractionPanel.js"></script>
+    <script src="js/components/ControlPanel.js"></script>
+    
+    <!-- Main Application -->
+    <script src="js/app.js"></script>
+</body>
+</html>

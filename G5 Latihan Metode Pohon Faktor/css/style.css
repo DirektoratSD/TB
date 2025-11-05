@@ -1,0 +1,663 @@
+/********************************************
+ * 1) GLOBAL & BODY STYLES
+ *********************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: #e0e8ef;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/********************************************
+ * 2) APPLET CONTAINER (16:9 Aspect Ratio)
+ *********************************************/
+.applet-container {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  max-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 1vh 3vw rgba(0, 0, 0, 0.15);
+  background-color: #6ca0dc;
+  background-image: url("../assets/DarkBG.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+/* Initial State: Right panel hidden, left panel centered */
+.initial-state .right-panel-content {
+  display: none;
+}
+.initial-state .main-layout {
+  justify-content: center;
+  align-items: center;
+}
+.initial-state .left-panel-anchor {
+  width: 50%;
+  max-width: 40vw;
+  justify-content: center;
+  height: 80%;
+}
+.initial-state .speech-bubble-container {
+  max-height: 50%;
+}
+.initial-state .character-display {
+  height: 60%;
+}
+.initial-state .contextBox::after {
+    bottom: -3vh;
+    left: 25%;
+    transform: translateX(-50%);
+}
+
+/********************************************
+ * 3) PROGRESS BAR (NEW)
+ *********************************************/
+#progress-bar-container {
+    display: flex;
+    align-items: center;
+    padding: 2vh 2vw 0vh 2vw; /* Add more padding for spacing */
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.progress-step {
+    display: flex;
+    justify-content: center; /* Center the circle */
+    align-items: center;
+    flex: 1;
+    position: relative;
+    color: #a0b0d0;
+    font-weight: bold;
+    font-size: calc(1.25vw);
+    transition: color 0.4s ease-in-out;
+}
+
+/* NEW: Last step doesn't expand */
+.progress-step:last-child {
+    /* flex: 0 1 auto; */
+}
+
+.progress-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    height: 4px;
+    background-color: #55678b; /* Upcoming line color */
+    transform: translateY(-50%);
+    z-index: 1;
+    transition: background-color 0.4s ease-in-out;
+    /* NEW: Line starts from center of one item and spans to the next */
+    left: 50%;
+    width: 100%;
+}
+
+.progress-circle {
+    width: 2.5vw;
+    height: 2.5vw;
+    border-radius: 50%;
+    background-color: #55678b; /* Upcoming circle color */
+    border: 0.2vw solid #7c90b6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+    transition: all 0.4s ease-in-out;
+    overflow: hidden; 
+    flex-shrink: 0;
+}
+
+/* NEW: Hide the label */
+.progress-label {
+    display: none;
+}
+
+/* --- Progress Bar States --- */
+.progress-step.current .progress-circle {
+    background-color: #fdbe35;
+    border-color: #fff;
+    transform: scale(1.2);
+}
+.progress-step.current {
+    color: #fdbe35;
+}
+.progress-step.current .progress-text{
+    color: #554519;
+}
+.progress-step.completed .progress-circle {
+    background-color: #2d9d49;
+    border-color: #72e577;
+    color: #fff;
+}
+.progress-step.completed {
+    color: #bdffc0;
+}
+
+.progress-step.completed .progress-text {
+    display: none;
+}
+.progress-step.completed .progress-circle::before {
+    content: '✔';
+    font-size: 1.5vw;
+    color: white;
+}
+
+.progress-step.completed:not(:last-child)::after {
+    background-color: #2d9d49; /* Completed line color */
+}
+
+
+/********************************************
+ * 4) TITLE BAR
+ *********************************************/
+.titleBar {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(0.8vw);
+  padding: 1vh 2vw;
+  color: white;
+  text-align: center;
+  display: none;
+}
+
+/********************************************
+ * 5) MAIN LAYOUT
+ *********************************************/
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  gap: 1vw;
+}
+
+.left-panel-anchor {
+  width: 30%;
+  max-width: 20vw;
+  min-width: 15vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  justify-content: flex-end;
+}
+
+.character-display {
+  width: auto;
+  height: 50%;
+  z-index: 3;
+}
+
+#characterImageElement {
+  width: auto;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.speech-bubble-container {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 0.5vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 48%;
+
+  z-index: 5;
+}
+
+.contextBox {
+  background: rgba(255, 255, 255, 0.92);
+  padding: 2vh 2vw;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2vw;
+  position: relative;
+  box-shadow: 0 5px 2vw rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.contextBox::after {
+  content: "";
+  position: absolute;
+  bottom: -3vh;
+  right: 20%;
+  width: 0;
+  height: 0;
+  border: 2vw solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 0;
+}
+
+.contextBox .context-section h2 {
+  font-size: calc(0.5rem + 1.25vw);
+  color: #4169e1;
+  margin-bottom: 0.5vh;
+  font-weight: 600;
+}
+.contextBox .context-section div > p {
+  font-size: calc(0.5rem + 1vw);
+  margin-bottom: 1vh;
+  color: #444;
+}
+
+.inline-hammer-wrapper {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin: 0 0.2em; 
+}
+
+.inline-hammer {
+    width: 5em;
+    height: 2.5em;
+    object-fit: contain;
+}
+
+.right-panel-content {
+  padding: 2vh 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/********************************************
+ * 6) WORKING AREA CONTAINER
+ *********************************************/
+.workingArea-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1vh 1vh 0 1vh;
+  background-color: rgba(77, 86, 110, 0.55);
+  backdrop-filter: blur(0.5vw);
+  border-radius: 1.5vw;
+  overflow: visible;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#activity-area {
+  flex: 1;
+  border-radius: 1.5vw;
+  background-color: rgba(41, 45, 58, 0.7);
+  border: 1px solid rgba(255, 152, 68, 0.42);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; 
+  padding: 2vh 1vw;
+  gap: 1vw;
+}
+
+.lowerControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1vh 1vw;
+  gap: 1vw;
+  color: #e0e0e0;
+  font-size: calc(0.8rem + 0.8vw);
+  min-height: 8vh;
+  flex-wrap: wrap;
+}
+
+/********************************************
+ * 7) Applet Specific CSS (FACTORIZATION)
+ *********************************************/
+
+/* --- Main Game Layout --- */
+.game-layout {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 1vw;
+}
+.hammer-area {
+    width: 25%;
+    height: 100%;
+    position: relative;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 1vw;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1vw;
+}
+.factor-tree-area {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 1vw;
+    background: rgba(0, 0, 0, 0.1);
+}
+.breakdown-text {
+    color: #fff;
+    font-size: calc(0.5rem + 1.5vw);
+    text-align: center;
+    position: absolute;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 90%;
+    padding: 0.5vh 2vw;
+    background: rgba(0,0,0,0.4);
+    border-radius: 1vw;
+    backdrop-filter: blur(3px);
+}
+
+/* --- Hammers --- */
+.hammer {
+    position: absolute;
+    width: 14vw;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out;
+    z-index: 10;
+}
+.hammer img {
+    width: 100%;
+}
+.hammer.disabled {
+    pointer-events: none;
+    opacity: 1;
+}
+.hammer:hover:not(.disabled) {
+    transform: scale(1.1);
+}
+.hammer::after {
+    content: attr(data-number);
+    position: absolute;
+    top: 45%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    font-size: 3vw;
+    font-weight: bold;
+    color: #d4a668;
+    text-shadow: -0.05vw -0.05vw 0.02vw #f8d5ab;
+    filter: drop-shadow(0.05vw 0.05vw 0.02vw #3f2603);
+}
+
+/* Hammer Swing Animation */
+.hammer-swing {
+    animation: swing 0.5s ease-in-out;
+    z-index: 10;
+}
+@keyframes swing {
+    0% { transform: rotate(10deg); }
+    50% { transform: rotate(-60deg); }
+    100% { transform: rotate(10deg); }
+}
+
+/* --- Factor Tree --- */
+.tree-node-wrapper {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out, left 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.tree-node {
+    width: 5vw;
+    height: 5vw;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5vw;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(45deg, #096ac5, #18abe6);
+    box-shadow: 0 0.5vh 0px #01519b, 0 1vh 2vh rgba(0,0,0,0.3);
+    transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, filter 0.3s ease;
+    z-index: 2; 
+    position: relative; 
+}
+.tree-node.prime {
+    background: linear-gradient(145deg, #2d9d49, #4caf50);
+    box-shadow: 0 0.5vh 0px #1b5e20;
+    border-radius: 10%;
+    width: 4.75vw;
+    height: 4.75vw;
+}
+.tree-node.incorrect {
+    background: linear-gradient(145deg, #d32f2f, #f44336);
+    box-shadow: 0 0.5vh 0px #b71c1c;
+    animation: shake 0.5s ease-in-out;
+}
+.tree-node.faded {
+    filter: grayscale(1);
+    transform: scale(0.9);
+}
+.node-entering {
+    opacity: 0;
+    transform: scale(0) !important;
+}
+
+.line {
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    transform-origin: bottom center;
+    z-index: 1;
+    transition: height 0.5s ease-in-out 0.2s, transform 0.5s ease-in-out 0.2s;
+}
+
+/* --- Strike Effect --- */
+.strike-effect {
+    position: absolute;
+    width: 10vw;
+    height: 10vw;
+    z-index: 100;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+/* --- MCQ Options --- */
+.mcq-container {
+    position: absolute;
+    bottom: 2vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 2vw;
+    justify-content: center;
+    width: 100%;
+}
+.mcq-option {
+    font-size: calc(0.8rem + 1vw);
+    background: linear-gradient(145deg, #2d9fd4, #03a9f4);
+    box-shadow: 0 0.5vh 0px #01579b, 0 1vh 2vh rgba(0,0,0,0.3);
+    padding: 1vh 2vw;
+}
+.mcq-option.correct {
+    background: linear-gradient(145deg, #10cc6e, #07c274);
+    box-shadow: 0 0.6vh 0px rgba(9, 170, 9, 0.6);
+}
+.mcq-option.incorrect {
+    background: linear-gradient(145deg, #f5613c, #df4f0d);
+    box-shadow: 0 0.6vh 0px rgba(255, 122, 104, 0.6);
+    animation: shake 0.5s ease-in-out;
+}
+
+/* --- General Animations & Controls --- */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-8px); }
+}
+
+.btn {
+  padding: 1vh 2vw;
+  border: 1px solid transparent;
+  border-radius: 4vw;
+  font-size: calc(0.5rem + 1.25vw);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.btn:hover:not([disabled]) {
+  transform: translateY(-2px);
+}
+.btn-primary {
+  background: linear-gradient(145deg, #fdbe35, #fba92d);
+  box-shadow: 0 4px 0px rgba(206, 141, 0, 0.6);
+  color: #fff;
+}
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #f0f0f0;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.4;
+}
+.step-counter {
+    display: none;
+}
+
+/* --- FTUE STYLES --- */
+#hand-ftue {
+  position: fixed;
+  width: 6vw;
+  height: auto;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  transform: translate(-30%, -20%);
+  transition: top 0.3s ease, left 0.3s ease;
+}
+#hand-ftue img {
+  width: 100%;
+  height: auto;
+}
+.hand-animating {
+  display: block !important;
+  animation: hand-tap-animation 1.5s ease-in-out infinite;
+}
+@keyframes hand-tap-animation {
+  0%, 100% {
+    opacity: 0;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  20%, 80% {
+    opacity: 1;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  50% {
+    transform: translate(-30%, -20%) scale(0.95);
+  }
+}
+
+#start-button-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.breakdown-text:empty {
+  opacity: 0;
+}
+
+/********************************************
+ * 8) APP LOGO (Bottom Right)
+ *********************************************/
+/********************************************
+ * 9) TOP MARQUEE
+ *********************************************/
+.top-marquee {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  /* Marquee spans from right edge to left edge of screen */
+  height: 5vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.top-marquee marquee {
+  color: white;
+  font-size: calc(0.5rem + 0.8vw);
+  line-height: 5vh;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.app-logo {
+  position: absolute;
+  bottom: 2vh;
+  right: 2vw;
+  width: auto;
+  height: 4.25vh;
+  max-width: 12.75vw;
+  min-height: 25.5px;
+  max-height: 68px;
+  z-index: 150;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+/* Responsive adjustments for logo */
+@media (max-width: 768px) {
+  .app-logo {
+    bottom: 1vh;
+    right: 1vw;
+    height: 3.4vh;
+    max-width: 17vw;
+    min-height: 21.25px;
+    max-height: 42.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-logo {
+    bottom: 0.5vh;
+    right: 0.5vw;
+    height: 2.55vh;
+    max-width: 21.25vw;
+    min-height: 17px;
+    max-height: 34px;
+  }
+}
+
+@media (min-width: 1920px) {
+  .app-logo {
+    height: 5.1vh;
+    max-width: 10.2vw;
+    min-height: 34px;
+    max-height: 85px;
+  }
+}

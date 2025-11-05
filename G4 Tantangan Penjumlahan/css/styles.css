@@ -1,0 +1,2171 @@
+/* CSS Variables for Responsive Design */
+:root {
+    --header-container-height: 7%;
+    --character-panel-width: 25%;
+    --control-panel-height: 12%;
+    --character-box-height: 50%; /* Character box takes 50% of character panel height */
+    --dialogue-box-height: 50%; /* Dialogue box takes remaining 50% */
+    
+    /* Step Layout Variables */
+    --bottom-dialogue-height: 15%;
+    --working-area-top-margin: 2%;
+    --working-area-bottom-margin: 1%;
+    --bottom-dialogue-top-margin: 1%;
+    --bottom-dialogue-bottom-margin: 2%;
+    --working-area-height: calc(100% - var(--bottom-dialogue-height) - var(--working-area-top-margin) - var(--working-area-bottom-margin) - var(--bottom-dialogue-top-margin) - var(--bottom-dialogue-bottom-margin));
+    
+    /* Character Margins */
+    --character-box-margin-bottom: 2px;
+    --character-box-margin-left: 2px;
+    --character-box-margin-right: 2px;
+    --character-box-margin-top: 12.5px;
+    --character-top-margin: 0px;
+    --character-bottom-margin: 10px;
+    
+    /* Button Sizes */
+    --button-padding-vertical: clamp(0.4rem, 1vw, 0.8rem);
+    --button-padding-horizontal: clamp(1rem, 2vw, 1.5rem);
+    --button-font-size: clamp(1.125rem, 2.25vw, 1.5rem); /* Increased by 25% */
+    --button-border-radius: 25px;
+    --button-min-width: clamp(92px, 13.8vw, 138px); /* Increased by 15% */
+    
+    /* Colors and Opacity */
+    --header-bg-color: black;
+    --header-bg-opacity: 0.75;
+    
+    /* Background */
+    --main-background-image: url('../assets/background.png');
+    --overlay-opacity: 0.3;
+    
+    /* Dialogue Box - Base size calculated for 1656x924 screen */
+    --dialogue-text-color: black;
+    --dialogue-base-font-size: 2.975rem; /* Target font size for 1656x924 screen (reduced by 15%) */
+    --dialogue-base-screen-width: 1656; /* Reference screen width */
+    --dialogue-text-size: var(--dialogue-base-font-size); /* Will be calculated by JavaScript */
+    --dialogue-text-bold: normal;
+    --dialogue-border-color: transparent;
+    --dialogue-box-fill-color: rgba(255, 255, 255, 0.95);
+    
+    /* Bottom Dialogue Box - Base size calculated for 1656x924 screen */
+    --bottom-dialogue-base-font-size: 2.16rem; /* Target font size for 1656x924 screen */
+    --bottom-dialogue-text-size: var(--bottom-dialogue-base-font-size); /* Will be calculated by JavaScript */
+    
+    /* Box Layout Variables */
+    --box-width: 35%; /* Box width as percentage of visualization container */
+    --box-gap: 20%; /* Gap between boxes as percentage of visualization container */
+    --left-box-margin: 5%; /* Left margin for left box */
+    --right-box-margin: 5%; /* Right margin for right box */
+    --box-top-margin: 10%; /* Top margin from visualization container top */
+    
+    /* Star Variables */
+    --star-size: 5vw; /* Star size as 5% of visualization container width */
+    
+    /* Problem Grid Variables */
+    --problem-grid-cell-size: clamp(50px, 8vw, 80px);
+    --problem-grid-gap: clamp(5px, 1vw, 15px);
+    --problem-grid-font-size: clamp(1.5rem, 4vw, 3rem);
+    
+    /* Responsive Font Sizes */
+    --font-size-small: clamp(0.75rem, 1.5vw, 1rem);
+    --font-size-medium: clamp(1rem, 2vw, 1.5rem);
+    --font-size-large: clamp(1.25rem, 2.5vw, 2rem);
+    
+    /* Container Dimensions */
+    --container-border-radius: 8px;
+    --main-container-margin: 2px;
+    
+    /* Working Area Component Parameters */
+    --working-area-bg-color: rgba(0, 0, 0, 0.3);
+    --working-area-bg-opacity: 0.3;
+    --working-area-border-radius: 12px;
+    --working-area-margin-vertical: 5px;
+    
+    /* Interaction Panel Layout Parameters */
+    --second-dialog-height: 10%;
+    --control-panel-height-percentage: 10%;
+    --working-area-top-margin-percentage: 1%;
+    --working-area-bottom-margin-percentage: 0.5%;
+    --second-dialog-top-margin-percentage: 0.5%;
+    --second-dialog-bottom-margin-percentage: 0.5%;
+    --control-panel-top-margin-percentage: 0.5%;
+    --control-panel-bottom-margin-percentage: 0.5%;
+    --component-border-radius: 12px;
+    --interaction-panel-margin-percentage: 0.5%; /* Margin as % of main-container height */
+    
+    /* Color Palette */
+    --clr-green: #2ECC71;      --clr-green-light: #58D98B;      --clr-green-dark: #219150;
+    --clr-orange: #FF7F3F;     --clr-orange-light: #FF9C6A;     --clr-orange-dark: #E56529;
+    --clr-pink: #3498DB;       --clr-pink-light: #5EB2E7;       --clr-pink-dark: #2576B6;
+    --clr-blue: #FF4D6D;       --clr-blue-light: #FF738C;       --clr-blue-dark: #D83655;
+    --clr-purple: #9B59B6;     --clr-purple-light: #B77FD0;     --clr-purple-dark: #7E3E99;
+    --clr-aqua: #1ABC9C;       --clr-aqua-light: #48D1B6;       --clr-aqua-dark: #139A82;
+    --clr-rose: #E84393;       --clr-rose-light: #EF6AA9;       --clr-rose-dark: #B8306C;
+    --clr-yellow: #FF9F1A;     --clr-yellow-light: #FFB84D;     --clr-yellow-dark: #D68300;
+    --clr-gold: #F1C40F;       --clr-gold-light: #F5D54D;       --clr-gold-dark: #BFA70B;
+    --clr-sand: #D2B48C;       --clr-sand-light: #DEC3A3;       --clr-sand-dark: #B9966D;
+    --clr-salmon: #FF6F61;     --clr-salmon-light: #FF8F83;     --clr-salmon-dark: #D4574C;
+    --clr-white: #FFFFFF;      --clr-white-light: #FFFFFF;      --clr-white-dark: #D9D9D9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background: var(--clr-white-dark);
+}
+
+.marquee-container {
+    position: fixed;
+    top: 0;
+    /* Calculate left edge: logo left position + logo width + spacing */
+    /* Logo width is approximately equal to its height (square/auto width) */
+    left: calc(clamp(0.5rem, 1.5vw, 2rem) + clamp(30px, 70%, 60px) + 10px); /* Starts at right edge of logo */
+    right: 0; /* Extends to right edge of screen */
+    height: 5vh;
+    background-color: rgba(0, 0, 0, 0.35);
+    z-index: 5;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+.marquee-content {
+    position: absolute;
+    /* Start from the right edge of the container */
+    right: 0;
+    width: max-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    /* Animation: 25s scroll + 0.25s pause = 25.25s total */
+    animation: marquee-scroll 25.25s linear infinite;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        /* Start with text fully visible on the right */
+        transform: translateX(0);
+    }
+    /* Scroll completes at 99.01% (25s out of 25.25s) */
+    /* Move left by the full container width plus text width to scroll completely out */
+    99.01% {
+        /* Calculate container width: 100vw - marquee left position */
+        /* Then add text width (100% of marquee-content) to ensure it fully exits */
+        /* Since translateX is relative to the element, we need to use calc with the container width */
+        /* The container width is: 100vw - (logo left + logo width + spacing) */
+        /* So we move by: -(container width) - (text width) */
+        transform: translateX(calc(-100vw + (clamp(0.5rem, 1.5vw, 2rem) + clamp(30px, 70%, 60px) + 10px) - 100%));
+    }
+    /* Pause at end for 250ms (0.99% of 25.25s) before restarting */
+    100% {
+        transform: translateX(calc(-100vw + (clamp(0.5rem, 1.5vw, 2rem) + clamp(30px, 70%, 60px) + 10px) - 100%));
+    }
+}
+
+.marquee-text {
+    color: white;
+    font-size: clamp(0.875rem, 1.2vw, 1.1rem);
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.main-container {
+    width: calc(100vw - 2 * var(--main-container-margin));
+    height: calc(100vh - 2 * var(--main-container-margin));
+    margin: var(--main-container-margin);
+    border-radius: var(--container-border-radius);
+    background-image: var(--main-background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Maintain 16:9 aspect ratio */
+    aspect-ratio: 16 / 9;
+    max-width: calc((100vh - 2 * var(--main-container-margin)) * 16 / 9);
+    max-height: calc((100vw - 2 * var(--main-container-margin)) * 9 / 16);
+    margin: auto;
+    position: relative;
+}
+
+.main-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: var(--overlay-opacity);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: var(--container-border-radius);
+}
+
+.main-container > * {
+    position: relative;
+    z-index: 2;
+}
+
+.header-container {
+    height: var(--header-container-height);
+    background-color: var(--header-bg-color);
+    opacity: var(--header-bg-opacity);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    position: relative;
+}
+
+.header-logo {
+    position: absolute;
+    top: 50%;
+    left: clamp(0.5rem, 1.5vw, 2rem);
+    transform: translateY(-50%);
+    height: clamp(30px, 70%, 60px);
+    max-height: clamp(30px, 70%, 60px);
+    min-height: 30px;
+    width: auto;
+    object-fit: contain;
+    z-index: 15;
+}
+
+.header-title {
+    color: white;
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.language-selector {
+    display: flex;
+    gap: 0.5rem;
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.lang-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.lang-btn.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--clr-blue);
+    border-color: white;
+}
+
+.activity-container {
+    height: calc(100% - var(--header-container-height));
+    display: flex;
+    flex-direction: row;
+    flex: 1; /* Take remaining space after header */
+}
+
+.character-panel {
+    width: var(--character-panel-width);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: var(--character-panel-width);
+    max-width: var(--character-panel-width);
+}
+
+.dialogue-box {
+    height: var(--dialogue-box-height);
+    position: relative;
+    margin: 10px;
+    background: var(--dialogue-box-fill-color);
+    border: 2px solid var(--dialogue-border-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 5px;
+    flex-shrink: 0;
+    min-height: var(--dialogue-box-height);
+    max-height: var(--dialogue-box-height);
+}
+
+.dialogue-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dialogue-text {
+    font-size: var(--dialogue-text-size);
+    color: var(--dialogue-text-color);
+    font-weight: var(--dialogue-text-bold);
+    text-align: center;
+    line-height: 1.4;
+}
+
+.dialogue-tail {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgba(255, 255, 255, 0.95);
+}
+
+.character-box {
+    margin-bottom: var(--character-box-margin-bottom);
+    margin-left: var(--character-box-margin-left);
+    margin-right: var(--character-box-margin-right);
+    margin-top: var(--character-box-margin-top);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    height: var(--character-box-height);
+    min-height: var(--character-box-height);
+    max-height: var(--character-box-height);
+}
+
+.character-image {
+    width: clamp(120px, 22vw, 350px);
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: bottom;
+    margin-top: var(--character-top-margin);
+    margin-bottom: var(--character-bottom-margin);
+}
+
+.interaction-panel {
+    width: calc(100% - var(--character-panel-width) - var(--interaction-panel-margin-percentage) * 2);
+    height: calc(100% - var(--interaction-panel-margin-percentage) * 2);
+    margin: var(--interaction-panel-margin-percentage);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-width: calc(100% - var(--character-panel-width) - var(--interaction-panel-margin-percentage) * 2);
+    max-width: calc(100% - var(--character-panel-width) - var(--interaction-panel-margin-percentage) * 2);
+    border-radius: var(--component-border-radius);
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.visualization-panel {
+    width: 100%; /* Take full width of interaction panel */
+    height: calc(100% - var(--control-panel-height-percentage) - var(--control-panel-top-margin-percentage) - var(--control-panel-bottom-margin-percentage));
+    min-height: calc(100% - var(--control-panel-height-percentage) - var(--control-panel-top-margin-percentage) - var(--control-panel-bottom-margin-percentage)); /* Fixed height */
+    max-height: calc(100% - var(--control-panel-height-percentage) - var(--control-panel-top-margin-percentage) - var(--control-panel-bottom-margin-percentage)); /* Fixed height */
+    display: flex;
+    flex-direction: column; /* Stack working area and second dialog vertically */
+    position: relative;
+    overflow: hidden; /* Prevent content overflow */
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.interaction-panel .control-panel {
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+#visualization-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.control-panel {
+    height: var(--control-panel-height-percentage);
+    min-height: var(--control-panel-height-percentage);
+    max-height: var(--control-panel-height-percentage);
+    margin-top: var(--control-panel-top-margin-percentage);
+    margin-bottom: var(--control-panel-bottom-margin-percentage);
+    margin-left: 10px;
+    margin-right: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--button-padding-vertical) calc(var(--button-padding-horizontal) * 2);
+    gap: 1rem; /* Reduced gap */
+    background: rgba(0, 0, 0, 0.3); /* Black background with 30% opacity */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: var(--component-border-radius);
+    width: calc(100% - 20px); /* Account for left and right margins */
+    flex-shrink: 0; /* Prevent shrinking */
+    box-sizing: border-box;
+}
+
+.navigation-buttons {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.left-buttons {
+    justify-content: flex-start;
+}
+
+.right-buttons {
+    justify-content: flex-end;
+}
+
+/* Center section with progress dots and reset button */
+.center-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* Gap between dots and reset button */
+}
+
+.control-btn {
+    padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+    font-size: var(--button-font-size);
+    font-weight: bold;
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: var(--button-min-width);
+    background: linear-gradient(145deg, var(--clr-blue), var(--clr-blue-dark));
+    color: var(--clr-white);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+}
+
+.reset-btn {
+    background: linear-gradient(145deg, var(--clr-orange), var(--clr-orange-dark));
+    box-shadow: 0 4px 15px rgba(255, 127, 63, 0.4);
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Highlight next button when enabled */
+.control-btn:not(:disabled):not(.reset-btn) {
+    background: linear-gradient(145deg, var(--clr-green), var(--clr-green-dark));
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.6);
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(46, 204, 113, 0.6);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(46, 204, 113, 0.8);
+        transform: scale(1.02);
+    }
+}
+
+.btn-text {
+    display: block;
+}
+
+.progress-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    gap: 6px; /* Smaller gap for smaller dots */
+}
+
+.progress-dot {
+    width: 12px; /* Smaller circles */
+    height: 12px; /* Smaller circles */
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    color: transparent; /* Hide numbers */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0; /* Hide text */
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Thinner border for smaller dots */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    position: relative;
+}
+
+.progress-dot:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.progress-dot.active {
+    background: linear-gradient(145deg, var(--clr-blue), var(--clr-blue-dark));
+    color: transparent; /* Keep numbers hidden */
+    border-color: var(--clr-blue-dark);
+    transform: scale(1.5); /* Larger highlight for smaller base size */
+    box-shadow: 0 2px 8px rgba(52, 152, 219, 0.5);
+}
+
+.progress-dot.completed {
+    background: linear-gradient(145deg, var(--clr-green), var(--clr-green-dark));
+    color: var(--clr-white);
+    border-color: var(--clr-green-dark);
+    box-shadow: 0 2px 10px rgba(46, 204, 113, 0.4);
+}
+
+.progress-dot.completed::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Control panel layout - simplified - REMOVED DUPLICATE */
+
+/* Language selector styling */
+.language-selector {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    border: 2px solid #333;
+    border-radius: 6px;
+    background: white;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.language-selector:hover {
+    border-color: #1976d2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design for Different Screen Sizes */
+@media screen and (max-width: 480px) {
+    .header-logo {
+        height: clamp(20px, 50%, 35px);
+        max-height: clamp(20px, 50%, 35px);
+        min-height: 20px;
+        left: clamp(0.25rem, 0.8vw, 0.75rem);
+    }
+    
+    .header-container {
+        padding: 0 clamp(0.5rem, 2vw, 1rem);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    :root {
+        --character-panel-width: 30%;
+        --font-size-small: clamp(0.6rem, 2vw, 0.8rem);
+        --font-size-medium: clamp(0.8rem, 2.5vw, 1.2rem);
+        --font-size-large: clamp(1rem, 3vw, 1.5rem);
+    }
+    
+    .header-logo {
+        height: clamp(25px, 60%, 40px);
+        max-height: clamp(25px, 60%, 40px);
+        min-height: 25px;
+        left: clamp(0.25rem, 1vw, 1rem);
+    }
+    
+    .control-btn {
+        padding: 0.4rem 1rem;
+        min-width: 92px; /* Increased by 15% */
+        font-size: 1.125rem; /* Increased by 25% */
+    }
+}
+
+@media screen and (min-width: 1600px) and (max-width: 1700px) {
+    :root {
+        /* Dialogue size is now calculated automatically based on screen width */
+        --font-size-small: clamp(1rem, 1.2vw, 1.3rem);
+        --font-size-medium: clamp(1.4rem, 1.8vw, 2.2rem);
+        --font-size-large: clamp(2rem, 2.5vw, 3rem);
+    }
+    
+    .header-logo {
+        height: clamp(50px, 75%, 70px);
+        max-height: clamp(50px, 75%, 70px);
+        min-height: 50px;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    :root {
+        --font-size-small: clamp(1rem, 1vw, 1.2rem);
+        --font-size-medium: clamp(1.5rem, 1.5vw, 2rem);
+        --font-size-large: clamp(2rem, 2vw, 3rem);
+    }
+    
+    .header-logo {
+        height: clamp(55px, 80%, 80px);
+        max-height: clamp(55px, 80%, 80px);
+        min-height: 55px;
+    }
+}
+
+/* Ensure no scrollbars appear */
+.character-panel,
+.interaction-panel,
+.visualization-panel,
+.control-panel,
+.character-box {
+    overflow: hidden;
+}
+
+/* React-specific layout adjustments */
+.visualization-panel .working-area {
+    flex: 1; /* Take up remaining space after bottom dialogue */
+    min-height: 300px; /* Ensure minimum height for problem grid */
+}
+
+.visualization-panel .bottom-dialogue {
+    flex-shrink: 0; /* Don't shrink the bottom dialogue */
+    height: auto; /* Allow content to determine height */
+    min-height: 80px; /* Minimum height for dialogue */
+    max-height: 120px; /* Maximum height to prevent taking too much space */
+}
+
+
+
+/* Problem Grid Container */
+.problem-grid-container {
+    /* Problem Grid Container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 350px;
+    max-height: 600px; /* Prevent excessive growth */
+    margin: 0 !important;
+    padding: 20px !important; /* Add some padding for better appearance */
+    box-sizing: border-box;
+}
+
+
+
+/* Problem Grid - Made 2x bigger */
+.problem-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr; /* sign column + 3 digit columns */
+    grid-template-rows: auto auto auto auto auto; /* 5 rows: header, first number, second number, divider, answer */
+    gap: 0.5rem; /* Better spacing */
+    align-items: center;
+    justify-items: center;
+    margin: 0 auto; /* Center the grid */
+    max-width: 500px; /* Limit grid width */
+    width: 100%;
+}
+
+/* Problem grid row styles - now visible */
+.problem-grid-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.problem-grid-cell {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.3rem; /* Reduced from 1rem for tighter spacing */
+    border-radius: 16px; /* Doubled from 8px */
+    min-width: 6rem; /* Doubled from 3rem */
+    min-height: 6rem; /* Doubled from 3rem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem; /* Doubled from 2rem */
+    font-weight: bold;
+    color: black; /* Changed to black */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Doubled shadow offset */
+    transition: all 0.3s ease;
+}
+
+/* Sign column styling - positioned in grid column 1, row 2 */
+.problem-grid-cell.sign-column {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 3rem; /* Doubled from 1.5rem */
+    justify-self: end;
+    margin-right: 1rem; /* Doubled from 0.5rem */
+    background: rgba(255, 255, 255, 0.9);
+    color: black; /* Changed to black */
+    min-width: 4rem; /* Doubled from 2rem */
+    min-height: 4rem; /* Doubled from 2rem */
+}
+
+/* First number digits */
+.problem-grid-cell.first-number {
+    grid-row: 1;
+}
+
+.problem-grid-cell.first-number.hundreds {
+    grid-column: 2;
+}
+
+.problem-grid-cell.first-number.tens {
+    grid-column: 3;
+}
+
+.problem-grid-cell.first-number.units {
+    grid-column: 4;
+}
+
+/* Second number digits */
+.problem-grid-cell.second-number {
+    grid-row: 2;
+}
+
+.problem-grid-cell.second-number.hundreds {
+    grid-column: 2;
+}
+
+.problem-grid-cell.second-number.tens {
+    grid-column: 3;
+}
+
+.problem-grid-cell.second-number.units {
+    grid-column: 4;
+}
+
+/* Empty space for first row, first column */
+.empty-space {
+    grid-column: 1;
+    grid-row: 1;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Divider line styling - REDUCED MARGIN FOR TIGHTER SPACING */
+.divider-line {
+    width: 100%;
+    height: 8px; /* Doubled from 4px */
+    background-color: rgba(255, 255, 255, 0.9);
+    margin: 0.2rem 0; /* Reduced from 2rem for tighter spacing */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4); /* Doubled shadow offset */
+    grid-column: 1 / -1;
+    grid-row: 3;
+    border-radius: 4px; /* Doubled from 2px */
+}
+
+/* Answer cell styling - REDUCED PADDING FOR TIGHTER SPACING */
+.answer-cell {
+    grid-column: 2 / -1; /* Span across all digit columns */
+    grid-row: 4;
+    font-size: 4rem; /* Doubled from 2rem */
+    font-weight: bold;
+    color: #FFD700; /* Keep golden color for the ? */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.3rem; /* Reduced from 1rem for tighter spacing */
+    border-radius: 16px; /* Doubled from 8px */
+    min-width: 6rem; /* Doubled from 3rem */
+    min-height: 6rem; /* Doubled from 3rem */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Doubled shadow offset */
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.problem-grid-cell:hover {
+    transform: translateY(-4px); /* Doubled from -2px */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Doubled shadow offset */
+}
+
+/* Remove old separator line and answer cell styles */
+.separator-line {
+    display: none;
+}
+
+/* Remove old grid-specific styles that are no longer needed */
+.problem-grid-cell.hundreds,
+.problem-grid-cell.tens,
+.problem-grid-cell.units {
+    border-left: none;
+}
+
+.problem-grid-cell.separator-row {
+    display: none;
+}
+
+
+
+/* Working Area Component */
+.working-area {
+    height: calc(100% - var(--second-dialog-height) - var(--working-area-top-margin-percentage) - var(--working-area-bottom-margin-percentage) - var(--second-dialog-top-margin-percentage) - var(--second-dialog-bottom-margin-percentage));
+    min-height: calc(100% - var(--second-dialog-height) - var(--working-area-top-margin-percentage) - var(--working-area-bottom-margin-percentage) - var(--second-dialog-top-margin-percentage) - var(--second-dialog-bottom-margin-percentage));
+    max-height: calc(100% - var(--second-dialog-height) - var(--working-area-top-margin-percentage) - var(--working-area-bottom-margin-percentage) - var(--second-dialog-top-margin-percentage) - var(--second-dialog-bottom-margin-percentage));
+    margin-top: var(--working-area-top-margin-percentage);
+    margin-bottom: var(--working-area-bottom-margin-percentage);
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--working-area-bg-color);
+    border-radius: var(--component-border-radius);
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative; /* Add relative positioning for absolute positioned children */
+}
+
+/* Working Area Component Variants */
+.working-area.transparent {
+    --working-area-bg-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.working-area.light {
+    --working-area-bg-color: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.working-area.dark {
+    --working-area-bg-color: rgba(0, 0, 0, 0.7);
+    border-color: rgba(0, 0, 0, 0.3);
+}
+
+.working-area.blue {
+    --working-area-bg-color: rgba(52, 152, 219, 0.3);
+    border-color: rgba(52, 152, 219, 0.5);
+}
+
+.working-area.green {
+    --working-area-bg-color: rgba(46, 204, 113, 0.3);
+    border-color: rgba(46, 204, 113, 0.5);
+}
+
+/* Custom background color and opacity utility classes */
+.working-area[data-bg-color] {
+    background: var(--custom-bg-color, var(--working-area-bg-color));
+}
+
+.working-area[data-bg-opacity] {
+    background: rgba(var(--custom-bg-rgb, 0, 0, 0), var(--custom-bg-opacity, 0.5));
+}
+
+/* Header row styling */
+.problem-grid-cell.header-row {
+    grid-row: 1;
+    font-size: 2rem;
+    font-weight: bold;
+    color: black; /* Changed to black for consistency */
+    padding: 0.5rem;
+    border-radius: 12px;
+    min-width: 4rem;
+    min-height: 4rem;
+}
+
+.problem-grid-cell.header-row.hundreds {
+    grid-column: 2;
+    background: var(--clr-gold);
+}
+
+.problem-grid-cell.header-row.tens {
+    grid-column: 3;
+    background: var(--clr-pink);
+}
+
+.problem-grid-cell.header-row.units {
+    grid-column: 4;
+    background: var(--clr-blue);
+}
+
+
+
+/* Invisible header cells to maintain consistent grid dimensions */
+.invisible-header {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    min-height: 4rem; /* Same height as visible headers to maintain spacing */
+    visibility: hidden;
+}
+
+/* SecondDialogBox Component Styles */
+.second-dialog-box {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* SecondDialogBox in visualization panel */
+.visualization-panel .second-dialog-box {
+    height: var(--second-dialog-height);
+    min-height: var(--second-dialog-height);
+    max-height: var(--second-dialog-height);
+    margin-top: var(--second-dialog-top-margin-percentage);
+    margin-bottom: var(--second-dialog-bottom-margin-percentage);
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: var(--component-border-radius);
+    width: calc(100% - 20px); /* Account for left and right margins */
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.second-dialog-content {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.second-dialog-text {
+    margin: 0;
+    font-size: 1.771rem;
+    font-weight: normal;
+    line-height: 1.4;
+    color: black;
+    text-shadow: none;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+/* Responsive font sizes for SecondDialogBox */
+@media screen and (max-width: 768px) {
+    .second-dialog-text {
+        font-size: 1.518rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .second-dialog-text {
+        font-size: 2.024rem;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .second-dialog-text {
+    font-size: 2.277rem;
+    }
+}
+
+/* SecondDialogBox hover effects */
+.second-dialog-box:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* SecondDialogBox style variants */
+.second-dialog-box.success {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-color: rgba(76, 175, 80, 0.3);
+}
+
+.second-dialog-box.warning {
+    background-color: rgba(255, 193, 7, 0.1);
+    border-color: rgba(255, 193, 7, 0.3);
+}
+
+.second-dialog-box.info {
+    background-color: rgba(33, 150, 243, 0.1);
+    border-color: rgba(33, 150, 243, 0.3);
+}
+
+.second-dialog-box.transparent {
+    background-color: transparent;
+    border: none;
+}
+
+/* MathProblemGrid Component Styles */
+.math-problem-grid {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    margin: 0 auto;
+    max-width: fit-content; /* Let grid size to content instead of forcing width */
+    width: auto; /* Don't force full width */
+    gap: 0.5rem; /* Consistent gap for both rows and columns */
+}
+
+/* Base math grid cell styling */
+.math-grid-cell {
+    background: rgba(255, 255, 255, 1.0);
+    padding: 0.3rem;
+    border-radius: 16px;
+    min-width: 6rem;
+    min-height: 6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.math-grid-cell:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Header row styling */
+.math-grid-cell.header-cell {
+    font-weight: bold;
+    font-size: 3rem;
+    color: black;
+    border-radius: 8px;
+    min-height: 4rem;
+}
+
+.math-grid-cell.hundreds-header {
+    background: var(--clr-gold-light);
+}
+
+.math-grid-cell.tens-header {
+    background: var(--clr-pink-light);
+}
+
+.math-grid-cell.units-header {
+    background: var(--clr-blue-light);
+}
+
+.math-grid-cell.empty-header {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Carry row styling */
+.math-grid-cell.carry-cell {
+    font-size: var(--problem-grid-font-size); /* Same font size as other cells */
+    min-height: var(--problem-grid-cell-size); /* Same height as other cells */
+    color: black; /* Black text for better readability */
+    font-weight: bold;
+    /* Background will be set by getCellBgStyle function */
+}
+
+/* Carry row with column colors - override black text with highest specificity */
+.math-problem-grid .math-grid-cell.carry-cell.carry-white.hundreds-column {
+    color: rgba(255, 193, 15, 1.0) !important; /* Gold/Yellow text for hundreds */
+}
+
+.math-problem-grid .math-grid-cell.carry-cell.carry-white.tens-column {
+    color: var(--clr-pink) !important; /* Pink/Red text for tens */
+    font-weight: bold !important; /* Make it more visible */
+}
+
+.math-problem-grid .math-grid-cell.carry-cell.carry-white.units-column {
+    color: var(--clr-blue) !important; /* Blue text for units */
+}
+
+/* Also add rules for transparent carry cells */
+.math-problem-grid .math-grid-cell.carry-cell.carry-transparent.hundreds-column {
+    color: rgba(255, 193, 15, 1.0) !important; /* Gold/Yellow text for hundreds */
+}
+
+.math-problem-grid .math-grid-cell.carry-cell.carry-transparent.tens-column {
+    color: var(--clr-pink) !important; /* Pink/Red text for tens */
+    font-weight: bold !important; /* Make it more visible */
+}
+
+.math-problem-grid .math-grid-cell.carry-cell.carry-transparent.units-column {
+    color: var(--clr-blue) !important; /* Blue text for units */
+}
+
+/* Carry row specific backgrounds - override column colors */
+.math-grid-cell.carry-cell.carry-white {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.math-grid-cell.carry-cell.carry-transparent {
+    background-color: transparent !important;
+}
+
+/* Extra specificity to ensure R2C2 is transparent */
+.math-grid-cell.carry-cell.carry-transparent.tens-column {
+    background-color: transparent !important;
+}
+
+.math-grid-cell.empty-carry {
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Number cells styling */
+.math-grid-cell.number-cell {
+    background: rgba(255, 255, 255, 1.0);
+    color: black;
+}
+
+/* Steps 2-8: Number cells with transparent backgrounds */
+.math-grid-cell.number-cell.step-2,
+.math-grid-cell.number-cell.step-3,
+.math-grid-cell.number-cell.step-4,
+.math-grid-cell.number-cell.step-5,
+.math-grid-cell.number-cell.step-6,
+.math-grid-cell.number-cell.step-7,
+.math-grid-cell.number-cell.step-8 {
+    background: transparent !important;
+}
+
+.math-grid-cell.plus-sign {
+    font-size: 3rem;
+    min-width: 4rem;
+    min-height: 4rem;
+    background: rgba(255, 255, 255, 1.0);
+    color: black;
+    cursor: pointer;
+}
+
+/* Override plus sign styling for steps 2-8 */
+.math-grid-cell.plus-sign.step-2,
+.math-grid-cell.plus-sign.step-3,
+.math-grid-cell.plus-sign.step-4,
+.math-grid-cell.plus-sign.step-5,
+.math-grid-cell.plus-sign.step-6,
+.math-grid-cell.plus-sign.step-7,
+.math-grid-cell.plus-sign.step-8 {
+    background: transparent !important;
+    color: transparent !important;
+    font-size: 4rem !important; /* Match regular cell font size */
+}
+
+/* Override plus sign hover styling for steps 2-8 */
+.math-grid-cell.plus-sign.step-2:hover,
+.math-grid-cell.plus-sign.step-3:hover,
+.math-grid-cell.plus-sign.step-4:hover,
+.math-grid-cell.plus-sign.step-5:hover,
+.math-grid-cell.plus-sign.step-6:hover,
+.math-grid-cell.plus-sign.step-7:hover,
+.math-grid-cell.plus-sign.step-8:hover {
+    background: transparent !important;
+    color: white !important;
+    transform: none !important;
+}
+
+/* Override animated plus sign styling for steps 4, 6, 7A, and 8 */
+.math-grid-cell.animated-plus-container.step-4,
+.math-grid-cell.animated-plus-container.step-6,
+.math-grid-cell.animated-plus-container.step-7,
+.math-grid-cell.animated-plus-container.step-8 {
+    background: transparent !important;
+    color: white !important;
+}
+
+/* Override animated plus sign hover styling */
+.math-grid-cell.animated-plus-container.step-4:hover,
+.math-grid-cell.animated-plus-container.step-6:hover,
+.math-grid-cell.animated-plus-container.step-7:hover,
+.math-grid-cell.animated-plus-container.step-8:hover {
+    background: transparent !important;
+    color: white !important;
+    transform: none !important;
+}
+
+/* Override AnimatedSign component inside animated plus containers */
+.math-grid-cell.animated-plus-container.step-4 .step4-animated-plus,
+.math-grid-cell.animated-plus-container.step-6 .step4-animated-plus,
+.math-grid-cell.animated-plus-container.step-7 .step4-animated-plus,
+.math-grid-cell.animated-plus-container.step-8 .step4-animated-plus {
+    color: white !important;
+    background: transparent !important;
+}
+
+.math-grid-cell.plus-sign:hover {
+    background: var(--clr-blue-light);
+    transform: translateY(-2px) scale(1.1);
+}
+
+.math-grid-cell.empty-first,
+.math-grid-cell.empty-plus,
+.math-grid-cell.empty-answer {
+    background: transparent !important;
+    box-shadow: none;
+    border: none;
+    opacity: 0;
+}
+
+/* Separator line styling */
+.math-grid-cell.separator-line {
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.9);
+    margin: 0.2rem 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    min-height: 8px;
+    grid-column: 1 / -1;
+}
+
+/* Answer cells styling */
+.math-grid-cell.answer-cell {
+    font-size: 4rem;
+    font-weight: bold;
+    color: black !important;
+    background: rgba(255, 255, 255, 1.0) !important;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.math-grid-cell.answer-cell:hover {
+    background: var(--clr-gold-light);
+    color: black;
+}
+
+/* Specific position styling */
+.math-grid-cell.first-hundreds,
+.math-grid-cell.second-hundreds,
+.math-grid-cell.answer-hundreds {
+    /* Hundreds column specific styling if needed */
+}
+
+.math-grid-cell.first-tens,
+.math-grid-cell.second-tens,
+.math-grid-cell.answer-tens {
+    /* Tens column specific styling if needed */
+}
+
+.math-grid-cell.first-units,
+.math-grid-cell.second-units,
+.math-grid-cell.answer-units {
+    /* Units column specific styling if needed */
+}
+
+/* Place Value Column Colors */
+.math-grid-cell.hundreds-column {
+    background-color: rgba(255, 193, 15, 1.0) !important; /* Gold/Yellow for hundreds */
+}
+
+.math-grid-cell.tens-column {
+    background-color: var(--clr-pink) !important; /* Pink for tens */
+}
+
+.math-grid-cell.units-column {
+    background-color: var(--clr-blue) !important; /* Blue for units */
+}
+
+/* Steps 2-8: Transparent backgrounds with colored text */
+.math-grid-cell.step-2.hundreds-column,
+.math-grid-cell.step-3.hundreds-column,
+.math-grid-cell.step-4.hundreds-column,
+.math-grid-cell.step-5.hundreds-column,
+.math-grid-cell.step-6.hundreds-column,
+.math-grid-cell.step-7.hundreds-column,
+.math-grid-cell.step-8.hundreds-column {
+    background-color: transparent !important;
+    color: rgba(255, 193, 15, 1.0) !important; /* Yellow text */
+}
+
+.math-grid-cell.step-2.tens-column,
+.math-grid-cell.step-3.tens-column,
+.math-grid-cell.step-4.tens-column,
+.math-grid-cell.step-5.tens-column,
+.math-grid-cell.step-6.tens-column,
+.math-grid-cell.step-7.tens-column,
+.math-grid-cell.step-8.tens-column {
+    background-color: transparent !important;
+    color: var(--clr-pink) !important; /* Red text */
+}
+
+.math-grid-cell.step-2.units-column,
+.math-grid-cell.step-3.units-column,
+.math-grid-cell.step-4.units-column,
+.math-grid-cell.step-5.units-column,
+.math-grid-cell.step-6.units-column,
+.math-grid-cell.step-7.units-column,
+.math-grid-cell.step-8.units-column {
+    background-color: transparent !important;
+    color: var(--clr-blue) !important; /* Blue text */
+}
+
+/* Answer cells should use the same colors as their columns */
+.math-grid-cell.answer-cell.hundreds-column {
+    background-color: rgba(255, 193, 15, 1.0) !important; /* Gold/Yellow for hundreds */
+    color: black !important;
+}
+
+.math-grid-cell.answer-cell.tens-column {
+    background-color: var(--clr-pink) !important; /* Pink for tens */
+    color: black !important;
+}
+
+.math-grid-cell.answer-cell.units-column {
+    background-color: var(--clr-blue) !important; /* Blue for units */
+    color: white !important; /* White text on blue background for better contrast */
+}
+
+/* Steps 2-8: Answer cells with transparent backgrounds and colored text */
+/* More specific rules to override black color */
+.math-problem-grid .math-grid-cell.answer-cell.step-2.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-3.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-4.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-5.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-6.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-7.hundreds-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-8.hundreds-column {
+    background-color: transparent !important;
+    color: rgba(255, 193, 15, 1.0) !important; /* Yellow text */
+}
+
+/* More specific rules to override black color */
+.math-problem-grid .math-grid-cell.answer-cell.step-2.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-3.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-4.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-5.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-6.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-7.tens-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-8.tens-column {
+    background-color: transparent !important;
+    color: var(--clr-pink) !important; /* Red text */
+}
+
+.math-problem-grid .math-grid-cell.answer-cell.step-2.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-3.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-4.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-5.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-6.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-7.units-column,
+.math-problem-grid .math-grid-cell.answer-cell.step-8.units-column {
+    background-color: transparent !important;
+    color: var(--clr-blue) !important; /* Blue text */
+}
+
+/* Header cells with full opacity colors when place value colors are on */
+.math-grid-cell.header-cell.hundreds-column {
+    background-color: rgba(255, 193, 15, 1.0) !important; /* Full opacity gold */
+}
+
+.math-grid-cell.header-cell.tens-column {
+    background-color: var(--clr-pink) !important; /* Full opacity pink */
+}
+
+.math-grid-cell.header-cell.units-column {
+    background-color: var(--clr-blue) !important; /* Full opacity blue */
+}
+
+/* Steps 2-8: Header cells with transparent backgrounds and colored text */
+.math-grid-cell.header-cell.step-2.hundreds-column,
+.math-grid-cell.header-cell.step-3.hundreds-column,
+.math-grid-cell.header-cell.step-4.hundreds-column,
+.math-grid-cell.header-cell.step-5.hundreds-column,
+.math-grid-cell.header-cell.step-6.hundreds-column,
+.math-grid-cell.header-cell.step-7.hundreds-column,
+.math-grid-cell.header-cell.step-8.hundreds-column {
+    background-color: transparent !important;
+    color: rgba(255, 193, 15, 1.0) !important; /* Yellow text */
+}
+
+.math-grid-cell.header-cell.step-2.tens-column,
+.math-grid-cell.header-cell.step-3.tens-column,
+.math-grid-cell.header-cell.step-4.tens-column,
+.math-grid-cell.header-cell.step-5.tens-column,
+.math-grid-cell.header-cell.step-6.tens-column,
+.math-grid-cell.header-cell.step-7.tens-column,
+.math-grid-cell.header-cell.step-8.tens-column {
+    background-color: transparent !important;
+    color: var(--clr-pink) !important; /* Red text */
+}
+
+.math-grid-cell.header-cell.step-2.units-column,
+.math-grid-cell.header-cell.step-3.units-column,
+.math-grid-cell.header-cell.step-4.units-column,
+.math-grid-cell.header-cell.step-5.units-column,
+.math-grid-cell.header-cell.step-6.units-column,
+.math-grid-cell.header-cell.step-7.units-column,
+.math-grid-cell.header-cell.step-8.units-column {
+    background-color: transparent !important;
+    color: var(--clr-blue) !important; /* Blue text */
+}
+
+/* Column Border Styling - Enhanced for entire column borders */
+.math-problem-grid {
+    position: relative;
+}
+
+/* Column border styling using CSS Grid approach */
+.math-problem-grid {
+    position: relative;
+}
+
+/* Single continuous column border approach */
+.math-grid-cell.column-border {
+    transition: all 0.3s ease;
+}
+
+/* New approach: Use CSS Grid to position the border accurately */
+.math-problem-grid {
+    position: relative;
+}
+
+/* Create border overlay that uses CSS Grid positioning */
+.math-problem-grid::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    bottom: -10px;
+    border: 4px dashed rgba(255, 255, 255, 1.0);
+    box-shadow: 
+        0 0 0 2px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.8);
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+    animation: none; /* Ensure no animation by default */
+}
+
+/* Column 1 border - Hundreds column */
+.math-problem-grid.has-column-border-1::before {
+    opacity: 1 !important;
+    left: 26%;
+    width: 22%;
+}
+
+/* Column 2 border - Tens column */
+.math-problem-grid.has-column-border-2::before {
+    opacity: 1 !important;
+    left: 50%;
+    width: 22%;
+}
+
+/* Column 3 border - Units column */
+.math-problem-grid.has-column-border-3::before {
+    opacity: 1 !important;
+    left: 76%;
+    width: 22%;
+}
+
+/* ANIMATED COLUMN BORDERS - Grid-level overlays */
+/* Column 1 animated border - Hundreds column */
+.math-problem-grid.has-column-border-1-animated::before {
+    opacity: 1 !important;
+    left: 26%;
+    width: 22%;
+    border: 4px solid transparent !important;
+    background: 
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px);
+    background-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+    animation: movingDashBorder 2s linear infinite !important;
+    transition: none !important; /* Override the base transition */
+}
+
+/* Column 2 animated border - Tens column */
+.math-problem-grid.has-column-border-2-animated::before {
+    opacity: 1 !important;
+    left: 50%;
+    width: 22%;
+    border: 4px solid transparent !important;
+    background: 
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px);
+    background-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+    animation: movingDashBorder 2s linear infinite !important;
+    transition: none !important; /* Override the base transition */
+}
+
+/* Column 3 animated border - Units column */
+.math-problem-grid.has-column-border-3-animated::before {
+    opacity: 1 !important;
+    left: 76%;
+    width: 22%;
+    border: 4px solid transparent !important;
+    background: 
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 1) 0px, rgba(255, 255, 255, 1) 10px, transparent 10px, transparent 20px);
+    background-size: 100% 4px, 100% 4px, 4px 100%, 4px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+    animation: movingDashBorder 2s linear infinite !important;
+    transition: none !important; /* Override the base transition */
+}
+
+/* Reduce opacity of other columns when units column has animated border */
+.math-problem-grid.has-column-border-3-animated .math-grid-cell.hundreds-column,
+.math-problem-grid.has-column-border-3-animated .math-grid-cell.tens-column {
+    opacity: 0.7 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Reduce opacity of other columns when hundreds column has animated border */
+.math-problem-grid.has-column-border-1-animated .math-grid-cell.tens-column,
+.math-problem-grid.has-column-border-1-animated .math-grid-cell.units-column {
+    opacity: 0.7 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Reduce opacity of other columns when tens column has animated border */
+.math-problem-grid.has-column-border-2-animated .math-grid-cell.hundreds-column,
+.math-problem-grid.has-column-border-2-animated .math-grid-cell.units-column {
+    opacity: 0.7 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Keyframe animation for moving dashed border */
+@keyframes movingDashBorder {
+    0% {
+        background-position: 0px 0px, 0px 100%, 0px 0px, 100% 0px;
+        box-shadow: 
+            0 0 0 2px rgba(0, 0, 0, 0.8),
+            0 0 15px rgba(255, 255, 255, 1.0),
+            0 0 30px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        background-position: 20px 0px, -20px 100%, 0px -20px, 100% 20px;
+        box-shadow: 
+            0 0 0 2px rgba(0, 0, 0, 0.8),
+            0 0 15px rgba(255, 255, 255, 1.0),
+            0 0 30px rgba(255, 255, 255, 0.6);
+    }
+}
+
+/* Keyframe animation for pulsating circle */
+@keyframes pulsatingCircle {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        border-color: rgba(255, 255, 255, 1.0);
+    }
+    50% {
+        transform: scale(1.1);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        border-color: rgba(255, 255, 255, 0.9);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        border-color: rgba(255, 255, 255, 1.0);
+    }
+}
+
+/* Old individual cell border styles - no longer used 
+   (Column borders are now handled at grid level) */
+
+/* Step-specific styling */
+.math-grid-cell.step-1 {
+    color: white !important;
+}
+
+/* Ensure numbers are visible in step 1 */
+.math-grid-cell.step-1.first-cell,
+.math-grid-cell.step-1.second-cell {
+    background: rgba(255, 255, 255, 0.9) !important;
+    color: black !important;
+}
+
+/* Make sure plus sign is transparent */
+.math-grid-cell.step-1.plus-sign {
+    color: transparent !important;
+    background: transparent !important;
+}
+
+/* Custom transparent cells for step 1 - override all other styles */
+.math-grid-cell.step-1.first-cell,
+.math-grid-cell.step-1.second-cell,
+.math-grid-cell.step-1.answer-cell {
+    background: transparent !important;
+    color: white !important;
+    border: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Plus sign should also be transparent with transparent color */
+.math-grid-cell.step-1.plus-sign {
+    background: transparent !important;
+    color: transparent !important;
+    border: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Responsive adjustments for MathProblemGrid */
+@media screen and (max-width: 768px) {
+    .math-grid-cell {
+        min-width: 4rem;
+        min-height: 4rem;
+        font-size: 2.5rem;
+    }
+    
+    .math-grid-cell.answer-cell {
+        font-size: 2.5rem;
+    }
+    
+    .math-grid-cell.header-cell {
+        font-size: 2rem;
+        min-height: 3rem;
+    }
+    
+    .math-grid-cell.plus-sign {
+        font-size: 2rem;
+        min-width: 3rem;
+        min-height: 3rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .math-grid-cell {
+        min-width: 7rem;
+        min-height: 7rem;
+        font-size: 5rem;
+    }
+    
+    .math-grid-cell.answer-cell {
+        font-size: 5rem;
+    }
+    
+    .math-grid-cell.header-cell {
+        font-size: 4rem;
+        min-height: 5rem;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .math-grid-cell {
+        min-width: 8rem;
+        min-height: 8rem;
+        font-size: 6rem;
+    }
+    
+    .math-grid-cell.answer-cell {
+        font-size: 6rem;
+    }
+    
+    .math-grid-cell.header-cell {
+        font-size: 5rem;
+        min-height: 6rem;
+    }
+}
+
+/* ===== SPLIT LAYOUT STYLES ===== */
+.working-area.split-layout {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 2rem !important;
+    height: 100% !important;
+    align-items: flex-start !important;
+}
+
+.left-half {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+.right-half {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.right-content {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+}
+
+/* Step 4 specific styles */
+.full-width {
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.step4-animated-plus {
+    pointer-events: auto;
+    user-select: none;
+}
+
+.step4-animated-plus:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease;
+}
+
+/* Container for animated plus sign in grid cell */
+.animated-plus-container {
+    position: relative;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    /* Don't set min-height, let the grid determine the cell size */
+}
+
+.animated-plus-container .animated-sign {
+    margin: 0 auto;
+}
+
+/* Cell-fitted animated sign should not overflow the grid cell */
+.animated-sign.cell-fitted {
+    width: 80% !important;
+    height: 80% !important;
+    max-width: 50px !important;
+    max-height: 50px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+}
+
+/* Step 5 vibrating cell for numbers > 9 */
+.vibrating-cell {
+    animation: vibrate 0.5s infinite linear;
+}
+
+.step5-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+/* More specific override for step 5 red cell */
+.math-grid-cell.step5-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+.math-grid-cell.step5-red-cell.units-column {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+.math-grid-cell.answer-cell.step5-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+/* Ultimate priority for step 5 red cell - override everything */
+.math-problem-grid .math-grid-cell.answer-cell.units-column.step5-red-cell {
+    background-color: rgb(255, 0, 0) !important;
+    color: white !important;
+    border: 2px solid darkred !important;
+}
+
+.math-problem-grid .math-grid-cell.step5-red-cell {
+    background-color: rgb(255, 0, 0) !important;
+    color: white !important;
+    border: 2px solid darkred !important;
+}
+
+/* Step 7B vibrating cell for tens place carrying */
+.step7B-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+/* More specific override for step 7B red cell */
+.math-grid-cell.step7B-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+.math-grid-cell.step7B-red-cell.tens-column {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+.math-grid-cell.answer-cell.step7B-red-cell {
+    background-color: rgba(255, 0, 0, 0.8) !important;
+    color: white !important;
+}
+
+/* Ultimate priority for step 7B red cell - override everything */
+.math-problem-grid .math-grid-cell.answer-cell.tens-column.step7B-red-cell {
+    background-color: rgb(255, 0, 0) !important;
+    color: white !important;
+    border: 2px solid darkred !important;
+}
+
+.math-problem-grid .math-grid-cell.step7B-red-cell {
+    background-color: rgb(255, 0, 0) !important;
+    color: white !important;
+    border: 2px solid darkred !important;
+}
+
+@keyframes vibrate {
+    0%, 100% { transform: translateX(0); }
+    10% { transform: translateX(-2px); }
+    20% { transform: translateX(2px); }
+    30% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    50% { transform: translateX(-2px); }
+    60% { transform: translateX(2px); }
+    70% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+    90% { transform: translateX(-2px); }
+}
+
+/* ===== INTERACTIVE CHOICE QUESTION COMPONENT STYLES ===== */
+.interactive-choice-question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    box-sizing: border-box;
+    background: var(--component-bg-color, rgba(255, 255, 255, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.choice-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.choice-header-text {
+    font-size: 2rem;
+    font-weight: bold;
+    color: white;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    line-height: 1.3;
+}
+
+.choice-buttons {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.choice-buttons.horizontal {
+    flex-direction: row;
+}
+
+.choice-buttons.horizontal .choice-btn {
+    min-width: 120px;
+    flex: 0 0 auto;
+}
+
+.choice-buttons.stacked {
+    flex-direction: column;
+    align-items: center;
+}
+
+.choice-buttons.stacked .choice-btn {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+
+.choice-btn {
+    padding: 1rem 2rem;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    background: transparent;
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    min-height: 60px;
+    width: auto;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Inline styles should override these defaults */
+.choice-btn[style] {
+    background: inherit;
+    border-color: inherit;
+}
+
+.choice-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Default hover state for buttons without custom colors */
+.choice-btn:not([style]):hover {
+    border-color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom colored buttons hover effect */
+.choice-btn[style]:hover {
+    filter: brightness(1.1);
+}
+
+.choice-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.choice-btn.permanently-disabled {
+    opacity: 0.3;
+    background: rgba(128, 128, 128, 0.3) !important;
+    border-color: rgba(128, 128, 128, 0.5) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.choice-btn.permanently-disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: rgba(128, 128, 128, 0.5) !important;
+    background: rgba(128, 128, 128, 0.3) !important;
+}
+
+.choice-btn.faded-out {
+    opacity: 0.4;
+    background: rgba(128, 128, 128, 0.2) !important;
+    border-color: rgba(128, 128, 128, 0.3) !important;
+    color: rgba(255, 255, 255, 0.4) !important;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.choice-btn.faded-out:hover {
+    transform: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: rgba(128, 128, 128, 0.3) !important;
+    background: rgba(128, 128, 128, 0.2) !important;
+}
+
+.choice-btn.selected {
+    border-width: 4px;
+    transform: scale(1.05);
+}
+
+.choice-btn.correct-btn {
+    background: var(--clr-green) !important;
+    border-color: var(--clr-green-dark) !important;
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+    transform: scale(1.05);
+}
+
+.choice-btn.correct-btn:disabled {
+    background: var(--clr-green) !important;
+    border-color: var(--clr-green-dark) !important;
+    color: white !important;
+    opacity: 1 !important;
+    cursor: default;
+    transform: scale(1.05);
+}
+
+.choice-btn.incorrect-btn {
+    background: var(--clr-pink) !important;
+    border-color: var(--clr-pink-dark) !important;
+    color: white !important;
+    box-shadow: 0 6px 20px rgba(255, 77, 109, 0.4);
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0) scale(1.05); }
+    25% { transform: translateX(-5px) scale(1.05); }
+    75% { transform: translateX(5px) scale(1.05); }
+}
+
+.feedback-container {
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+}
+
+.feedback-container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.feedback-text {
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.feedback-text.correct-feedback {
+    color: var(--clr-green-light);
+    background: rgba(46, 204, 113, 0.2);
+    border: 2px solid var(--clr-green);
+}
+
+.feedback-text.incorrect-feedback {
+    color: var(--clr-pink-light);
+    background: rgba(255, 77, 109, 0.2);
+    border: 2px solid var(--clr-pink);
+}
+
+.feedback-container .reset-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 2px solid var(--clr-orange);
+    background: var(--clr-orange);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.feedback-container .reset-btn:hover {
+    background: var(--clr-orange-dark);
+    border-color: var(--clr-orange-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 127, 63, 0.4);
+}
+
+/* Responsive adjustments for InteractiveChoiceQuestion */
+@media screen and (max-width: 768px) {
+    .choice-header-text {
+        font-size: 1.5rem;
+    }
+    
+    .choice-btn {
+    font-size: 1.2rem;
+        padding: 0.8rem 1.5rem;
+        min-width: 100px;
+    }
+    
+    .choice-buttons.horizontal {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .choice-buttons.stacked {
+        gap: 1rem;
+    }
+    
+    .feedback-text {
+        font-size: 1.1rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .choice-header-text {
+        font-size: 2.5rem;
+    }
+    
+    .choice-btn {
+        font-size: 1.6rem;
+        padding: 1.2rem 2.5rem;
+        min-width: 150px;
+    }
+    
+    .feedback-text {
+        font-size: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .choice-header-text {
+        font-size: 3rem;
+    }
+    
+    .choice-btn {
+        font-size: 1.8rem;
+        padding: 1.5rem 3rem;
+        min-width: 180px;
+    }
+    
+    .feedback-text {
+        font-size: 1.7rem;
+    }
+}
+
+/* ===== ANIMATED SIGN COMPONENT STYLES ===== */
+.animated-sign {
+    display: inline-block;
+    user-select: none;
+    pointer-events: none;
+}
+
+/* Responsive sizing for AnimatedSign */
+@media screen and (max-width: 768px) {
+    .animated-sign {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    .animated-sign {
+        font-size: 1.8rem;
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    .animated-sign {
+        font-size: 2rem;
+    }
+}
+
+
+
+
+
