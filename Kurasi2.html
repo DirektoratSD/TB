@@ -181,6 +181,76 @@
             gap: 1.75rem;
         }
 
+        /* == STYLING BARU: Kartu Login Admin == */
+        .admin-login-card {
+            max-width: 450px;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            text-align: center;
+        }
+        
+        .admin-login-card i {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .admin-login-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-login-card p {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            margin-bottom: 1.5rem;
+        }
+        
+        #admin-login-form input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            box-sizing: border-box;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        #admin-login-form button {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--primary-color) 0%, #818CF8 100%);
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+        
+        #admin-login-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .error-message {
+            color: #EF4444; /* Red 500 */
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 1rem;
+            display: none; /* Sembunyi default */
+        }
+
         /* == STYLING BARU: Tabel Admin == */
         .table-container {
             width: 100%;
@@ -595,20 +665,37 @@
 
             <!-- == TAMPILAN ADMIN == -->
             <div id="admin-view" class="view active">
-                <h2><i class="fas fa-tasks"></i> Manajemen Penugasan Konten</h2>
-                <div class="table-container">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Judul Konten</th>
-                                <th>Tugaskan ke Kurator</th>
-                            </tr>
-                        </thead>
-                        <tbody id="admin-table-body">
-                            <!-- Baris tabel Admin akan dibuat oleh JavaScript -->
-                        </tbody>
-                    </table>
+                
+                <!-- KARTU LOGIN (Tampil Default) -->
+                <div id="admin-login-card" class="admin-login-card">
+                    <i class="fas fa-user-lock"></i>
+                    <h3>Akses Terbatas</h3>
+                    <p>Silakan masukkan password admin untuk melanjutkan.</p>
+                    <form id="admin-login-form">
+                        <input type="password" id="admin-password" placeholder="••••••••" required>
+                        <button type="submit">Login</button>
+                        <p id="admin-error-msg" class="error-message">Password salah. Coba lagi.</p>
+                    </form>
                 </div>
+
+                <!-- KONTEN ADMIN (Sembunyi Default) -->
+                <div id="admin-content" style="display: none;">
+                    <h2><i class="fas fa-tasks"></i> Manajemen Penugasan Konten</h2>
+                    <div class="table-container">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Judul Konten</th>
+                                    <th>Tugaskan ke Kurator</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body">
+                                <!-- Baris tabel Admin akan dibuat oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
             <!-- == TAMPILAN KURATOR == -->
@@ -700,10 +787,10 @@
         // Daftar Kurator (Bisa ditambahkan)
         const allCurators = [
             "(Belum Dikurasi)",
-            "Andi Wijaya",
-            "Siti Aminah",
-            "Budi Hartono",
-            "Dewi Lestari"
+            "Bangbin",
+            "Awaliah",
+            "Fahriza",
+            "Waluyo Banjaran"
         ];
 
         // Daftar Semua Konten (Diambil dari HTML sebelumnya)
@@ -742,6 +829,7 @@
         // Objek untuk menyimpan data penugasan (Simulasi Database)
         // (contentId: curatorName)
         let contentAssignments = {};
+        let isAdminAuthenticated = false; // <-- VARIABEL STATUS LOGIN
 
         // === LOGIKA APLIKASI ===
         
@@ -751,13 +839,16 @@
             populateCuratorDropdowns();
             
             // Render tampilan default (Admin)
-            renderAdminView();
+            renderAdminView(); // <-- Ini akan membuat tabel, meskipun tersembunyi
             
             // Setup listener navigasi
             setupNavigation();
             
             // Setup listener modal (global)
             setupModalGlobalListeners();
+
+            // Setup listener login admin
+            setupAdminLogin();
             
             // Setup listener filter kurator
             document.getElementById('kurator-select').addEventListener('change', (e) => {
@@ -815,7 +906,16 @@
                     
                     // Render ulang view jika diperlukan
                     if (targetViewId === 'admin-view') {
-                        renderAdminView();
+                        // Cek apakah sudah login
+                        if (isAdminAuthenticated) {
+                            document.getElementById('admin-login-card').style.display = 'none';
+                            document.getElementById('admin-content').style.display = 'block';
+                            renderAdminView(); // Render ulang tabel
+                        } else {
+                            // Jika belum login, pastikan kartu login tampil
+                            document.getElementById('admin-login-card').style.display = 'block';
+                            document.getElementById('admin-content').style.display = 'none';
+                        }
                     } else if (targetViewId === 'kurator-view') {
                         // Reset dan render
                         document.getElementById('kurator-select').value = "";
@@ -948,6 +1048,42 @@
             });
         }
         
+        // FUNGSI BARU: Setup Admin Login
+        function setupAdminLogin() {
+            const loginForm = document.getElementById('admin-login-form');
+            const passwordInput = document.getElementById('admin-password');
+            const errorMsg = document.getElementById('admin-error-msg');
+            
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = passwordInput.value;
+                
+                if (password === "Admin1234") {
+                    // Password Benar
+                    isAdminAuthenticated = true;
+                    document.getElementById('admin-login-card').style.display = 'none';
+                    document.getElementById('admin-content').style.display = 'block';
+                    errorMsg.style.display = 'none';
+                    passwordInput.value = "";
+                    
+                    // Render tabel (jika belum)
+                    renderAdminView();
+                    
+                } else {
+                    // Password Salah
+                    isAdminAuthenticated = false;
+                    errorMsg.style.display = 'block';
+                    passwordInput.value = "";
+                }
+            });
+        }
+
+        /* * BAGIAN INI DIHAPUS KARENA DUPLIKAT DAN MENYEBABKAN ERROR
+         *
+         * // 4. Render Tampilan Admin (Semua Konten + Dropdown Tugaskan)
+         * function renderAdminView() {
+         *
+         */
 
         // === LOGIKA MODAL (Sebagian besar tidak berubah) ===
         
@@ -1036,6 +1172,8 @@
 
 </body>
 </html>
+
+
 
 
 
