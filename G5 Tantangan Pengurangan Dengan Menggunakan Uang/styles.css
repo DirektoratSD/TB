@@ -1,0 +1,557 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+:root {
+  --primary-color: #f1f5f9;
+  --black-text: #545454;
+  --blue-text: #4169e1;
+  --accent-color: #f59e0b;
+  --root-font-size: 1.7vw;
+  --bg-color: #1a0b2e;
+  --panel-bg: rgba(26, 11, 46, 0.6);
+  --text-color: #f0e8ff;
+  --glow-primary: #a855f7; /* Purple */
+  --glow-secondary: #00c2ff; /* Cyan */
+  --glow-success: #34d399; /* Green */
+  --glow-error: #f87171; /* Red */
+}
+html {
+  font-size: var(--root-font-size);
+}
+
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-weight: 500;
+}
+#aspect-container {
+  position: relative;
+  aspect-ratio: 16/9;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* background-image: url("assets/BG.png");
+  background-size: cover; */
+  background-color: var(--bg-color);
+}
+.aspect-container {
+  position: relative;
+}
+
+/* Marquee Styles */
+.marquee-container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 5.5rem; /* Start after logo (0.3rem left + ~5.2rem logo width estimate) */
+  height: 5vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 9998;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-scroll 30.25s linear infinite;
+}
+
+.marquee span {
+  color: white;
+  font-size: 1rem;
+  padding-right: 3rem;
+  display: inline-block;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  99.17% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* TemanBelajar Logo Position */
+.tb-logo {
+  position: absolute;
+  z-index: 9999;
+  left:0.3rem
+}
+
+.tb-logo img {
+  height: 1.2rem;
+  width: auto;
+  pointer-events: none;
+}
+#top-heading {
+  color: var(--primary-color);
+  height: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.7rem;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.2);
+}
+#main-content {
+  display: flex;
+  flex: 1;
+  margin: 0.25rem;
+}
+#left-panel {
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.5rem;
+  z-index: 2;
+  display: none;
+}
+#character {
+  position: relative;
+  width: 100%;
+  height: 48%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+}
+#character > img {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+}
+#context {
+  position: relative;
+  width: 100%;
+  min-height: 10%;
+  background-color: white;
+  border-radius: 1rem;
+  margin-bottom: 0.5rem;
+  margin-left: 0.5rem;
+  padding: 0.7rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(
+    145deg,
+    #fffbeb,
+    #fdf2d1
+  ); /* Light creamy gradient */
+  border: 0.4rem solid #fdbf74;
+}
+#context h3 {
+  color: var(--blue-text);
+  margin-bottom: 0.5rem;
+}
+#context p {
+  line-height: 1.3;
+  font-size: 1.1rem;
+  color: var(--black-text);
+  font-weight: 400;
+}
+#context::after {
+  content: "";
+  position: absolute;
+  bottom: -22px; /* Adjust position for thicker border */
+  left: 20%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #fdbf74; /* Matches the new border color */
+}
+/* LEFT PANEL */
+
+/* RIGHT PANEL */
+
+#right-panel {
+  z-index: 2;
+  flex: 1;
+  /* backdrop-filter: blur(5px);
+  background: rgba(255, 255, 255, 0.15); */
+  display: flex;
+  flex-direction: column;
+
+  padding: 0.5rem;
+  border-radius: 8px;
+  gap: 0.5rem;
+}
+#right-panel > div {
+  width: 100%;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+.strap {
+  min-height: 10%;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+#applet {
+  position: relative;
+  flex: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 75%;
+  /* margin-bottom: 1rem; */
+  width: 90%;
+}
+#lower-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
+#upper-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+  color: white;
+}
+
+/********************************************
+ * 8) BUTTONS
+ *********************************************/
+.btn {
+  padding: 0.35rem 1rem; /* Adjusted */
+  border: 1px solid transparent;
+  border-radius: 200px; /* Slightly more rounded */
+  font-size: 1.2rem; /* MODIFIED FONT SIZE (Original Value) */
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn:hover {
+  transform: translateY(-2px);
+}
+.btn:active {
+  transform: translateY(3px);
+}
+.btn[disabled] {
+  pointer-events: none;
+  opacity: 0.6 !important;
+  color: white;
+}
+.btn-primary {
+  background: linear-gradient(
+    145deg,
+    #fdbe35,
+    #fba92d
+  ); /* Yellow gradient background */
+  box-shadow: 0 7px 4px rgba(251, 169, 45, 0.3),
+    inset 0 2px 1px rgba(255, 255, 255, 0.5),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1), 0 4px 0px rgba(206, 141, 0, 0.6);
+  text-shadow: 0px 1px 2px rgba(175, 144, 5, 0.89);
+  color: rgb(39, 39, 39);
+}
+.btn-primary:hover {
+  background-color: #e67e00;
+}
+.btn-primary:active {
+  background: linear-gradient(
+    145deg,
+    #fba92d,
+    #f9a825
+  ); /* Darken the gradient */
+  box-shadow: 0 4px 8px rgba(251, 155, 45, 0.3),
+    inset 0 2px 3px rgba(0, 0, 0, 0.3);
+}
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2); /* Light, semi-transparent */
+  color: #f0f0f0;
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 2px rgba(255, 255, 255, 0.3);
+}
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn-secondary:active {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: none;
+}
+
+/*##################################################
+ OVERLAY 
+####################################################*/
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center; 
+  align-items: flex-start;
+  z-index: 20;
+  backdrop-filter: blur(15px);
+  display: none;
+}
+
+.overlay img {
+  max-width: 30%;
+  position: absolute;
+  bottom: 0;
+  left: 2%;
+  z-index: 1;
+}
+
+.overlay-content {
+  position: absolute;
+  top: 50%;
+  right: 10%; /* Centered horizontally */
+  transform: translate(0%, -50%); /* Ensures perfect centering */
+  width: 60%;
+  height: auto; /* Auto height to fit content */
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: 30px; /* Much rounder corners for a softer look */
+
+  /* Fun, sunny background gradient */
+  background: linear-gradient(135deg, #fdbf74, #fdbe35);
+
+  /* A playful, thick border */
+  border: 8px dashed white;
+
+  /* Soft shadow to make it pop! */
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15), 0 0 0 10px #fba92d;
+
+  /* A subtle animation for when it appears */
+  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.overlay-content h1 {
+  /* Using a fun, bold font */
+  font-family: "Fredoka One", cursive;
+  color: #a55c00; /* A deep, readable shade of orange */
+  font-size: 3.5rem; /* Bigger and bolder! */
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 0px white; /* Makes text stand out */
+}
+
+.overlay-content p {
+  /* A friendly, readable font for the message */
+  font-family: "Baloo 2", cursive;
+  color: #a55c00;
+  font-size: 1.5rem;
+  margin-bottom: 6rem;
+  font-weight: 700;
+}
+#overlay-button {
+  /* Positioning */
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  /* --- Appearance & Styling --- */
+
+  /* Using the friendly 'Baloo' font */
+  font-family: "Baloo 2", cursive;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+
+  /* Vibrant orange background */
+  background-color: #fba92d;
+
+  /* Soft, pill shape */
+  border-radius: 50px;
+  border: 4px solid #a55c00; /* Darker orange border */
+
+  /* Generous padding for a tappable feel */
+  padding: 0.5rem 1rem;
+
+  /* Pop-out shadow effect */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+
+  /* Making the cursor a pointer on hover */
+  cursor: pointer;
+
+  /* Smooth transition for hover effects */
+  transition: all 0.2s ease-in-out;
+}
+
+/* --- Interactive States for a Fun Feel --- */
+
+/* When the user hovers over the button */
+#overlay-button:hover {
+  background-color: #fdbe35; /* Lighter, sunnier yellow */
+  transform: translateX(-50%) translateY(-2px); /* Lift up, while keeping it centered */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* When the user clicks the button */
+#overlay-button:active {
+  transform: translateX(-50%) translateY(1px); /* Press down, while keeping it centered */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+/********************************************
+ * 9) STEP COUNTER
+ *********************************************/
+.step-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 2rem; /* Adjusted */
+  padding: 0.5rem 1rem;
+  border-radius: 100px; /* Pill shape */
+  background-color: rgba(0, 0, 0, 0.15); /* Darker transparent */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+.step-counter .dot {
+  width: 0.5rem; /* Adjusted */
+  height: 0.5rem; /* Adjusted */
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3); /* Dimmed dots */
+  transition: all 0.3s ease;
+}
+.step-counter .dot.active {
+  background-color: #ffc107; /* Active dot yellow/orange */
+  transform: scale(1.25);
+  box-shadow: 0 0 5px #ffc107;
+}
+
+/* Common animation classes 
+-------------------------
+*/
+@keyframes vibrate-x {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-2px);
+  }
+  40% {
+    transform: translateX(2px);
+  }
+  60% {
+    transform: translateX(-2px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.vibrate-x {
+  animation: vibrate-x 0.3s ease-in-out infinite;
+}
+
+.fade-in {
+  opacity: 0;
+  transform: scale(0.1);
+  animation: scaleFadeIn 0.4s ease-out forwards;
+}
+
+@keyframes scaleFadeIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* --- FTUE STYLES --- */
+#hand-ftue {
+  position: fixed;
+  width: 6vw;
+  height: auto;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  transform: translate(-30%, -20%);
+}
+.hand-offset{
+  translate: 0 20%;
+}
+#hand-ftue img {
+  width: 100%;
+  height: auto;
+}
+.hand-animating {
+  display: block !important;
+  animation: hand-tap-animation 2s ease-in-out infinite;
+}
+@keyframes hand-tap-animation {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  50% {
+    transform: translate(-30%, -20%) scale(0.95);
+  }
+}
+
+/* --------------------------------------------- */
+
+#stepCounter {
+  display: none;
+}
+#previous-button {
+  display: none;
+}
+
+@keyframes vibrate-x {
+  0% {
+    translate: 0;
+  }
+  20% {
+    translate: -2px 0;
+  }
+  40% {
+    translate: 2px 0;
+  }
+  60% {
+    translate: -2px 0;
+  }
+  80% {
+    translate: 2px 0;
+  }
+  100% {
+    left: 0;
+  }
+}
+
+.vibrate-x {
+  animation: vibrate-x 0.5s ease-in-out infinite;
+}
+
+.blue {
+  color: #0687ff !important;
+}
+.red {
+  color: #ff2f2f !important;
+}
+.green {
+  color: #00ad00 !important;
+}

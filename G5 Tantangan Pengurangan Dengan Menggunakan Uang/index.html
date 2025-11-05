@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Addition</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="applet/applet.css" />
+    <script src="packages/confetti.min.js"></script>
+    <script src="packages/gsap.min.js"></script>
+    <script src="applet/rootText.js"></script>
+    <script src="applet/texts.js"></script>
+  </head>
+  <body>
+    <div class="marquee-container">
+      <div class="marquee">
+        <span>Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</span>
+      </div>
+    </div>
+    <div id="aspect-container">
+       <div class="tb-logo">
+        <img src="assets/temanbelajarsingeline2.png" alt="Teman Belajar" />
+      </div>
+      <div id="highlight-box">
+        <button>+</button>
+      </div>
+      <div id="hand-ftue">
+        <img src="assets/tap.png" alt="tapping hand" />
+      </div>
+      <div class="overlay" id="fullscreen-overlay">
+        <img src="" />
+        <div class="overlay-content">
+          <h1>Congrats Activity complete</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia,
+            facere.
+          </p>
+          <button class="btn" id="overlay-button"></button>
+        </div>
+      </div>
+      <!-- <div id="top-heading">
+            <p>Applet Name Optional</p>
+        </div> -->
+      <div id="main-content">
+        <div id="left-panel">
+          <div id="context"></div>
+          <div id="character">
+            <img src="" />
+          </div>
+        </div>
+        <div id="right-panel">
+          <!-- <div class="strap" id="upper-controls">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nulla dolore obcaecati adipisci rem, tempora quisquam! Totam non nostrum odio. </div> -->
+          <div id="applet" class="main-container">
+            <div id="mcq-overlay" class="overlay">
+              <div id="left-info">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et,
+                quam?
+              </div>
+            </div>
+            <div class="panel question-panel">
+              <div id="big-question">
+                <span class="yellow-bg">Lorem ipsum</span> dolor sit amet,
+                <span class="yellow-bg">consectetur adipisicing</span> elit.
+                Quidem, assumenda.
+              </div>
+              <div id="facts">
+                <span class="yellow-bg">Lorem ipsum.</span>
+                <span class="yellow-bg">consectetur adipisicing</span>
+              </div>
+
+              <div id="addition-word-problem">
+                <div class="awp-line">
+                  <span class="awp-number"></span>
+                  <span class="awp-text"></span>
+                </div>
+                <div class="awp-line">
+                  <span class="awp-number"></span>
+                  <span class="awp-text"></span>
+                </div>
+                <div class="awp-line awp-line-divider">
+                  <hr />
+                </div>
+                <div class="awp-line">
+                  <div class="awp-box"></div>
+                  <span class="awp-text"></span>
+                </div>
+              </div>
+              <div id="drag-and-drop">
+                <!-- Equation with cards -->
+                <div class="dnd-equation">
+                  <span class="dnd-text">Money Left =</span>
+                  <div
+                    class="dnd-dropzone"
+                    data-correct-card="money-at-start"
+                  ></div>
+                  <span class="dnd-text">&nbsp;-&nbsp;</span>
+                  <div class="dnd-combined-wrapper">
+                    <div class="dnd-title">Total money spent</div>
+                    <div class="dnd-combined-zone">
+                      <div
+                        class="dnd-dropzone"
+                        data-correct-card="toy-robot-cost,spinning-top-cost"
+                      ></div>
+                      <span class="dnd-text">&nbsp;+&nbsp;</span>
+                      <div
+                        class="dnd-dropzone"
+                        data-correct-card="toy-robot-cost,spinning-top-cost"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Draggable cards -->
+                <div class="dnd-cards">
+                  <div class="dnd-card" id="toy-robot-cost" draggable="true">
+                    Toy Robot cost
+                  </div>
+                  <div class="dnd-card" id="money-at-start" draggable="true">
+                    Money at Start
+                  </div>
+                  <div class="dnd-card" id="spinning-top-cost" draggable="true">
+                    Spinning Top cost
+                  </div>
+                </div>
+
+                <!-- Equation with numbers (initially hidden) -->
+                <div class="dnd-values">
+                  <span class="dnd-text">&nbsp;=&nbsp;</span>
+                  <span class="dnd-number" id="start-money-value"></span>
+                  <span class="dnd-text">&nbsp;-&nbsp;(&nbsp;</span>
+                  <span class="dnd-number" id="cost1-value"></span>
+                  <span class="dnd-text">&nbsp;+&nbsp;</span>
+                  <span class="dnd-number" id="cost2-value"></span>
+                  <span class="dnd-text">&nbsp;)</span>
+                </div>
+              </div>
+            </div>
+            <!-- Left Panel: Standard Addition -->
+            <div class="panel right-panel">
+              <div class="addition-container">
+                <p id="plus">+</p>
+                <!-- <div class="item row-header"></div> -->
+                <div class="item header tth-color row-header col-1">TTh</div>
+                <div class="item header th-color row-header col-2">Th</div>
+                <div class="item header h-color row-header col-3">H</div>
+                <div class="item header t-color row-header col-4">T</div>
+                <div class="item header o-color row-header col-5">O</div>
+
+                <!-- <div class="item row-carry"></div> -->
+                <div class="item carry-over tth-color row-carry col-1"></div>
+                <div class="item carry-over th-color row-carry col-2"></div>
+                <div class="item carry-over h-color row-carry col-3"></div>
+                <div class="item carry-over t-color row-carry col-4"></div>
+                <div class="item carry-over row-carry col-5"></div>
+
+                <!-- <div class="item row-num1"></div> -->
+                <div class="item tth-color row-num1 col-1">50000</div>
+                <div class="item th-color row-num1 col-2">3000</div>
+                <div class="item h-color row-num1 col-3">600</div>
+                <div class="item t-color row-num1 col-4">80</div>
+                <div class="item o-color row-num1 col-5">2</div>
+
+                <!-- <div class="item row-num2">+</div> -->
+                <div class="item tth-color row-num2 col-1">30000</div>
+                <div class="item th-color row-num2 col-2">8000</div>
+                <div class="item h-color row-num2 col-3">700</div>
+                <div class="item t-color row-num2 col-4">40</div>
+                <div class="item o-color row-num2 col-5">9</div>
+
+                <div class="line-item row-line col-1-to-5"></div>
+
+                <!-- <div class="item row-result"></div> -->
+                <div class="item tth-color row-result col-1"></div>
+                <div class="item th-color row-result col-2"></div>
+                <div class="item h-color row-result col-3"></div>
+                <div class="item t-color row-result col-4"></div>
+                <div class="item o-color row-result col-5"></div>
+              </div>
+            </div>
+            <div class="panel left-panel">
+              <div id="mcq-container">
+                <p id="mcq-question">
+                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                  Nihil vitae temporibus quibusdam doloribus provident!
+                </p>
+                <div id="mcq-options">
+                  <div class="option">10+3</div>
+                  <div class="option">9+4</div>
+                  <div class="option">11+2</div>
+                </div>
+              </div>
+              <div class="addition-container">
+                <div class="item invisible header row-placeholder col-2">H</div>
+                <div class="item invisible header row-placeholder col-3">T</div>
+                <div class="item invisible header row-placeholder col-4">O</div>
+                <div class="item invisible header row-placeholder col-5">P</div>
+                <div class="item invisible header row-placeholder col-6">P</div>
+                <div class="item invisible header row-placeholder col-1">H</div>
+
+                <div class="item carry-over tth-color row-carry col-2"></div>
+                <div class="item carry-over th-color row-carry col-3"></div>
+                <div class="item carry-over h-color row-carry col-4"></div>
+                <div class="item carry-over t-color row-carry col-5"></div>
+                <div class="item carry-over row-carry col-6"></div>
+                <div class="item carry-over row-carry col-1"></div>
+
+                <div class="item row-num1 col-2">5</div>
+                <div class="item row-num1 col-3">3</div>
+                <div class="item row-num1 col-4">6</div>
+                <div class="item row-num1 col-5">8</div>
+                <div class="item row-num1 col-6">2</div>
+                <div class="item row-num1 col-1"></div>
+
+                <div class="item row-num2 col-2">3</div>
+                <div class="item row-num2 col-3">8</div>
+                <div class="item row-num2 col-4">7</div>
+                <div class="item row-num2 col-5">4</div>
+                <div class="item row-num2 col-6">9</div>
+                <div class="item row-num2 col-1">+</div>
+
+                <div class="line-item row-line col-1-to-6"></div>
+
+                <div class="item row-result col-2"></div>
+                <div class="item row-result col-3"></div>
+                <div class="item row-result col-4"></div>
+                <div class="item row-result col-5"></div>
+                <div class="item row-result col-6"></div>
+                <div class="item row-result col-1"></div>
+              </div>
+            </div>
+          </div>
+          <div id="bottom-statement">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore,
+            eveniet?
+          </div>
+          <div class="strap" id="lower-controls">
+            <button class="btn btn-secondary fade-in" id="previous-button">
+              Previous
+            </button>
+            <div class="step-counter fade-in" id="stepCounter"></div>
+            <button class="btn btn-primary fade-in" id="next-button">
+              Next
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="app.js"></script>
+    <script src="applet/applet.js"></script>
+  </body>
+</html>

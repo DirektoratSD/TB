@@ -1,0 +1,4 @@
+reoriented the containers. 
+mcq in left panel
+adjuested height width hover of mcq 
+change in load mcq in function 

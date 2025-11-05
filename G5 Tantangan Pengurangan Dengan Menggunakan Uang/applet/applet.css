@@ -1,0 +1,746 @@
+#bottom-statement {
+  color: white;
+  height: 15%;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  font-size: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+  z-index: 30;
+  text-align: center;
+  backdrop-filter: blur(7px);
+}
+.panel {
+  border-radius: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1vw 2vw;
+  color: white; /* Changed from white */
+  height: 100%;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  box-shadow: 0 0 1rem rgba(168, 85, 247, 0.3),
+    0 0 0.5rem rgba(0, 194, 255, 0.2);
+}
+.main-container {
+  width: 100%;
+  display: flex;
+  padding: 0.5rem;
+  gap: 2rem;
+  position: relative;
+  background: var(--panel-bg);
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(7px);
+}
+.question-panel {
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  gap: 2rem;
+  display: none;
+}
+#big-question {
+  color: white;
+  font-size: 1.7rem;
+  text-align: center;
+  line-height: 1.5;
+  /* padding-bottom: 1rem; */
+  /* border-bottom: 1px solid black; */
+}
+#big-question span {
+  /* display: inline-block; */
+  padding: 0.1rem;
+  border-radius: 0.2rem;
+}
+#facts {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px dashed var(--glow-primary);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+#facts:has(#first-stage-mcq) {
+}
+#facts:not(:has(#first-stage-mcq)) {
+  align-items: flex-start;
+}
+
+#facts span {
+  display: inline-block;
+  border-radius: 0.5rem;
+  font-size: 1.5rem;
+  color: var(--text-color);
+}
+.yellow-bg {
+  background-color: rgba(168, 85, 247, 0.3);
+  color: #fff;
+}
+.green-bg {
+  background-color: rgba(52, 211, 153, 0.3);
+  color: #fff;
+}
+.main-container.first-stage .question-panel {
+  display: flex;
+}
+.main-container.first-stage .left-panel {
+  display: none;
+}
+.main-container.first-stage .right-panel {
+  display: none;
+}
+
+/* --- First Stage MCQ --- */
+#first-stage-mcq-question {
+  font-size: 1.6rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+#first-stage-mcq {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
+}
+.mcq-option {
+  color: var(--text-color);
+  font-size: 1.3rem;
+  font-weight: 700;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+.mcq-option:hover {
+  box-shadow: 0 0 20px var(--glow-primary);
+  border-color: var(--glow-primary);
+  background: linear-gradient(
+    145deg,
+    rgba(168, 85, 247, 0.3),
+    rgba(168, 85, 247, 0.1)
+  );
+  transform: translateY(-2px);
+}
+.mcq-option.correct {
+  background: rgba(52, 211, 153, 0.15) !important;
+  border-color: var(--glow-success) !important;
+  color: var(--glow-success) !important;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5) !important;
+}
+.mcq-option.wrong {
+  background: rgba(248, 113, 113, 0.15) !important;
+  border-color: var(--glow-error) !important;
+  color: var(--glow-error) !important;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.5) !important;
+}
+
+/* --- Unified Styling for Both Panels --- */
+.addition-container {
+  display: grid;
+  font-size: 3vw; /* Adjusted font size for more columns */
+  gap: 0.6vw 0.5vw; /* row-gap column-gap */
+  text-align: right;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+.addition-container div {
+  /* border: 1px solid blue; */
+}
+.item {
+  padding: 0.5vw;
+  box-sizing: border-box;
+  min-height: 3.5vw; /* Adjusted min-height */
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.row-result.item {
+  min-height: 8vw;
+  align-items: flex-start;
+}
+.line-item {
+  height: 0.2vw;
+  background-color: #333333; /* Changed from white */
+  grid-column: 1 / -1;
+  align-self: center;
+  /* margin: 0.3vw 0; */
+}
+
+/* --- Left Panel Specifics --- */
+.left-panel {
+  border-radius: 1rem;
+  width: 50%;
+  display: flex;
+  position: relative;
+}
+.left-panel .addition-container {
+  width: 85%;
+  grid-template-columns: repeat(6, 1.2rem);
+  column-gap: 0rem;
+  row-gap: 0;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+
+/* --- Right Panel Specifics --- */
+.right-panel {
+  flex: 1;
+  border-radius: 1rem;
+}
+
+.right-panel .item {
+  justify-content: center;
+  text-align: center;
+  border: 1px dashed rgba(168, 85, 247, 0.4);
+}
+.left-panel .item {
+  justify-content: center;
+  text-align: center;
+}
+.right-panel .header {
+  font-weight: bold;
+}
+
+.carry-over {
+  font-size: 2vw; /* Adjusted carry-over font size */
+  color: #555555; /* Changed from #bdc3c7 */
+  align-items: flex-end;
+  padding-bottom: 0.5vw;
+}
+
+.invisible {
+  visibility: hidden;
+}
+
+/* Color definitions for place values */
+.tth-color {
+  color: #2ecc71;
+} /* Green */
+.th-color {
+  color: #ffc000;
+} /* Yellow */
+.h-color {
+  color: #e56d30;
+} /* Orange */
+.t-color {
+  color: #00b4f1;
+} /* Blue */
+.o-color {
+  color: #ce088c;
+} /* Red */
+#mcq-overlay {
+  position: fixed;
+}
+/* --- MCQ Styles (Reverted to Dark Theme) --- */
+#mcq-container {
+  height: 70%;
+  padding: 0.5rem;
+  color: var(--text-color);
+  font-family: Arial, sans-serif;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none;
+}
+#left-info {
+  width: 95%;
+  height: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  display: none;
+  color: var(--text-color);
+  text-align: center;
+  padding: 0 1rem;
+  border-right: 1px solid rgba(240, 232, 255, 0.4);
+}
+#mcq-overlay.split #left-info {
+  display: flex;
+}
+#mcq-container p {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+}
+
+#mcq-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: 90%;
+}
+
+.option {
+  color: var(--text-color);
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.1rem;
+}
+
+.option:hover {
+  border-color: var(--glow-primary);
+  box-shadow: 0 0 15px var(--glow-primary);
+  transform: translateY(-2px);
+}
+
+.option.correct {
+  background: rgba(52, 211, 153, 0.2) !important;
+  color: var(--glow-success) !important;
+  border-color: var(--glow-success) !important;
+}
+
+.option.wrong {
+  background: rgba(248, 113, 113, 0.2) !important;
+  color: var(--glow-error) !important;
+  border-color: var(--glow-error) !important;
+  pointer-events: none;
+}
+/* --- End of Reverted MCQ Styles --- */
+
+#highlight-box {
+  position: fixed;
+  border: 3px solid rgb(193, 6, 193);
+  z-index: 10;
+  display: none;
+  transition: all 0.35s ease-in-out;
+  box-sizing: border-box;
+  /* pointer-events: none; */
+}
+.green-box {
+  border-color: #2ecc71 !important;
+}
+.clickable {
+  cursor: pointer;
+  pointer-events: all !important;
+}
+.right-panel .item.clickable {
+  cursor: pointer !important;
+  pointer-events: all !important;
+  background-color: rgba(255, 255, 255, 0.01) !important;
+}
+#highlight-box button {
+  position: absolute;
+  bottom: 0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2rem;
+  height: 2rem;
+  background-color: rgb(193, 6, 193);
+  color: white;
+  border: 2px solid white;
+  border-radius: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: none;
+}
+#highlight-box button:hover {
+  background-color: rgb(127, 3, 127);
+  scale: 1.1;
+}
+#next-button {
+  z-index: 30;
+}
+/* --- Border Fixes for Right Panel --- */
+
+/* Override the original rule that creates a border on all four sides of each cell */
+.right-panel .item {
+  border: none;
+}
+
+/* Add a border to the container, which will act as the top and left outlines of the grid */
+
+/* Add borders to the bottom and right of each cell to create the inner grid lines */
+.right-panel .item {
+  border-bottom: 1px dashed rgba(168, 85, 247, 1);
+  border-right: 1px dashed rgba(168, 85, 247, 1);
+}
+
+/* --- Exceptions for the horizontal line separator --- */
+
+/* The row before the line (.row-num2) should not have a bottom border,
+   as the .line-item itself will serve as the separator. */
+.right-panel .row-num2.item {
+  border-bottom: none;
+}
+/* --- Final Border Adjustments --- */
+
+/* Remove the right border from the rightmost column in the right panel.
+   The 'o-color' class is used for the 'Ones' column, which is the last one. */
+.right-panel .col-5 {
+  border-right: none;
+}
+
+/* Remove the bottom border from the final result row in the right panel. */
+.right-panel .row-result.item {
+  border-bottom: none;
+}
+/* .right-panel .row-carry.item {
+  border-right: none;
+} */
+
+.text-transparent {
+  color: transparent;
+}
+
+.right-panel .addition-container.simplified-mode {
+  grid-template-columns: repeat(5, 2rem) !important;
+  width: 60% !important;
+  padding-left: 2rem;
+}
+.right-panel .addition-container.simplified-mode .row-header {
+  display: none;
+}
+
+.right-panel .addition-container.simplified-mode .item {
+  border: none !important;
+}
+
+.right-panel .addition-container.simplified-mode .row-num1.item,
+.right-panel .addition-container.simplified-mode .row-num2.item {
+  color: white !important;
+}
+
+.addition-container.simplified-mode #plus {
+  top: 50%;
+  left: 10%;
+  display: block;
+}
+
+#addition-word-problem {
+  display: none;
+  /* Hidden by default */
+  flex-direction: column;
+  font-size: 1.3rem;
+  color: var(--text-color);
+  width: 65%; /* Increased width slightly for better spacing */
+  gap: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px dashed var(--glow-primary);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.awp-line {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+.awp-text {
+  flex-basis: 50%; /* Adjusted basis */
+  text-align: left; /* Text is on the right, aligned left */
+}
+
+.awp-number {
+  flex-basis: 25%; /* Adjusted basis */
+  text-align: left;
+  font-size: 2.2rem; /* Made numbers bigger */
+  font-weight: 700;
+}
+
+.awp-line-divider {
+  width: 25%; /* Match the width of the numbers column */
+  align-self: flex-start; /* Align to the left side */
+  padding: 0;
+  justify-content: flex-start;
+  /* padding-left: 1rem; */
+  margin-left: 3rem;
+}
+
+.awp-line-divider hr {
+  width: 100%;
+  border: 1px solid var(--text-color);
+}
+
+.awp-box {
+  border: 2px dashed var(--text-color);
+  width: 25%; /* Make box fill its container */
+  /* max-width: 8rem; */
+  align-self: flex-end;
+  height: 3.2rem; /* Increased height */
+  text-align: left;
+  font-size: 2.2rem; /* Match number font size */
+  font-weight: 700;
+  color: var(--text-color);
+  /* padding: 0 0.5rem; */
+  display: flex;
+  align-items: center;
+  /* justify-content: flex-end; */
+  border-radius: 0.5rem;
+}
+
+/* --- Drag and Drop Stage --- */
+/* --- Drag and Drop Stage --- */
+/* --- Drag and Drop Stage --- */
+#drag-and-drop {
+  display: none; /* Initially hidden */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 2rem;
+  color: var(--text-color);
+  font-family: sans-serif;
+}
+
+.dnd-equation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 6rem;
+}
+
+.dnd-text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.dnd-dropzone {
+  width: 12rem;
+  height: 5rem;
+  border: 3px dashed var(--glow-primary);
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dnd-dropzone.over {
+  background-color: rgba(168, 85, 247, 0.2);
+  border-style: solid;
+}
+
+.dnd-combined-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dnd-title {
+  position: absolute;
+  top: -2.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--glow-success);
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.5s ease-in-out;
+}
+
+.dnd-title.visible {
+  opacity: 1;
+}
+
+.dnd-combined-zone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 0.2rem dashed white;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+}
+
+.dnd-combined-zone.incorrect,
+.dnd-dropzone.incorrect {
+  border-color: var(--glow-error) !important;
+  animation: vibrate-x 0.5s ease-in-out;
+}
+
+.dnd-cards {
+  display: flex;
+  gap: 2rem;
+}
+
+.dnd-card {
+  width: 12rem;
+  height: 5rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: bold;
+  cursor: grab;
+  transition: transform 0.2s ease, background-color 0.3s, border-color 0.3s;
+  user-select: none;
+}
+
+.dnd-card:active {
+  cursor: grabbing;
+  transform: scale(1.05);
+}
+
+.dnd-card.dragging {
+  opacity: 0.5;
+}
+
+.dnd-card.placed {
+  cursor: default;
+  background: rgba(52, 211, 153, 0.2);
+  border-color: var(--glow-success);
+  border-style: solid;
+}
+
+.dnd-values {
+  display: flex;
+  align-items: center;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.5s ease-in-out 0.5s;
+}
+
+.dnd-values.visible {
+  opacity: 1;
+}
+
+.dnd-number {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: var(--text-color);
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--glow-primary);
+}
+
+#values-combined-zone .dnd-number {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+.dnd-values .dnd-text {
+  font-size: 2.5rem;
+}
+
+/* FIx */
+
+#plus {
+  position: absolute;
+  top: 60%;
+  right: -7%;
+  /* display: none; */
+}
+
+.right-panel .addition-container {
+  position: relative;
+  /* Proportional column widths: TTh > Th > H > T > O */
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 0;
+  row-gap: 0;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
+  /* padding: 0.5rem; */
+  border: 1px dashed rgba(168, 85, 247, 0.8);
+  margin-right: 1.5rem;
+}
+
+.row-result.item {
+  min-height: 4.8vw;
+  align-items: flex-start;
+}
+
+.yellow-bg {
+  background-color: #fdff88;
+  color: black;
+}
+.green-bg {
+  background-color: #4dffbe;
+  color: black;
+}
+.em {
+  color: var(--glow-secondary);
+}
+
+.line-item {
+  height: 0.3vw;
+  background-color: rgba(168, 85, 247, 0.8); /* Changed from white */
+  grid-column: 1 / -1;
+  align-self: center;
+  /* margin: 0.3vw 0; */
+}
+
+.red-box {
+  border-color: rgb(255, 12, 12) !important;
+}
+
+/* Add this to your CSS file */
+.ghost-card {
+  position: absolute; /* Allows it to follow the finger */
+  pointer-events: none; /* Lets events pass through to elements underneath */
+  z-index: 1000; /* Ensures it's on top */
+  opacity: 0.8; /* Makes it look like a "ghost" */
+  /* Copy any other critical styles from .dnd-card to make it look identical */
+  width: 12rem;
+  height: 5rem;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.1),
+    rgba(255, 255, 255, 0)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 0.5rem;
+  font-weight: bold;
+  color: white;
+}
+
+/* Your original .dragging class might hide the original card. 
+  For touch, we want to hide the original while the ghost is active.
+*/
+.dnd-card.dragging {
+  opacity: 0.3; /* Or visibility: hidden; */
+}
