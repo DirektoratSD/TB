@@ -1,0 +1,669 @@
+/********************************************
+ * 1) GLOBAL & BODY STYLES
+ *********************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: #e0e8ef;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/********************************************
+ * MARQUEE STYLES
+ *********************************************/
+.marquee-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.marquee-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: white;
+  font-size: calc(0.5rem + 0.8vw);
+  animation: marquee-scroll 30s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/********************************************
+ * 2) APPLET CONTAINER (16:9 Aspect Ratio)
+ *********************************************/
+.applet-container {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  max-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 1vh 3vw rgba(0, 0, 0, 0.15);
+  background-color: #6ca0dc;
+  background-image: url("../assets/DarkBG.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  gap: 1vw;
+}
+.applet-container {
+  position: relative;
+}
+
+/* TemanBelajar Logo Position */
+.tb-logo {
+  position: absolute;
+  z-index: 10000;
+  left:0.3rem
+}
+
+.tb-logo img {
+  height: 1.5rem;
+  width: auto;
+  pointer-events: none;
+}
+/* Initial State: Right panel hidden, left panel centered */
+.initial-state .right-panel-content {
+  display: none;
+}
+.initial-state .main-layout {
+  justify-content: center;
+  align-items: center;
+}
+.initial-state .left-panel-anchor {
+  width: 50%;
+  max-width: 40vw;
+  justify-content: center;
+  height: 80%;
+}
+.initial-state .speech-bubble-container {
+  max-height: 50%;
+}
+.initial-state .character-display {
+  height: 60%;
+}
+.initial-state .contextBox::after {
+  bottom: -2.8vh;
+  left: 25%;
+  transform: translateX(-50%);
+}
+
+/********************************************
+ * 3) TITLE BAR
+ *********************************************/
+.titleBar {
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(0.8vw);
+  padding: 1vh 2vw;
+  color: white;
+  text-align: center;
+  display: none;
+}
+
+/********************************************
+ * 4) MAIN LAYOUT
+ *********************************************/
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  padding: 0 1vw;
+  gap: 1vw;
+}
+
+.left-panel-anchor {
+  width: 30%;
+  max-width: 20vw;
+  min-width: 15vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  justify-content: flex-end;
+}
+
+.character-display {
+  width: auto;
+  height: 50%;
+  z-index: 3;
+}
+
+#characterImageElement {
+  width: auto;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.speech-bubble-container {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  padding: 0.5vw;
+  display: flex;
+  flex-direction: column;
+  max-height: 48%;
+  
+  z-index: 5;
+}
+
+.contextBox {
+  background: rgba(255, 255, 255, 0.92);
+  padding:  0.5vw;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 2vw;
+  position: relative;
+  box-shadow: 0 5px 2vw rgba(0, 0, 0, 0.15);
+  border: 2px solid rgba(0, 140, 255, 0.5);
+  /* NEW: Added transition for smooth color changes */
+  transition: background-color 0.3s ease;
+}
+
+.contextBox::after {
+  content: "";
+  position: absolute;
+  bottom: -2.8vh;
+  right: 20%;
+  width: 0;
+  height: 0;
+  border: 1.5vw solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 0;
+  /* NEW: Added transition for smooth color changes */
+  transition: border-top-color 0.3s ease;
+}
+
+/* NEW: Context box feedback states */
+.contextBox.correct {
+  background: rgba(194, 255, 197, 0.95);
+  border: 2px solid rgba(0, 255, 13, 0.5); /* Light green tint */
+}
+.contextBox.correct::after {
+  border-top-color: rgba(194, 255, 197, 0.95);
+}
+.contextBox.incorrect {
+  background: rgba(255, 212, 212, 0.95);
+  border: 2px solid rgba(255, 72, 0, 0.5); /* Light red tint */
+}
+.contextBox.incorrect::after {
+  border-top-color: rgba(255, 212, 212, 0.95);
+}
+
+.contextBox .context-section h2 {
+  font-size: calc(0.5rem + 1.25vw);
+  color: #4169e1;
+  margin-bottom: 0.5vh;
+  font-weight: 600;
+}
+.contextBox .context-section div > p {
+  font-size: calc(0.5rem + 1vw);
+  margin-bottom: 1vh;
+  color: #444;
+}
+
+.inline-hammer-wrapper {
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  /* FIX: Add space on the left and right so it doesn't crowd the text */
+  margin: 0 0.2em;
+}
+
+/* Inline hammer in text */
+.inline-hammer {
+  /* FIX: Increased size by 20% (3em * 1.2 = 3.6em) */
+  width: 5em;
+  height: 2.5em;
+  object-fit: contain;
+  /* Note: vertical-align and margin have been moved to the wrapper */
+}
+
+.right-panel-content {
+  padding: 2vh 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/********************************************
+ * 5) WORKING AREA CONTAINER
+ *********************************************/
+.workingArea-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5vh 1vw;
+  background-color: rgba(77, 86, 110, 0.55);
+  backdrop-filter: blur(0.5vw);
+  border-radius: 1.5vw;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+#activity-area {
+  flex: 1;
+  border-radius: 1.5vw;
+  background-color: rgba(41, 45, 58, 0.7);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 2vh 1vw;
+  gap: 1vw;
+}
+
+.lowerControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1vh 1vw;
+  gap: 1vw;
+  color: #e0e0e0;
+  font-size: calc(0.8rem + 0.8vw);
+  min-height: 8vh;
+  flex-wrap: wrap;
+}
+
+/********************************************
+ * 6) Applet Specific CSS (FACTORIZATION)
+ *********************************************/
+
+/* --- Hammer Intro Screen --- */
+.hammer-intro-container {
+  width: 40%;
+  position: relative;
+}
+.hammer-intro-container img {
+  width: 100%;
+}
+.hammer-intro-container::after {
+  content: attr(data-number);
+  position: absolute;
+  top: 45%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  color: #c09a69;
+  font-size: 6vw;
+  font-weight: bold;
+  text-shadow: -0.05vw -0.05vw 0.1vw #f8d7ae;
+  filter: drop-shadow(0.1vw 0.1vw 0.1vw #613d0d);
+}
+
+/* --- Main Game Layout --- */
+.game-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 1vw;
+}
+/* FIX: Added proper styling for hammer and tree areas */
+.hammer-area {
+  width: 25%;
+  height: 100%;
+  position: relative;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 1vw;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 1vw;
+}
+.factor-tree-area {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 1vw;
+  background: rgba(0, 0, 0, 0.1);
+}
+/* FIX: Added styling for the breakdown text box */
+.breakdown-text {
+  color: #fff;
+  font-size: calc(0.5rem + 1.5vw);
+  text-align: center;
+  position: absolute;
+  bottom: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 90%;
+  padding: 0.5vh 2vw;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 1vw;
+  backdrop-filter: blur(3px);
+}
+
+/* --- Hammers --- */
+.hammer {
+  position: absolute;
+  width: 14vw;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out, top 0.5s ease-in-out,
+    left 0.5s ease-in-out;
+  z-index: 10;
+}
+.hammer img {
+  width: 100%;
+}
+.hammer.disabled {
+  pointer-events: none;
+}
+.hammer:hover:not(.disabled) {
+  transform: scale(1.1);
+}
+.hammer::after {
+  content: attr(data-number);
+  position: absolute;
+  top: 45%;
+  left: 25%;
+  transform: translate(-50%, -50%);
+  font-size: 3vw;
+  font-weight: bold;
+  color: #d4a668;
+  text-shadow: -0.05vw -0.05vw 0.02vw #f8d5ab;
+  filter: drop-shadow(0.05vw 0.05vw 0.02vw #3f2603);
+}
+
+/* Hammer Swing Animation */
+.hammer-swing {
+  animation: swing 0.5s ease-in-out;
+}
+@keyframes swing {
+  0% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-60deg);
+  }
+  100% {
+    transform: rotate(10deg);
+  }
+}
+
+/* --- Factor Tree --- */
+/* FIX: Revamped node positioning. The wrapper is now a positioning context. */
+.tree-node-wrapper {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out,
+    left 0.5s ease-in-out, transform 0.5s ease-in-out;
+  /* This makes children position relative to the wrapper */
+}
+
+.tree-node {
+  width: 6vw;
+  height: 6vw;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5vw;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #096ac5, #18abe6);
+  box-shadow: 0 0.5vh 0px #01519b, 0 1vh 2vh rgba(0, 0, 0, 0.3);
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  z-index: 2; /* Nodes above lines */
+  position: relative; /* Needed for z-index to work properly */
+}
+.tree-node.prime {
+  background: linear-gradient(145deg, #2d9d49, #4caf50);
+  box-shadow: 0 0.5vh 0px #1b5e20;
+  border-radius: 10%;
+  width: 5.6vw;
+  height: 5.6vw;
+}
+.tree-node.incorrect {
+  background: linear-gradient(145deg, #d32f2f, #f44336);
+  box-shadow: 0 0.5vh 0px #b71c1c;
+  animation: shake 0.5s ease-in-out;
+}
+.tree-node.faded {
+  filter: grayscale(1);
+}
+/* FIX: The wrapper for intermediate nodes will be faded, not just the node itself */
+.tree-node-wrapper.faded .tree-node {
+  transform: scale(0.9);
+}
+
+/* Node enter animation */
+.node-entering {
+  opacity: 0;
+  transform: scale(0) !important;
+}
+
+/* FIX: New Line Styling */
+.line {
+  position: absolute;
+  bottom: 50%; /* Start from the center of the child node */
+  left: 50%;
+  width: 3px;
+  background-color: rgba(255, 255, 255, 0.7);
+  transform-origin: bottom center; /* Rotate from the bottom */
+  z-index: 1;
+  transition: height 0.5s ease-in-out 0.2s, transform 0.5s ease-in-out 0.2s; /* Delay line animation slightly */
+}
+
+/* --- Strike Effect --- */
+/* FIX: Centered the strike effect correctly */
+.strike-effect {
+  position: absolute;
+  width: 10vw; /* Slightly larger for better effect */
+  height: 10vw;
+  z-index: 100;
+  pointer-events: none;
+  transform: translate(
+    -50%,
+    -50%
+  ); /* This will center it on its top/left coords */
+}
+
+/* --- MCQ Options --- */
+.mcq-container {
+  position: absolute;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2vw;
+  justify-content: center;
+  width: 100%;
+}
+.mcq-option {
+  font-size: calc(0.8rem + 1vw);
+  background: linear-gradient(145deg, #2d9fd4, #03a9f4);
+  box-shadow: 0 0.5vh 0px #01579b, 0 1vh 2vh rgba(0, 0, 0, 0.3);
+  padding: 1vh 2vw;
+}
+.mcq-option.correct {
+  background: linear-gradient(145deg, #10cc6e, #07c274);
+  box-shadow: 0 0.6vh 0px rgba(9, 170, 9, 0.6);
+}
+.mcq-option.incorrect {
+  background: linear-gradient(145deg, #f5613c, #df4f0d);
+  box-shadow: 0 0.6vh 0px rgba(255, 122, 104, 0.6);
+  animation: shake 0.5s ease-in-out;
+}
+
+/* --- Final Result Text --- */
+.final-factorization-text {
+  position: absolute;
+  bottom: 5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: calc(1rem + 1vw);
+  font-weight: bold;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1vh 2vw;
+  border-radius: 1vw;
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+.breakdown-text:empty {
+  opacity: 0;
+}
+/* NEW: Highlighting styles for final summary */
+.highlight {
+  transition: transform 0.2s ease-in-out;
+  animation: highlight-anim 0.8s ease-in-out;
+}
+
+@keyframes highlight-anim {
+  50% { transform: scale(1.2); }
+}
+
+.tree-node.highlight {
+  box-shadow: 0 0 1vw 0.5vw #00aeff;
+}
+.tree-node.prime.highlight {
+  box-shadow: 0 0 1vw 0.5vw #00ff4c;
+}
+.num-prime{
+  color: #2d9d49;
+}
+.num-root{
+  color: #096ac5;
+}
+.num-prime.highlight {
+  text-shadow: 0.1vw 0.1vw 0.2vw #81c784;
+  font-size: calc(0.8rem + 1.5vw);
+}
+.num-root.highlight {
+  text-shadow: 0.1vw 0.1vw 0.2vw #6cbfff;
+  font-size: calc(0.8rem + 1.5vw);
+}
+/* END NEW */
+
+
+/* --- General Animations & Controls --- */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-8px);
+  }
+  50% {
+    transform: translateX(8px);
+  }
+  75% {
+    transform: translateX(-8px);
+  }
+}
+
+.btn {
+  padding: 1vh 3vw;
+  border: 1px solid transparent;
+  border-radius: 4vw;
+  font-size: calc(1rem + 1vw);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+.btn:hover:not([disabled]) {
+  transform: translateY(-2px);
+}
+.btn-primary {
+  background: linear-gradient(145deg, #fdbe35, #fba92d);
+  box-shadow: 0 4px 0px rgba(206, 141, 0, 0.6);
+  color: #fff;
+}
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #f0f0f0;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.4;
+}
+.step-counter {
+  display: none;
+}
+
+/* --- FTUE STYLES --- */
+#hand-ftue {
+  position: fixed;
+  width: 6vw;
+  height: auto;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  transform: translate(-30%, -20%);
+  transition: top 0.3s ease, left 0.3s ease;
+}
+#hand-ftue img {
+  width: 100%;
+  height: auto;
+}
+.hand-animating {
+  display: block !important;
+  animation: hand-tap-animation 1.5s ease-in-out infinite;
+}
+@keyframes hand-tap-animation {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: translate(-30%, -20%) scale(1.1);
+  }
+  50% {
+    transform: translate(-30%, -20%) scale(0.95);
+  }
+}
+
+#start-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
