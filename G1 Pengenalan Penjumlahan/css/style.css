@@ -1,0 +1,580 @@
+/********************************************
+ * 1) GLOBAL & BODY STYLES
+ *********************************************/
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: #e0e8ef;
+  color: #333;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+/********************************************
+ * 0) TOP MARQUEE
+ *********************************************/
+.top-marquee {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-left: 11%;
+}
+.top-marquee marquee {
+  color: white;
+  font-size: calc(0.9rem + 0.5vw);
+  line-height: 5vh;
+  width: 100%;
+}
+/********************************************
+ * 2) APPLET CONTAINER
+ *********************************************/
+.applet-container {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  width: 100%;
+  min-height: 480px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background-color: #6ca0dc;
+  background-image: url("../assets/BG.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  gap: 8px;
+}
+.main-layout.hidden,
+.titleBar.hidden {
+  display: none;
+}
+.app-logo {
+  position: absolute;
+  top: 1%;
+  left: 1%;
+  max-width: 8%;
+  max-height: 6%;
+  width: auto;
+  height: auto;
+  z-index: 1001;
+  object-fit: contain;
+}
+#welcome-logo {
+  z-index: 101;
+}
+/********************************************
+ * 3) MAIN LAYOUT & PANELS
+ *********************************************/
+.main-layout {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  padding: 0 16px 16px;
+  gap: 15px;
+}
+.left-panel-anchor {
+  width: 30%;
+  max-width: 320px;
+  min-width: 220px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  justify-content: flex-end;
+}
+.right-panel-content {
+  flex: 1;
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+/********************************************
+ * 4) CHARACTER & SPEECH BUBBLE
+ *********************************************/
+.character-display {
+  width: auto;
+  height: 50%;
+  z-index: 4;
+}
+#characterImageElement {
+  width: auto;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.speech-bubble-container {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 48%;
+}
+.contextBox {
+  background: rgba(255, 255, 255, 0.92);
+  padding: 18px 22px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 25px;
+  position: relative;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.contextBox::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: 20%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-top-color: rgba(255, 255, 255, 0.92);
+  border-bottom: 0;
+}
+.contextBox .context-section h2 {
+  font-size: calc(1.5rem + 0.5vw);
+  color: #4169e1;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.contextBox .context-section div {
+  font-size: calc(1.2rem + 0.5vw);
+}
+/********************************************
+ * 5) WELCOME SLIDE
+ *********************************************/
+.welcome-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  background-color: #6ca0dc;
+  background-image: url("../assets/BG.jpg");
+  background-size: cover;
+  background-position: center;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+.welcome-slide.hidden {
+  display: none;
+}
+.welcome-content {
+  text-align: center;
+  padding: 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.welcome-content p {
+  font-size: 50px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 80%;
+  line-height: 1.6;
+  margin: 0;
+}
+#startButton {
+  font-size: 49px;
+  font-weight: 500;
+  padding: 10px 28px;
+  margin-top: 12px;
+}
+
+/********************************************
+ * 6) WORKING AREA
+ *********************************************/
+.workingArea-container {
+  flex: 1; /* Fill the right-panel-content */
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  background-color: rgba(77, 86, 110, 0.55); /* Darker frosted glass */
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  overflow: hidden; /* Important for border-radius and backdrop-filter */
+  border: 1px solid rgba(255, 255, 255, 0.12); /* Subtle border */
+  box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1);
+}
+.workingArea {
+  flex: 1;
+  border: 1px solid rgba(180, 190, 220, 0.3); /* Lighter border */
+  border-radius: 12px;
+  background-color: rgba(
+    41,
+    45,
+    58,
+    0.7
+  ); /* Dark background for canvas for contrast */
+  margin: 8px 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  min-height: 200px;
+}
+.workingArea-container {
+  position: relative;
+}
+.workingArea:hover {
+  border-color: rgba(255, 165, 0, 0.6); /* Orange highlight on hover */
+  box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+}
+.math-activity-area {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Adjusted for new layout */
+  align-items: center;
+  gap: 10px;
+}
+.lowerControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 12px;
+  min-height: 50px;
+}
+/********************************************
+ * 7) QUESTION BOX (NEW)
+ *********************************************/
+.question-box {
+  border-radius: 12px;
+  padding: 8px 24px;
+  margin-top: 10px;
+  width: auto;
+  max-width: 80%;
+  text-align: center;
+}
+#questionText {
+  font-size: calc(1.3rem + 0.5vw);
+  color: #fff;
+  font-weight: 500;
+}
+/********************************************
+ * 8) CLOUD STYLES
+ *********************************************/
+.cloud-container {
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  position: relative; /* Crucial for positioning absolute children */
+  min-height: 200px;
+}
+
+.cloud {
+  width: 45%;
+  max-width: 400px;
+  position: absolute;
+  top: 50%; /* Vertically center all clouds */
+  /* Animate all relevant properties for a smooth morph */
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out,
+    left 0.8s ease-in-out, right 0.8s ease-in-out;
+  filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.15));
+}
+
+.cloud.highlight {
+  filter: drop-shadow(0px 8px 10px rgba(0, 0, 0, 0.15))
+    drop-shadow(0px 0px 20px rgba(255, 252, 228, 0.95));
+}
+
+#leftCloud {
+  left: 5%;
+  transform: translateY(-50%);
+}
+
+#rightCloud {
+  right: 5%;
+  transform: translateY(-50%);
+}
+
+#mergedCloud {
+  width: 60%;
+  max-width: 500px;
+  opacity: 0; /* Base state is invisible */
+  z-index: 1;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+#mergedCloud.merging {
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 5;
+}
+
+.cloud-object {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  animation: float 3s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(-8px);
+  }
+}
+/********************************************
+* 9) NUMPAD
+*********************************************/
+#numpad {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 10px 0;
+  justify-content: center;
+  width: 100%;
+}
+.number-btn {
+  font: inherit;
+  font-size: calc(1.8rem + 0.5vw);
+  font-weight: bold;
+  background: linear-gradient(145deg, #61dfff, #0687ff);
+  box-shadow: 0 6px 0px rgba(30, 134, 253, 0.7);
+  border: 1px solid #fff;
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  width: 100px;
+  height: 64px;
+  transition: all 0.15s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.number-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 0px rgba(30, 134, 253, 0.7);
+}
+.number-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 4px 0px rgba(30, 134, 253, 0.7);
+}
+.number-btn.correct {
+  background: linear-gradient(145deg, #05cf1d, #0daa1f);
+  box-shadow: 0 6px 0 #2ca130;
+  transform: scale(1.05);
+}
+.number-btn.incorrect {
+  background: linear-gradient(145deg, #f5613c, #df4f0d);
+  box-shadow: 0 6px 0 #a5330a;
+  animation: shake 0.5s ease-in-out;
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  75% {
+    transform: (-6px);
+  }
+}
+
+/********************************************
+ * 10) NUMPAD FEEDBACK AREA
+ *********************************************/
+.numpad-feedback-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 0px 0 10px 0;
+  justify-content: center;
+  width: 100%;
+  min-height: 60px; /* Reserve space */
+}
+.feedback-box {
+  width: 100px;
+  height: 64px;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  gap: 6px;
+  transition: background-color 0.3s ease;
+}
+.feedback-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s ease;
+}
+.feedback-box:has(.feedback-dot.visible) {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.feedback-dot.visible.dot-correct {
+  background-color: #4caf50;
+  opacity: 1;
+  transform: scale(1);
+}
+.feedback-dot.visible.dot-neutral {
+  background-color: #ffffff;
+  opacity: 1;
+  transform: scale(1);
+}
+.feedback-dot.visible.dot-incorrect {
+  background-color: #f44336;
+  opacity: 1;
+  transform: scale(1);
+}
+
+/********************************************
+ * 11) STEP COUNTER & BUTTONS
+ *********************************************/
+.step-counter {
+  display: flex;
+  gap: 8px;
+}
+.step-counter .dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+.step-counter .dot.active {
+  background-color: #ffc107;
+  transform: scale(1.25);
+  box-shadow: 0 0 5px #ffc107;
+}
+.btn {
+  min-height: 40px;
+  padding: 8px 24px;
+  border-radius: 50px;
+  font-size: calc(0.95rem + 0.75vw);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.btn-primary {
+  background: linear-gradient(145deg, #fdbe35, #fba92d);
+  color: #fff;
+  border: none;
+}
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #f0f0f0;
+  border: none;
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+.btn-tertiary {
+  background: linear-gradient(145deg, #61dfff, #0687ff);
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1), 0 8px 0px rgba(71, 139, 216, 0.9);
+  border: none;
+  color: #fff;
+  font-size: calc(1.25rem + 0.4vw);
+  padding: 16px 40px;
+}
+.btn-tertiary:hover {
+  transform: translateY(-2px) scale(1.05); /* Slight lift and grow on hover */
+  box-shadow: inset 0 2px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.1), 0 10px 0px rgba(71, 139, 216, 0.9);
+}
+.btn-tertiary.selected {
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.5);
+}
+/********************************************
+ * 12) FINAL SUMMARY STYLES
+ *********************************************/
+#join-button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+#final-summary-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* MODIFIED: Styling for the left panel to stack clouds */
+#summary-left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+}
+/* MODIFIED: Styling for the right panel */
+#summary-right-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#summary-separator {
+  width: 4px;
+  height: 70%;
+  background-color: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+}
+
+/* MODIFIED: Refined styling for clouds in the summary view */
+.summary-cloud {
+  transform: scale(1);
+  max-height: 240px;
+  margin: -15px 0; /* Use negative margin to tighten the column */
+  position: relative; /* Must be relative to sit in the flex container */
+  width: auto;
+  max-width: 320px;
+  animation: none !important; /* Disable floating animation */
+}
+#summary-right-panel .summary-cloud {
+  max-height: 360px;
+  max-width: 440px;
+}
+.summary-cloud .cloud-object {
+  animation: none !important;
+}

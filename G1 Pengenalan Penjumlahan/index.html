@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- Configuration ---
+        let viewportWidth = document.documentElement.clientWidth;
+        let refFactor = 1560;
+        let scaleFactor = viewportWidth / refFactor;
+
+        window.addEventListener("resize", handleResize);
+
+        const applet = document.querySelector(".applet-container");
+
+        if (applet) {
+          applet.style.zoom = scaleFactor;
+        }
+
+        function handleResize() {
+          viewportWidth = document.documentElement.clientWidth;
+          refFactor = 1560;
+          scaleFactor = viewportWidth / refFactor;
+
+          if (applet) {
+            applet.style.zoom = scaleFactor;
+          }
+        }
+      });
+    </script>
+    <title id="html_title">Counting Clouds</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="top-marquee">
+      <marquee>Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</marquee>
+    </div>
+    <div class="applet-container">
+      <img id="logo" class="app-logo" src="" alt="Logo" />
+      <div id="welcome-slide" class="welcome-slide">
+        <img id="welcome-logo" class="app-logo" src="" alt="Logo" />
+        <div class="welcome-content">
+          <p id="welcomeDescription"></p>
+          <button id="startButton" class="btn btn-primary"></button>
+        </div>
+      </div>
+      <div class="titleBar">
+        <h1 id="main_title_text"></h1>
+        <p id="subtitle_text"></p>
+      </div>
+      <div class="main-layout">
+        <div class="left-panel-anchor">
+          <div class="speech-bubble-container">
+            <div class="contextBox" id="contextBox">
+              <div class="context-section">
+                <h2 id="instructionTitleElement"></h2>
+                <div id="instructionContentElement"></div>
+              </div>
+            </div>
+          </div>
+          <div class="character-display">
+            <img
+              src="assets/Normal.png"
+              alt="Character"
+              id="characterImageElement"
+            />
+          </div>
+        </div>
+        <div class="right-panel-content">
+          <div class="workingArea-container">
+            <div class="workingArea">
+              <div id="math-activity-area" class="math-activity-area">
+                <div class="question-box">
+                  <p id="questionText"></p>
+                </div>
+                <div class="cloud-container">
+                  <svg id="leftCloud" class="cloud"></svg>
+                  <div id="join-button-container"></div>
+                  <svg id="rightCloud" class="cloud"></svg>
+                  <svg id="mergedCloud" class="cloud"></svg>
+                </div>
+                <div id="final-summary-container" style="display: none">
+                  <div id="summary-left-panel" class="summary-panel"></div>
+                  <div id="summary-separator"></div>
+                  <div id="summary-right-panel" class="summary-panel"></div>
+                </div>
+                <div id="numpad" class="numpad"></div>
+                <div
+                  id="numpad-feedback-area"
+                  class="numpad-feedback-area"
+                ></div>
+              </div>
+            </div>
+            <div class="lowerControls">
+              <button
+                class="btn btn-secondary"
+                id="prevButton"
+                disabled
+              ></button>
+              <div class="step-counter" id="stepCounter"></div>
+              <button class="btn btn-primary" id="nextButton"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/texts.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/confetti.min.js"></script>
+  </body>
+</html>
