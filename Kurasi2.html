@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Kurasi Konten Profesional</title>
+    
+    <!-- Memuat Font Google 'Inter' -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Memuat Font Awesome untuk Ikon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        /* == Pengaturan Dasar & Tema Warna == */
+        :root {
+            --primary-color: #6366F1; /* Indigo 500 */
+            --primary-hover: #4F46E5; /* Indigo 600 */
+            --secondary-color: #6B7280; /* Gray 500 */
+            --light-bg: #F9FAFB;      /* Gray 50 */
+            --card-bg: #FFFFFF;
+            --border-color: #E5E7EB;   /* Gray 200 */
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: #1F2937; /* Gray 800 */
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* == Header Profesional == */
+        header {
+            background: linear-gradient(90deg, var(--primary-color) 0%, #818CF8 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.25rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        /* == Konten Utama & Grid Kartu == */
+        main {
+            max-width: 1400px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--primary-hover);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Grid Responsif untuk Kartu */
+        .content-grid {
+            display: grid;
+            /* Buat kolom otomatis: minimal 320px, 1fr (sisanya) */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.75rem; /* Jarak antar kartu */
+        }
+
+        /* == Desain Kartu Konten == */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 12px; /* Sudut lebih bulat */
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Agar footer menempel di bawah */
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .content-card:hover {
+            transform: translateY(-8px) scale(1.02); /* Efek terangkat */
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-hover);
+        }
+
+        .card-body {
+            padding: 1.5rem;
+            flex-grow: 1; /* Mendorong footer ke bawah */
+        }
+
+        .card-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-detail i {
+            width: 20px;
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .card-detail span {
+            font-weight: 500;
+            color: #374151; /* Gray 700 */
+        }
+
+        .card-footer {
+            background-color: #F9FAFB; /* Gray 50 */
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: right;
+        }
+
+        /* == Tombol Kurasi (Gaya Pil) == */
+        .curate-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, var(--primary-color) 0%, #818CF8 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px; /* Bentuk pil */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .curate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .curate-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(99, 102, 241, 0.4);
+        }
+
+        .curate-btn i {
+            margin-right: 8px;
+        }
+
+        /* == Struktur Modal (Lebih Animatif) == */
+        .modal {
+            display: none; /* Diubah ke 'flex' oleh JS */
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7); /* Backdrop lebih gelap */
+            animation: fadeIn 0.3s ease-out;
+            /* Menggunakan flex untuk menengahkan modal */
+            justify-content: center;
+            align-items: flex-start; /* Mulai dari atas */
+            padding-top: 5vh; /* Jarak dari atas */
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 1300px;
+            border-radius: 15px; /* Sudut modal lebih bulat */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            position: relative;
+            /* Animasi meluncur dari atas */
+            animation: slideDownFadeIn 0.4s ease-out forwards;
+        }
+
+        .close-btn {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 32px;
+            font-weight: bold;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s, transform 0.2s;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: #333;
+            transform: scale(1.1);
+            text-decoration: none;
+        }
+        
+        /* == Layout 2 Kolom Modal == */
+        .modal-body {
+            display: flex;
+            flex-wrap: wrap; /* Responsif */
+            gap: 30px; /* Jarak antar kolom */
+            margin-top: 1.5rem;
+        }
+
+        .modal-left {
+            flex: 2; /* Kolom kiri (embed) lebih besar */
+            min-width: 300px;
+        }
+
+        .modal-right {
+            flex: 1; /* Kolom kanan (form) */
+            min-width: 300px;
+            background-color: var(--light-bg);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* == Konten Modal == */
+        .modal-header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-hover);
+        }
+
+        /* Sematan Web (Iframe) */
+        .embed-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+        }
+
+        .embed-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Formulir Kurasi (Lebih Rapi) */
+        #curationForm .form-group {
+            margin-bottom: 1.3rem;
+        }
+
+        #curationForm label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151; /* Gray 700 */
+        }
+
+        #curationForm select,
+        #curationForm textarea {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            border: 1px solid #D1D5DB; /* Gray 300 */
+            border-radius: 8px;
+            box-sizing: border-box; 
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        #curationForm select:focus,
+        #curationForm textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        #curationForm textarea {
+            resize: vertical;
+            min-height: 130px;
+        }
+
+        /* Tombol Submit Form */
+        .submit-btn {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(90deg, #10B981 0%, #34D399 100%); /* Green */
+            color: white;
+            border: none;
+            padding: 0.85rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(16, 185, 129, 0.4);
+        }
+        
+        .submit-btn i {
+            margin-right: 8px;
+        }
+
+        /* == Animasi Keyframes == */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDownFadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* == Media Query untuk Responsif == */
+        @media (max-width: 768px) {
+            .modal-body {
+                flex-direction: column; /* Tumpuk kolom modal di HP */
+            }
+            
+            .modal-content {
+                margin: 5% auto; /* Kurangi margin atas di HP */
+                padding: 20px;
+            }
+            
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-drafting-compass"></i> Dasbor Kurasi Konten</h1>
+    </header>
+
+    <main>
+        <h2><i class="fas fa-stream"></i> Alur Konten (Siap Dikurasi)</h2>
+        
+        <div class="content-grid">
+            
+            <!-- CONTOH KARTU 1 (DIPERBARUI) -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>G1 Pengenalan Penjumlahan</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-detail">
+                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>1</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-layer-group"></i> Fase: <span>A</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-user-clock"></i> Kurator: <span>(Belum Dikurasi)</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="curate-btn" 
+                            data-title="G1 Pengenalan Penjumlahan" 
+                            data-url="https://direktoratsd.github.io/TB/G1%20Pengenalan%20Penjumlahan/">
+                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTOH KARTU 2 -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Siklus Air dan Cuaca</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-detail">
+                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>4</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-layer-group"></i> Fase: <span>B</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-user-check"></i> Kurator: <span>Siti Aminah</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button class="curate-btn" 
+                            data-title="Siklus Air dan Cuaca" 
+                            data-url="https://belajar.kemdikbud.go.id/sumber-belajar/tve/play/493">
+                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
+                    </button>
+                </div>
+            </div>
+
+            <!-- CONTOH KARTU 3 -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h3>Sejarah Kemerdekaan Indonesia</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-detail">
+                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>5</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-layer-group"></i> Fase: <span>C</span>
+                    </div>
+                    <div class="card-detail">
+                        <i class="fas fa-user-clock"></i> Kurator: <span>(Belum Dikurasi)</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                     <button class="curate-btn" 
+                            data-title="Sejarah Kemerdekaan Indonesia" 
+                            data-url="https://id.wikipedia.org/wiki/Proklamasi_Kemerdekaan_Indonesia">
+                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Ulangi .content-card di atas untuk konten lainnya -->
+
+        </div>
+    </main>
+
+    <!-- 
+    ===================================================
+    MODAL KURASI (Tersembunyi secara default)
+    ===================================================
+    -->
+    <div id="curationModal" class="modal">
+        <div class="modal-content">
+            <!-- Tombol Close Modal -->
+            <span class="close-btn">&times;</span>
+
+            <div class="modal-header">
+                <h3 id="modalTitle">Formulir Kurasi: [Judul Konten]</h3>
+            </div>
+
+            <div class="modal-body">
+                
+                <!-- KOLOM KIRI: SEMATAN WEB -->
+                <div class="modal-left">
+                    <h4><i class="fas fa-link"></i> Pratinjau Konten</h4>
+                    <div class="embed-container">
+                        <iframe id="contentEmbed" 
+                                src="" 
+                                title="Konten yang Dikurasi" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <!-- KOLOM KANAN: FORMULIR PERTANYAAN -->
+                <div class="modal-right">
+                    <h4><i class="fas fa-clipboard-check"></i> Lembar Penilaian</h4>
+                    <form id="curationForm">
+                        <div class="form-group">
+                            <label for="q1">1. Kesesuaian Materi dengan Tujuan Pembelajaran?</label>
+                            <select id="q1" name="q1" required>
+                                <option value="">- Pilih Nilai -</option>
+                                <option value="1">1 - Sangat Tidak Sesuai</option>
+                                <option value="2">2 - Tidak Sesuai</option>
+                                <option value="3">3 - Cukup Sesuai</option>
+                                <option value="4">4 - Sesuai</option>
+                                <option value="5">5 - Sangat Sesuai</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="q2">2. Kejelasan dan Kualitas Penyampaian Konten?</label>
+                            <select id="q2" name="q2" required>
+                                <option value="">- Pilih Nilai -</option>
+                                <option value="1">1 - Sangat Buruk</option>
+                                <option value="2">2 - Buruk</option>
+                                <option value="3">3 - Cukup</option>
+                                <option value="4">4 - Baik</option>
+                                <option value="5">5 - Sangat Baik</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="q3">3. Apakah Konten Bebas dari Bias/SARA?</label>
+                            <select id="q3" name="q3" required>
+                                <option value="">- Pilih Nilai -</option>
+                                <option value="1">1 - Ya (Bebas Bias)</option>
+                                <option value="0">0 - Tidak (Perlu Tinjauan)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="analysis">Analisis dan Keterangan Kurasi:</label>
+                            <textarea id="analysis" name="analysis" rows="6" placeholder="Tuliskan catatan, analisis, atau perbaikan yang diperlukan..."></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-btn"><i class="fas fa-save"></i> Simpan Hasil Kurasi</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === Logika untuk Mengelola Modal ===
+        // (Logika JavaScript ini sebagian besar sama, hanya menargetkan elemen baru)
+
+        const modal = document.getElementById("curationModal");
+        const closeBtn = document.querySelector(".close-btn");
+        const allCurateButtons = document.querySelectorAll(".curate-btn");
+        const modalTitle = document.getElementById("modalTitle");
+        const contentEmbed = document.getElementById("contentEmbed");
+        const curationForm = document.getElementById("curationForm");
+
+        // 2. Fungsi untuk membuka modal
+        allCurateButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const title = this.getAttribute("data-title");
+                const url = this.getAttribute("data-url");
+
+                modalTitle.textContent = `Formulir Kurasi: ${title}`;
+                contentEmbed.src = url;
+
+                modal.style.display = "flex"; // Gunakan flex untuk menampilkan
+            });
+        });
+
+        // 3. Fungsi untuk menutup modal (klik tombol 'x')
+        closeBtn.onclick = function() {
+            closeModal();
+        }
+
+        // 4. Fungsi untuk menutup modal (klik di luar area modal)
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+        
+        // 5. Fungsi saat formulir di-submit
+        curationForm.addEventListener("submit", function(event) {
+            event.preventDefault(); 
+            
+            const formData = new FormData(curationForm);
+            const data = Object.fromEntries(formData.entries());
+            
+            console.log("Data Kurasi Siap Dikirim:", data);
+            
+            // Di sini Anda bisa menambahkan notifikasi modal kustom (bukan alert)
+            // Untuk saat ini, kita tutup saja modalnya.
+            
+            closeModal();
+        });
+        
+        // 6. Fungsi utama untuk menutup modal (membersihkan iframe)
+        function closeModal() {
+            // Tambahkan animasi fade-out sebelum menutup
+            modal.style.animation = "fadeOut 0.3s ease-out forwards";
+            
+            // Tunggu animasi selesai sebelum benar-benar menyembunyikan
+            // dan membersihkan konten
+            setTimeout(() => {
+                modal.style.display = "none";
+                modal.style.animation = "fadeIn 0.3s ease-out"; // Reset animasi
+                contentEmbed.src = ""; // Hentikan video/konten
+                curationForm.reset();
+            }, 300); // 300ms = durasi animasi fadeOut
+        }
+        
+        // Tambahkan keyframe untuk fadeOut di CSS (opsional tapi bagus)
+        const styleSheet = document.styleSheets[0];
+        styleSheet.insertRule(`
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `, styleSheet.cssRules.length);
+
+    </script>
+
+</body>
+</html>
+
