@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Learning Applet</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  </head>
+  <body>
+    <div id="marquee-container">
+      <div class="marquee-content">Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</div>
+    </div>
+    <img id="logo" src="assets/logo.png" alt="Logo" />
+    <div id="highlight-box"></div>
+    <div class="aspect-ratio-container">
+      <div id="fullscreenOverlay">
+        <div id="mcq">
+          <div id="mcq-question">Question</div>
+          <div id="mcq-options">
+            <div class="mcq-option">Option 1</div>
+            <div class="mcq-option">Option 2</div>
+            <div class="mcq-option">Option 3</div>
+            <div class="mcq-option">Option 4</div>
+          </div>
+        </div>
+        <div id="overlayStatement">
+            <div class="overlay-content">
+              <div class="overlay-text-panel">
+                <p id="overlayText">Instruction text goes here.</p>
+                <img id="overlayCharacter" src="" alt="Character"/>
+              </div>
+              <div class="overlay-image-panel">
+                  <img id="overlayInstructionImage" src="" alt="Instruction Graphic"/>
+                  <button id="overlayOkayBtn" class="btn btn-primary">Okay</button>
+                  <button id="startOverBtn" class="btn btn-primary hidden">Start Over</button>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="app-container">
+        <header class="app-header">
+          <div class="problem-statement">
+            <h1>
+              <span>1</span><span>6</span><span>7</span>-<span>2</span
+              ><span>5</span><span>6</span><span> = 333</span>
+            </h1>
+          </div>
+        </header>
+        <main class="app-main">
+          <div class="grid-container">
+            <div class="visual-container">
+              <div class="grid-heading">H</div>
+              <div class="grid-heading">T</div>
+              <div class="grid-heading">O</div>
+              <div class="grid-item row-1 hundred-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="hundred-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-1 ten-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="ten-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-1 unit-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="unit-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 hundred-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="hundred-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 ten-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="ten-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 unit-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="unit-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 hundred-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="hundred-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 ten-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="ten-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 unit-visual">
+                <div class="grid-item-content">
+                  <div class="block-placeholder">
+                    <div class="corner-badge">0</div>
+                    <div class="unit-block"></div>
+                  </div>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+            </div>
+            <div class="number-container">
+              <div class="grid-heading">H</div>
+              <div class="grid-heading">T</div>
+              <div class="grid-heading">O</div>
+              <div class="grid-item row-1 hundred-number">
+                <div class="grid-item-content">
+                  <span class="number-display">000</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-1 ten-number">
+                <div class="grid-item-content">
+                  <span class="number-display">00</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-1 unit-number">
+                <div class="grid-item-content">
+                  <span class="number-display">0</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 hundred-number">
+                <div class="grid-item-content">
+                  <span class="number-display">000</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 ten-number">
+                <div class="grid-item-content">
+                  <span class="number-display">00</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-2 unit-number">
+                <div class="grid-item-content">
+                  <span class="number-display">0</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 hundred-number">
+                <div class="grid-item-content">
+                  <span class="number-display">000</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 ten-number">
+                <div class="grid-item-content">
+                  <span class="number-display">00</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+              <div class="grid-item row-3 unit-number">
+                <div class="grid-item-content">
+                  <span class="number-display">0</span>
+                </div>
+                <div class="stepper">
+                  <button class="stepper-btn plus">+</button
+                  ><button class="stepper-btn minus">-</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="instruction-text">Set the second number</div>
+        </main>
+        <footer class="app-footer">
+          <button class="next-button btn btn-primary">Next</button>
+        </footer>
+      </div>
+    </div>
+    <script src="texts.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
