@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Math Learning Applet</title>
+    <script>
+        // Set dynamic title based on language
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                if (typeof i18n !== 'undefined') {
+                    document.title = i18n.t('appInfo.title');
+                }
+            }, 1000);
+        });
+    </script>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/gc-units.css">
+</head>
+<body>
+    <div id="react-root"></div>
+    
+    <!-- Language selector removed - language detection is automatic or can be set programmatically -->
+    
+    <!-- Grid System Files -->
+    <script src="js/gridcell-units.js"></script>
+    <script src="js/gridpositions.js"></script>
+    <script src="js/GridConfig.js"></script>
+    <script src="js/GridCalculations.js"></script>
+    <script src="js/GridFontUtils.js"></script>
+    <script src="js/GridOverlay.js"></script>
+    <script src="js/GridSystem.js"></script>
+    <!-- PageManager and GridEditor removed from main app -->
+    <!-- Use grid-editor.html for layout editing -->
+    
+    <!-- Animation library (offline) -->
+    <script src="js/anime.min.js"></script>
+    
+    <!-- React bundle (minimal offline version) -->
+    <script src="js/react-bundle.js"></script>
+    <!-- Load data.js first for i18n -->
+    <script src="js/data.js"></script>
+    <script src="js/constants.js"></script>
+    <script src="js/math-activities.js"></script>
+    <script src="js/math-applet.js"></script>
+    
+    <script>
+        // ====================================
+        // APP CONFIGURATION
+        // ====================================
+        // 
+        // QUICK LANGUAGE SETUP:
+        // To force English: Set FORCE_LANGUAGE to 'en'
+        // To force Indonesian: Set FORCE_LANGUAGE to 'id'
+        // To use auto-detection: Set FORCE_LANGUAGE to null
+        // 
+        const APP_CONFIG = {
+            // Grid overlay visibility on startup
+            // Set to 'false' to disable grid overlay by default
+            GRID_OVERLAY_DEFAULT: false,
+            
+            // UI Elements visibility
+            // Set to 'false' to hide question dropdown and page progress indicator
+            SHOW_QUESTION_DROPDOWN: false,
+            SHOW_PAGE_PROGRESS: false,
+            
+            // Language Settings
+            // Set FORCE_LANGUAGE to 'en' or 'id' to force a specific language
+            // Set to null to use auto-detection (browser language + saved preference)
+            FORCE_LANGUAGE: 'id', // Options: 'en', 'id', or null
+            
+            // Supported languages (only English and Indonesian)
+            SUPPORTED_LANGUAGES: ['en', 'id'],
+            
+            // Default language if no preference is found
+            DEFAULT_LANGUAGE: 'id'
+        };
+        
+        // Initialize language without UI selector
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize i18n system with APP_CONFIG available
+            if (typeof i18n !== 'undefined' && typeof i18n.initLanguage === 'function') {
+                i18n.initLanguage();
+            }
+            
+            let langToUse;
+            
+            // Check if language is forced in configuration
+            if (APP_CONFIG.FORCE_LANGUAGE && APP_CONFIG.SUPPORTED_LANGUAGES.includes(APP_CONFIG.FORCE_LANGUAGE)) {
+                langToUse = APP_CONFIG.FORCE_LANGUAGE;
+                console.log(`🌐 Language forced to: ${langToUse}`);
+            } else {
+                // Auto-detect language from browser or use saved preference
+                const browserLang = navigator.language.startsWith('id') ? 'id' : 'en';
+                const savedLang = localStorage.getItem('appLanguage') || browserLang || APP_CONFIG.DEFAULT_LANGUAGE;
+                
+                // Ensure it's a supported language
+                langToUse = APP_CONFIG.SUPPORTED_LANGUAGES.includes(savedLang) ? savedLang : APP_CONFIG.DEFAULT_LANGUAGE;
+                console.log(`🌐 Language auto-detected: ${langToUse}`);
+            }
+            
+            // Set the language in the i18n system
+            if (typeof i18n !== 'undefined' && typeof i18n.setLanguage === 'function') {
+                i18n.setLanguage(langToUse);
+            }
+        });
+        
+        // Save language preference
+        window.addEventListener('beforeunload', function() {
+            localStorage.setItem('appLanguage', i18n.getCurrentLanguage());
+        });
+        
+        // Initialize Grid System (Basic Setup)
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                // Initialize basic grid system
+                if (typeof GridSystem !== 'undefined' && LAYOUT_CONSTANTS.GRID_SYSTEM.ENABLED) {
+                    const gridSystem = GridSystem.getInstance();
+                    
+                    // Override the default SHOW_ON_STARTUP with our config
+                    if (LAYOUT_CONSTANTS.GRID_SYSTEM.OVERLAY) {
+                        LAYOUT_CONSTANTS.GRID_SYSTEM.OVERLAY.SHOW_ON_STARTUP = APP_CONFIG.GRID_OVERLAY_DEFAULT;
+                    }
+                    
+                    // Show/hide overlay based on configuration
+                    if (APP_CONFIG.GRID_OVERLAY_DEFAULT && gridSystem && gridSystem.overlay) {
+                        gridSystem.overlay.show();
+                    } else if (gridSystem && gridSystem.overlay) {
+                        gridSystem.overlay.hide();
+                    }
+                }
+                
+                // console.log('Math Learning Applet initialized!');
+                // console.log('Grid overlay default:', APP_CONFIG.GRID_OVERLAY_DEFAULT ? 'ON' : 'OFF');
+                // console.log('');
+                // console.log('Keyboard shortcuts:');
+                // console.log('  Ctrl+G: Toggle grid overlay');
+                // console.log('  Ctrl+Shift+G: Toggle grid info panel'); 
+                // console.log('');
+                // console.log('Supported languages:', APP_CONFIG.SUPPORTED_LANGUAGES.join(', '));
+                // console.log('Use setAppLanguage("en") or setAppLanguage("id") to change language');
+                // console.log('');
+                // console.log('💡 For layout editing, open grid-editor.html');
+                
+
+            }, 1000);
+        });
+        
+        // Make APP_CONFIG globally available
+        window.APP_CONFIG = APP_CONFIG;
+        
+        // Utility function to change language programmatically (for debugging)
+        window.setAppLanguage = function(langCode) {
+            if (APP_CONFIG.SUPPORTED_LANGUAGES.includes(langCode)) {
+                if (typeof i18n !== 'undefined' && i18n.setLanguage(langCode)) {
+                    console.log(`🌐 Manual language change to: ${langCode}`);
+                    location.reload();
+                    return true;
+                }
+            }
+            console.warn(`Language '${langCode}' not supported. Supported languages:`, APP_CONFIG.SUPPORTED_LANGUAGES);
+            return false;
+        };
+    </script>
+</body>
+</html>

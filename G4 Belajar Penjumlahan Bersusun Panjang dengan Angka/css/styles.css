@@ -1,0 +1,1633 @@
+/* CSS Variables for Responsive Design */
+:root {
+    --header-container-height: 7%;
+    --character-panel-width: 25%;
+    --control-panel-height: 12%;
+    --character-box-height: 50%; /* Character box takes 50% of character panel height */
+    --dialogue-box-height: 50%; /* Dialogue box takes remaining 50% */
+    
+    /* Character Margins */
+    --character-box-margin-bottom: 2px;
+    --character-box-margin-left: 2px;
+    --character-box-margin-right: 2px;
+    --character-box-margin-top: 5px;
+    --character-top-margin: 0px;
+    --character-bottom-margin: 10px;
+    
+    /* Button Sizes */
+    --button-padding-vertical: clamp(0.4rem, 1vw, 0.8rem);
+    --button-padding-horizontal: clamp(1rem, 2vw, 1.5rem);
+    --button-font-size: clamp(0.9rem, 1.8vw, 1.2rem);
+    --button-border-radius: 25px;
+    --button-min-width: clamp(80px, 12vw, 120px);
+    
+    /* Colors and Opacity */
+    --header-bg-color: black;
+    --header-bg-opacity: 0.75;
+    
+    /* Background */
+    --main-background-image: url('../assets/background.png');
+    --overlay-opacity: 0.3;
+    
+    /* Dialogue Box - Base size calculated for 1656x924 screen */
+    --dialogue-text-color: var(--clr-white-dark);
+    --dialogue-base-font-size: 3.5rem; /* Target font size for 1656x924 screen */
+    --dialogue-base-screen-width: 1656; /* Reference screen width */
+    --dialogue-text-size: var(--dialogue-base-font-size); /* Will be calculated by JavaScript */
+    --dialogue-text-bold: normal;
+    --dialogue-border-color: transparent;
+    --dialogue-box-fill-color: rgba(255, 255, 255, 0.95);
+    
+    /* Bottom Dialogue Box - Base size calculated for 1656x924 screen */
+    --bottom-dialogue-base-font-size: 2.16rem; /* Target font size for 1656x924 screen */
+    --bottom-dialogue-text-size: var(--bottom-dialogue-base-font-size); /* Will be calculated by JavaScript */
+    
+    /* Box Layout Variables */
+    --box-width: 35%; /* Box width as percentage of visualization container */
+    --box-gap: 20%; /* Gap between boxes as percentage of visualization container */
+    --left-box-margin: 5%; /* Left margin for left box */
+    --right-box-margin: 5%; /* Right margin for right box */
+    --box-top-margin: 10%; /* Top margin from visualization container top */
+    
+    /* Star Variables */
+    --star-size: 5vw; /* Star size as 5% of visualization container width */
+    
+    /* Responsive Font Sizes */
+    --font-size-small: clamp(0.75rem, 1.5vw, 1rem);
+    --font-size-medium: clamp(1rem, 2vw, 1.5rem);
+    --font-size-large: clamp(1.25rem, 2.5vw, 2rem);
+    
+    /* Container Dimensions */
+    --container-border-radius: 8px;
+    /* --main-container-margin: 2px; */
+    
+    /* Color Palette */
+    --clr-green: #2ECC71;      --clr-green-light: #58D98B;      --clr-green-dark: #219150;
+    --clr-orange: #FF7F3F;     --clr-orange-light: #FF9C6A;     --clr-orange-dark: #E56529;
+    --clr-blue: #3498DB;       --clr-blue-light: #5EB2E7;       --clr-blue-dark: #2576B6;
+    --clr-pink: #FF4D6D;       --clr-pink-light: #FF738C;       --clr-pink-dark: #D83655;
+    --clr-purple: #9B59B6;     --clr-purple-light: #B77FD0;     --clr-purple-dark: #7E3E99;
+    --clr-aqua: #1ABC9C;       --clr-aqua-light: #48D1B6;       --clr-aqua-dark: #139A82;
+    --clr-rose: #E84393;       --clr-rose-light: #EF6AA9;       --clr-rose-dark: #B8306C;
+    --clr-yellow: #FF9F1A;     --clr-yellow-light: #FFB84D;     --clr-yellow-dark: #D68300;
+    --clr-gold: #F1C40F;       --clr-gold-light: #F5D54D;       --clr-gold-dark: #BFA70B;
+    --clr-sand: #D2B48C;       --clr-sand-light: #DEC3A3;       --clr-sand-dark: #B9966D;
+    --clr-salmon: #FF6F61;     --clr-salmon-light: #FF8F83;     --clr-salmon-dark: #D4574C;
+    --clr-white: #FFFFFF;      --clr-white-light: #FFFFFF;      --clr-white-dark: #D9D9D9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+    background: var(--clr-white-dark);
+}
+
+.main-container {
+    width: calc(100vw - 2 * var(--main-container-margin));
+    height: calc(100vh - 2 * var(--main-container-margin));
+    border-radius: var(--container-border-radius);
+    background-image: var(--main-background-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    /* Maintain 16:9 aspect ratio */
+    aspect-ratio: 16 / 9;
+    max-width: calc((100vh - 2 * var(--main-container-margin)) * 16 / 9);
+    max-height: calc((100vw - 2 * var(--main-container-margin)) * 9 / 16);
+    margin: auto;
+    position: relative;
+}
+
+.main-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: black;
+    opacity: var(--overlay-opacity);
+    pointer-events: none;
+    z-index: 1;
+    border-radius: var(--container-border-radius);
+}
+
+/* Removed blanket relative positioning to allow absolute positioning for grid elements */
+.main-container > .activity-container {
+    position: relative;
+    z-index: 2;
+}
+
+/* Ensure grid-positioned elements use absolute positioning */
+.main-container .header-container[data-grid-position],
+.main-container .character-container[data-grid-position],
+.main-container .dialog-container[data-grid-position] {
+    position: absolute !important;
+    z-index: 100 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Container positioning */
+.main-container .container1[data-grid-position],
+.main-container .container2[data-grid-position] {
+    position: absolute !important;
+    z-index: 50 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* All grid-positioned elements should have no margins/paddings */
+[data-grid-position] {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* All child elements of grid-positioned elements should also have no margins/paddings */
+[data-grid-position] * {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Override pointer-events for interactive elements */
+[data-grid-position="next-button"],
+[data-grid-position="question-dropdown"] {
+    pointer-events: auto !important;
+}
+
+.header-container {
+    height: var(--header-container-height);
+    background-color: var(--header-bg-color);
+    opacity: var(--header-bg-opacity);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.header-title {
+    color: white;
+    font-size: var(--font-size-large);
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.activity-container {
+    height: calc(100% - var(--header-container-height));
+    display: flex;
+    flex-direction: row;
+}
+
+.character-panel {
+    width: var(--character-panel-width);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.character-display {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.character-box {
+    height: var(--character-box-height);
+    position: relative;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.character-image {
+    max-width: var(--character-size-percentage, 90%);
+    max-height: var(--character-size-percentage, 90%);
+    object-fit: contain;
+    margin: 0 !important;
+    padding: 0 !important;
+    transition: transform 0.3s ease;
+}
+
+.character-image:hover {
+    transform: scale(1.05);
+}
+
+/* Legacy dialogue-box styles - ONLY apply when NOT inside grid-positioned containers */
+.dialogue-box:not(.dialog-container .dialogue-box) {
+    height: var(--dialogue-box-height);
+    position: relative;
+    margin: 10px;
+    background: var(--dialogue-box-fill-color);
+    border: 2px solid var(--dialogue-border-color);
+    border-radius: 15px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    margin-bottom: 5px;
+    flex-shrink: 0;
+}
+
+/* Grid-positioned dialogue-box styles - Override legacy styles for grid system */
+.dialog-container[data-grid-position] .dialogue-box {
+    position: relative !important;
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--dialogue-box-fill-color);
+    border: 2px solid var(--dialogue-border-color);
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* Grid system dialog content - Reset to allow inline styles to override */
+.dialog-container[data-grid-position] .dialogue-content,
+.dialog-container[data-grid-position] .dialog-content {
+    font-size: unset !important;
+    line-height: unset !important;
+    color: unset !important;
+    text-align: unset !important;
+}
+
+/* Grid cell font override class */
+.gc-font-override {
+    font-size: var(--gc-font-size) !important;
+    line-height: var(--gc-line-height) !important;
+    color: var(--gc-text-color) !important;
+    text-align: var(--gc-text-align) !important;
+}
+
+.dialogue-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dialogue-text {
+    color: var(--dialogue-text-color);
+    font-weight: var(--dialogue-text-bold);
+    text-align: center;
+    line-height: 1.4;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* font-size removed - handled by specific dialog implementations */
+}
+
+.dialogue-tail {
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid var(--dialogue-box-fill-color);
+    z-index: 10;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.interaction-panel {
+    width: calc(100% - var(--character-panel-width));
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.visualization-panel {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#visualization-canvas {
+    width: 100%;
+    height: 100%;
+}
+
+.control-panel {
+    height: var(--control-panel-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.header-section {
+    height: 8%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.control-btn {
+    padding: var(--button-padding-vertical) var(--button-padding-horizontal);
+    background: linear-gradient(135deg, var(--clr-blue), var(--clr-blue-light));
+    color: white;
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    font-size: var(--button-font-size);
+    font-weight: bold;
+    min-width: var(--button-min-width);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.reset-btn {
+    background: linear-gradient(135deg, var(--clr-orange), var(--clr-orange-light));
+}
+
+.control-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-text {
+    display: block;
+}
+
+/* React Component Styles */
+.activity-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.activity-card:hover::before {
+    left: 100%;
+}
+
+.activity-card:hover {
+    transform: scale(1.05) rotate(1deg);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.activity-card.selected {
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.problem-display {
+    animation: slideInUp 0.5s ease-out;
+}
+
+.counting-dot {
+    animation: bounceIn 0.6s ease;
+}
+
+.counting-dot:nth-child(even) {
+    animation-delay: 0.1s;
+}
+
+.progress-container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.progress-bar {
+    background: linear-gradient(90deg, currentColor, rgba(255, 255, 255, 0.1));
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+.stats-display {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0) rotate(0deg); }
+    50% { transform: scale(1.3) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px currentColor; }
+    50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+/* Responsive Design for All Screen Sizes */
+
+/* 960x540 - Small screens */
+@media screen and (max-width: 960px) and (max-height: 540px) {
+    :root {
+        --character-panel-width: 30%;
+        --font-size-small: 0.7rem;
+        --font-size-medium: 0.9rem;
+        --font-size-large: 1.1rem;
+        --button-padding-vertical: 0.3rem;
+        --button-padding-horizontal: 0.8rem;
+    }
+    
+    .activity-card {
+        min-width: 150px;
+        padding: 15px;
+        margin: 5px;
+    }
+    
+    .dialogue-text {
+        /* font-size removed - handled by specific dialog implementations */
+    }
+}
+
+/* 1024x576 - Standard small */
+@media screen and (min-width: 960px) and (max-width: 1024px) {
+    :root {
+        --character-panel-width: 28%;
+        --font-size-small: 0.8rem;
+        --font-size-medium: 1rem;
+        --font-size-large: 1.3rem;
+    }
+}
+
+/* 1152x648 - Medium small */
+@media screen and (min-width: 1024px) and (max-width: 1152px) {
+    :root {
+        --character-panel-width: 26%;
+        --font-size-small: 0.9rem;
+        --font-size-medium: 1.1rem;
+        --font-size-large: 1.4rem;
+    }
+}
+
+/* 1280x720 - HD */
+@media screen and (min-width: 1152px) and (max-width: 1280px) {
+    :root {
+        --character-panel-width: 25%;
+        --font-size-small: 1rem;
+        --font-size-medium: 1.2rem;
+        --font-size-large: 1.5rem;
+    }
+}
+
+/* 1366x768 - Standard laptop */
+@media screen and (min-width: 1280px) and (max-width: 1366px) {
+    :root {
+        --character-panel-width: 25%;
+        --font-size-small: 1rem;
+        --font-size-medium: 1.3rem;
+        --font-size-large: 1.6rem;
+    }
+}
+
+/* 1600x900 - Large laptop */
+@media screen and (min-width: 1366px) and (max-width: 1600px) {
+    :root {
+        --character-panel-width: 24%;
+        --font-size-small: 1.1rem;
+        --font-size-medium: 1.4rem;
+        --font-size-large: 1.8rem;
+    }
+}
+
+/* 1920x1080 - Full HD */
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+    :root {
+        --character-panel-width: 23%;
+        --font-size-small: 1.2rem;
+        --font-size-medium: 1.5rem;
+        --font-size-large: 2rem;
+        --dialogue-text-size: 1.2rem;
+    }
+    
+    .activity-card {
+        min-width: 220px;
+        padding: 25px;
+    }
+}
+
+/* 2048x1152 - 2K */
+@media screen and (min-width: 1920px) and (max-width: 2048px) {
+    :root {
+        --character-panel-width: 22%;
+        --font-size-small: 1.3rem;
+        --font-size-medium: 1.7rem;
+        --font-size-large: 2.2rem;
+        --dialogue-text-size: 1.4rem;
+    }
+    
+    .activity-card {
+        min-width: 240px;
+        padding: 30px;
+    }
+}
+
+/* 2560x1440 - QHD */
+@media screen and (min-width: 2048px) and (max-width: 2560px) {
+    :root {
+        --character-panel-width: 21%;
+        --font-size-small: 1.5rem;
+        --font-size-medium: 2rem;
+        --font-size-large: 2.5rem;
+        --dialogue-text-size: 1.6rem;
+    }
+    
+    .activity-card {
+        min-width: 280px;
+        padding: 35px;
+    }
+}
+
+/* 2880x1620 - Retina */
+@media screen and (min-width: 2560px) and (max-width: 2880px) {
+    :root {
+        --character-panel-width: 20%;
+        --font-size-small: 1.7rem;
+        --font-size-medium: 2.3rem;
+        --font-size-large: 2.8rem;
+        --dialogue-text-size: 1.8rem;
+    }
+    
+    .activity-card {
+        min-width: 320px;
+        padding: 40px;
+    }
+}
+
+/* 3480x1960 - Ultra Wide */
+@media screen and (min-width: 2880px) and (max-width: 3480px) {
+    :root {
+        --character-panel-width: 19%;
+        --font-size-small: 2rem;
+        --font-size-medium: 2.8rem;
+        --font-size-large: 3.5rem;
+        --dialogue-text-size: 2.2rem;
+    }
+    
+    .activity-card {
+        min-width: 380px;
+        padding: 50px;
+        margin: 15px;
+    }
+    
+    .counting-dot {
+        width: 30px;
+        height: 30px;
+        margin: 5px;
+    }
+    
+    .multiplication-item {
+        width: 25px;
+        height: 25px;
+        margin: 4px;
+    }
+}
+
+/* 3480x1960+ - Ultra High Resolution */
+@media screen and (min-width: 3480px) {
+    :root {
+        --character-panel-width: 18%;
+        --font-size-small: 2.4rem;
+        --font-size-medium: 3.2rem;
+        --font-size-large: 4rem;
+        --dialogue-text-size: 2.6rem;
+        --button-padding-vertical: 1.2rem;
+        --button-padding-horizontal: 2rem;
+        --button-font-size: 1.8rem;
+        --button-min-width: 160px;
+    }
+    
+    .activity-card {
+        min-width: 450px;
+        padding: 60px;
+        margin: 20px;
+        font-size: 1.4rem;
+    }
+    
+    .counting-dot {
+        width: 36px;
+        height: 36px;
+        margin: 6px;
+    }
+    
+    .multiplication-item {
+        width: 30px;
+        height: 30px;
+        margin: 5px;
+    }
+    
+    .header-title {
+        font-size: 4.5rem;
+    }
+    
+    .character-image {
+        max-width: 95%;
+        max-height: 95%;
+    }
+    
+    .dialogue-box {
+        padding: 2rem;
+        border-radius: 20px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .control-btn {
+        padding: 1.2rem 2.4rem;
+        font-size: 2rem;
+        border-radius: 30px;
+    }
+}
+
+/* Mobile and tablet adjustments */
+@media screen and (max-width: 768px) {
+    .main-container {
+        flex-direction: column;
+    }
+    
+    .activity-container {
+        flex-direction: column;
+    }
+    
+    .character-panel {
+        width: 100%;
+        height: 30%;
+        flex-direction: row;
+    }
+    
+    .character-box {
+        width: 40%;
+        height: 100%;
+    }
+    
+    .dialogue-box {
+        width: 60%;
+        height: 80%;
+        margin: 10px;
+    }
+    
+    .interaction-panel {
+        width: 100%;
+        height: 70%;
+    }
+    
+    .activity-selector {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .activity-card {
+        width: 90%;
+        max-width: 300px;
+        margin: 10px 0;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --dialogue-box-fill-color: rgba(255, 255, 255, 1);
+        --overlay-opacity: 0.1;
+    }
+    
+    .activity-card {
+        border: 2px solid rgba(255, 255, 255, 0.8);
+    }
+    
+    .control-btn {
+        border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.activity-card:focus,
+.control-btn:focus,
+input:focus {
+    outline: 3px solid #4A90E2;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .main-container {
+        background: none;
+        box-shadow: none;
+    }
+    
+    .character-panel {
+        display: none;
+    }
+    
+    .interaction-panel {
+        width: 100%;
+    }
+}
+
+/* Grid System Styles */
+.main-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Allow interactive elements to be clickable */
+    pointer-events: none;
+}
+
+/* Ensure interactive grid elements can receive clicks */
+.main-container [data-grid-position="next-button"],
+.main-container [data-grid-position="question-dropdown"],
+.main-container .next-button,
+.main-container .question-dropdown-container {
+    pointer-events: auto !important;
+}
+
+/* Character container styling */
+.character-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* Dialog container styling */
+.dialog-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    z-index: 15;
+}
+
+/* Character image styling */
+.character-container .character-image {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+    transition: transform 0.3s ease;
+    border: 3px solid transparent;
+    border-radius: 10px;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.character-container .character-image:hover {
+    transform: scale(1.05);
+}
+
+/* Dialog tail pointing to character */
+.dialog-container .dialogue-tail {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 15px solid var(--dialogue-box-fill-color);
+    z-index: 1;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Dialog content responsive text */
+.dialog-container .dialog-content,
+.dialog-container .dialogue-content {
+    font-size: clamp(1rem, 2.5vw, 1.8rem);
+    color: #2C3E50;
+    text-align: center;
+    font-weight: 500;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) {
+    .dialog-container[data-grid-position] .dialogue-box {
+        border-radius: 12px;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .dialog-container .dialog-content,
+    .dialog-container .dialogue-content {
+        font-size: clamp(0.9rem, 4vw, 1.4rem);
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
+
+/* Animation for character entrance */
+@keyframes characterEnter {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animation for dialog entrance */
+@keyframes dialogEnter {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.character-container {
+    animation: characterEnter 0.8s ease-out;
+}
+
+.dialog-container {
+    animation: dialogEnter 0.6s ease-out 0.4s both;
+}
+
+/* Container styling */
+.container1[data-grid-position],
+.container2[data-grid-position] {
+    /* background removed - now handled by grid system props */
+    border-radius: 8px;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Instruction header styling */
+.instruction-header[data-grid-position] {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+    pointer-events: none;
+    user-select: none;
+    white-space: normal;
+    overflow: visible;
+    word-wrap: break-word;
+    color: black !important;
+}
+
+/* Debug border styles - applied dynamically via JavaScript */
+.debug-borders-active [data-grid-position] {
+    border: 2px solid red !important;
+    box-sizing: border-box !important;
+}
+
+/* Clean Dialog Implementation - Conflict-Free Styles */
+.clean-dialog-container {
+    /* All positioning handled by inline styles */
+    box-sizing: border-box;
+}
+
+.clean-dialog-bubble {
+    /* All styling handled by inline styles */
+    box-sizing: border-box;
+}
+
+/* Override grid positioning padding reset for dialog bubble */
+[data-grid-position] .clean-dialog-bubble {
+    padding: 12px !important;
+}
+
+.clean-dialog-tail {
+    /* All styling handled by inline styles */
+    box-sizing: border-box;
+}
+
+.clean-dialog-text {
+    /* All styling handled by inline styles - no CSS font size rules */
+    box-sizing: border-box;
+    font-family: inherit;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Reset any inherited styles that might interfere */
+.clean-dialog-container *:not(.clean-dialog-bubble),
+.clean-dialog-bubble *:not(.clean-dialog-bubble),
+.clean-dialog-text * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ensure no existing CSS rules can interfere - removed font-size rule that was conflicting */
+.clean-dialog-text {
+    /* font-size removed - handled by more specific rule below */
+    line-height: inherit !important; /* Will be overridden by inline styles */
+    color: inherit !important; /* Will be overridden by inline styles */
+    text-align: inherit !important; /* Will be overridden by inline styles */
+    font-weight: inherit !important; /* Will be overridden by inline styles */
+}
+
+/* Clean dialog text - allow inline styles to work (no !important overrides) */
+.clean-dialog-container .clean-dialog-bubble .clean-dialog-text {
+    /* All styling now handled by inline styles like NextButton */
+    line-height: inherit;
+    font-weight: inherit;
+    margin: inherit;
+    padding: inherit;
+    display: inherit;
+    width: inherit;
+    height: inherit;
+    overflow: inherit;
+    white-space: inherit;
+    word-wrap: inherit;
+}
+
+/* Grid1 styling */
+.grid1-container {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.grid1-cell {
+    position: absolute;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.grid1-cell:hover {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    transform: scale(1.02);
+    cursor: pointer;
+}
+
+/* Disable hover effect for highlighted cells */
+.grid1-cell.highlighted-cell:hover {
+    background-color: rgba(255, 255, 0, 0.3) !important;
+    transform: none !important;
+    cursor: pointer !important;
+}
+
+.grid1-cell[data-cell] {
+    /* Cell-specific styling if needed */
+}
+
+/* Grid1 cell text styling */
+.grid1-cell div {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+}
+
+/* Grid1 separator row styling - Minimal CSS, let JavaScript control everything */
+.grid1-cell.separator-row {
+    /* All styling now controlled by JavaScript - no CSS overrides */
+}
+
+/* Grid2 separator row styling - Matches Grid1 behavior */
+.grid2-cell.separator-row {
+    /* All styling now controlled by JavaScript - no CSS overrides */
+}
+
+/* Grid1 Separator Line Element */
+.grid1-separator-line {
+    width: calc(100% - 10px);
+    height: 4px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    display: block;
+    position: relative;
+}
+
+/* Grid2 Separator Line Element - Matches Grid1 exactly */
+.grid2-separator-line {
+    width: calc(100% - 10px);
+    height: 6px;
+    background: #FFFFFF;
+    border-radius: 2px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    border: 2px solid #FFFFFF;
+    border-top: 4px solid #FFFFFF;
+    margin-top: 5px;
+}
+
+/* Grid2 Column Overlay - White Border */
+.grid2-column-overlay-white {
+    border: 2px solid #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Grid2 Column Overlay - Red Dashed Border */
+.grid2-column-overlay-red {
+    border: 2px dashed #ff0000;
+    background-color: rgba(255, 0, 0, 0.1);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Grid1 Separator Fallback - Disabled to allow JavaScript control */
+/*
+.grid1-cell.separator-row::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    right: 5px;
+    height: 3px;
+    background: white;
+    transform: translateY(-50%);
+    z-index: 1;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+*/
+
+/* Responsive Design for Grid1 Separator */
+@media (max-width: 768px) {
+    .grid1-cell.separator-row {
+        padding: 0 !important;
+        /* height: auto !important; - Removed to allow JavaScript control */
+    }
+    
+    .grid1-separator-line {
+        height: 3px;
+        margin: 0 auto;
+    }
+    
+    /* ::before element disabled - see above
+    .grid1-cell.separator-row::before {
+        height: 2px;
+    }
+    */
+}
+
+/* Question dropdown styling */
+.question-dropdown-container {
+    position: absolute;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.question-dropdown-container select {
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 8px !important;
+    border-radius: 8px;
+    border: 2px solid #333;
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.question-dropdown-container select:hover {
+    background-color: rgba(255, 255, 255, 1);
+    border-color: #007bff;
+    transform: scale(1.02);
+}
+
+.question-dropdown-container select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Next Button - Force highest z-index and ensure clickability */
+.next-button,
+button.next-button,
+.main-container .next-button,
+[data-grid-position="next-button"],
+.main-container [data-grid-position="next-button"] {
+    position: absolute !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: block !important;
+    border: none !important;
+    outline: none !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+}
+
+/* Ensure Next Button is always on top and clickable */
+.next-button:hover,
+button.next-button:hover {
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Page indicator styling */
+.page-indicator {
+    position: absolute !important;
+    z-index: 8000 !important;
+    pointer-events: auto !important;
+    user-select: none !important;
+}
+
+/* CRITICAL: Next Button Clickability Override - Force all possible selectors */
+.next-button,
+button.next-button,
+.main-container .next-button,
+.main-container button.next-button,
+[data-grid-position="next-button"],
+.main-container [data-grid-position="next-button"],
+*[data-grid-position="next-button"],
+div[data-grid-position="next-button"],
+button[data-grid-position="next-button"] {
+    /* Force positioning and visibility */
+    position: absolute !important;
+    display: block !important;
+    visibility: visible !important;
+    
+    /* Force highest z-index */
+    z-index: 99999 !important;
+    
+    /* Force pointer events */
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    
+    /* Remove any blocking elements */
+    isolation: isolate !important;
+    
+    /* Ensure it's not hidden or clipped */
+    clip: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+    
+    /* Force interaction capability */
+    touch-action: manipulation !important;
+    user-select: none !important;
+    
+    /* Remove any transforms that might interfere */
+    transform: none !important;
+    
+    /* Ensure proper stacking context */
+    contain: none !important;
+}
+
+/* Force hover state to also be clickable */
+.next-button:hover,
+button.next-button:hover,
+[data-grid-position="next-button"]:hover {
+    z-index: 100000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Next Button State Management */
+.next-button,
+button.next-button,
+[data-grid-position="next-button"] {
+    border: 3px solid #333 !important;
+    background-color: rgba(255, 153, 0, 0.9) !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+}
+
+/* Next Button Disabled State */
+.next-button:disabled,
+button.next-button:disabled,
+[data-grid-position="next-button"]:disabled {
+    border: 3px solid #666 !important;
+    background-color: rgba(120, 120, 120, 0.5) !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+}
+
+/* Next Button Enabled State (explicit override) */
+.next-button:not(:disabled),
+button.next-button:not(:disabled),
+[data-grid-position="next-button"]:not(:disabled) {
+    border: 3px solid #333 !important;
+    background-color: rgba(255, 153, 0, 0.9) !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+}
+
+/* ULTRA HIGH SPECIFICITY OVERRIDE - Force all possible combinations */
+html body .main-container button.next-button:not(:disabled),
+html body .main-container .next-button:not(:disabled),
+html body .main-container [data-grid-position="next-button"]:not(:disabled),
+html body .main-container button[data-grid-position="next-button"]:not(:disabled) {
+    border: 5px solid #333 !important;
+    background-color: rgba(255, 153, 0, 0.9) !important;
+    background: rgba(255, 153, 0, 0.9) !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    color: black !important;
+    text-decoration: none !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+/* Force specific browser overrides */
+html body .main-container button.next-button[disabled="false"],
+html body .main-container .next-button[disabled="false"],
+html body .main-container [data-grid-position="next-button"][disabled="false"] {
+    border: 5px solid #333 !important;
+    background-color: rgba(255, 153, 0, 0.9) !important;
+    background: rgba(255, 153, 0, 0.9) !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+}
+
+/* Force enabled state even more aggressively */
+button.next-button,
+.next-button,
+[data-grid-position="next-button"] {
+    background-color: rgba(255, 153, 0, 0.9) !important;
+    background: rgba(255, 153, 0, 0.9) !important;
+    border: 5px solid #333 !important;
+    cursor: pointer !important;
+    opacity: 1 !important;
+    color: black !important;
+}
+
+/* Override only when actually disabled */
+button.next-button[disabled="true"],
+.next-button[disabled="true"],
+[data-grid-position="next-button"][disabled="true"],
+button.next-button:disabled:not([disabled="false"]),
+.next-button:disabled:not([disabled="false"]),
+[data-grid-position="next-button"]:disabled:not([disabled="false"]) {
+    background-color: rgba(120, 120, 120, 0.5) !important;
+    background: rgba(120, 120, 120, 0.5) !important;
+    border: 5px solid #666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.5 !important;
+    color: #999 !important;
+}
+
+/* Previous Button - Force highest z-index and ensure clickability */
+.previous-button,
+button.previous-button,
+.main-container .previous-button,
+[data-grid-position="previous-button"],
+.main-container [data-grid-position="previous-button"] {
+    position: absolute !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    display: block !important;
+    border: none !important;
+    outline: none !important;
+    user-select: none !important;
+    touch-action: manipulation !important;
+}
+
+/* Ensure Previous Button is always on top and clickable */
+.previous-button:hover,
+button.previous-button:hover {
+    z-index: 10000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* CRITICAL: Previous Button Clickability Override - Force all possible selectors */
+.previous-button,
+button.previous-button,
+.main-container .previous-button,
+.main-container button.previous-button,
+[data-grid-position="previous-button"],
+.main-container [data-grid-position="previous-button"],
+*[data-grid-position="previous-button"],
+div[data-grid-position="previous-button"],
+button[data-grid-position="previous-button"] {
+    /* Force positioning and visibility */
+    position: absolute !important;
+    display: block !important;
+    visibility: visible !important;
+    
+    /* Force highest z-index */
+    z-index: 99999 !important;
+    
+    /* Force pointer events */
+    pointer-events: auto !important;
+    cursor: pointer !important;
+    
+    /* Remove any blocking elements */
+    isolation: isolate !important;
+    
+    /* Ensure it's not hidden or clipped */
+    clip: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+    
+    /* Force interaction capability */
+    touch-action: manipulation !important;
+    user-select: none !important;
+    
+    /* Remove any transforms that might interfere */
+    transform: none !important;
+    
+    /* Ensure proper stacking context */
+    contain: none !important;
+}
+
+/* Force hover state to also be clickable */
+.previous-button:hover,
+button.previous-button:hover,
+[data-grid-position="previous-button"]:hover {
+    z-index: 100000 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+}
+
+/* Debug styling - temporarily add a bright border to see the button */
+.previous-button,
+button.previous-button,
+[data-grid-position="previous-button"] {
+    border: 3px solid cyan !important;
+    background-color: rgba(102, 153, 204, 0.9) !important;
+}
+
+/* Override pointer-events for both buttons */
+[data-grid-position="next-button"],
+[data-grid-position="previous-button"],
+[data-grid-position="question-dropdown"] {
+    pointer-events: auto !important;
+}
+
+/* Marquee container styling */
+.marquee-container {
+    position: absolute !important;
+    top: 0 !important;
+    left: calc(clamp(5px, 1vw, 15px) + clamp(60px, 8vw, 180px) + 10px) !important;
+    right: 0 !important;
+    height: 5vh !important;
+    z-index: 9999 !important;
+    pointer-events: none !important;
+    display: flex !important;
+    align-items: center !important;
+    overflow: hidden !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+}
+
+.marquee-content {
+    display: inline-block !important;
+    white-space: nowrap !important;
+    color: white !important;
+    font-size: clamp(0.875rem, 1.5vw, 1.5rem) !important;
+    animation: marquee-scroll 30s linear infinite !important;
+}
+
+@keyframes marquee-scroll {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Logo container styling */
+.logo-container {
+    position: absolute !important;
+    top: clamp(5px, 1vh, 15px) !important;
+    left: clamp(5px, 1vw, 15px) !important;
+    z-index: 10001 !important;
+    pointer-events: auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+}
+
+.logo-image {
+    max-width: clamp(60px, 8vw, 180px) !important;
+    max-height: clamp(40px, 5vh, 120px) !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+/* Responsive logo sizing - matching existing breakpoints */
+/* 960x540 - Small screens */
+@media screen and (max-width: 960px) and (max-height: 540px) {
+    .logo-container {
+        top: 5px !important;
+        left: 5px !important;
+    }
+    .logo-image {
+        max-width: 60px !important;
+        max-height: 40px !important;
+    }
+}
+
+/* 1024x576 - Standard small */
+@media screen and (min-width: 960px) and (max-width: 1024px) {
+    .logo-image {
+        max-width: 70px !important;
+        max-height: 45px !important;
+    }
+}
+
+/* 1152x648 - Medium small */
+@media screen and (min-width: 1024px) and (max-width: 1152px) {
+    .logo-image {
+        max-width: 80px !important;
+        max-height: 55px !important;
+    }
+}
+
+/* 1280x720 - HD */
+@media screen and (min-width: 1152px) and (max-width: 1280px) {
+    .logo-image {
+        max-width: 90px !important;
+        max-height: 60px !important;
+    }
+}
+
+/* 1366x768 - Standard laptop */
+@media screen and (min-width: 1280px) and (max-width: 1366px) {
+    .logo-image {
+        max-width: 100px !important;
+        max-height: 65px !important;
+    }
+}
+
+/* 1600x900 - Large laptop */
+@media screen and (min-width: 1366px) and (max-width: 1600px) {
+    .logo-image {
+        max-width: 110px !important;
+        max-height: 70px !important;
+    }
+}
+
+/* 1920x1080 - Full HD */
+@media screen and (min-width: 1600px) and (max-width: 1920px) {
+    .logo-image {
+        max-width: 130px !important;
+        max-height: 85px !important;
+    }
+}
+
+/* 2048x1152 - 2K */
+@media screen and (min-width: 1920px) and (max-width: 2048px) {
+    .logo-image {
+        max-width: 150px !important;
+        max-height: 95px !important;
+    }
+}
+
+/* 2560x1440 - QHD */
+@media screen and (min-width: 2048px) and (max-width: 2560px) {
+    .logo-image {
+        max-width: 170px !important;
+        max-height: 110px !important;
+    }
+}
+
+/* 2880x1620 - Retina */
+@media screen and (min-width: 2560px) and (max-width: 2880px) {
+    .logo-image {
+        max-width: 190px !important;
+        max-height: 120px !important;
+    }
+}
+
+/* 3480x1960 - Ultra Wide */
+@media screen and (min-width: 2880px) and (max-width: 3480px) {
+    .logo-image {
+        max-width: 220px !important;
+        max-height: 140px !important;
+    }
+}
+
+/* 3480x1960+ - Ultra High Resolution */
+@media screen and (min-width: 3480px) {
+    .logo-image {
+        max-width: 260px !important;
+        max-height: 160px !important;
+    }
+}
+
+/* Mobile and tablet adjustments */
+@media screen and (max-width: 768px) {
+    .logo-container {
+        top: 5px !important;
+        left: 5px !important;
+    }
+    .logo-image {
+        max-width: 60px !important;
+        max-height: 40px !important;
+    }
+}
