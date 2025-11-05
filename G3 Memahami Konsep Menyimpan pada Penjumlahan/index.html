@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Addition 2 digit</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="marquee-container">
+      <div class="marquee">
+        <div class="marquee-content">
+          <span>Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</span>
+        </div>
+      </div>
+    </div>
+    <div class="aspect-ratio-container">
+       <div class="tb-logo">
+        <img src="assets/temanbelajarsingleline.png" alt="Teman Belajar" />
+      </div>
+      <div id="activity-complete-overlay" class="overlay-container">
+        <div class="overlay-content">
+            <div class="overlay-character">
+                <img src="assets/JAXhappy.png" alt="Jax the character" onerror="this.onerror=null;this.src='https://placehold.co/200x300/e0e0e0/000000?text=Jax';">
+            </div>
+            <div class="overlay-text">
+                <h1 id="overlay-title">Activity Complete</h1>
+                <p id="overlay-message">If you want to try it again, click on the "Start Over" button.</p>
+                <button id="start-over-btn" class="btn btn-primary">Start Over</button>
+            </div>
+        </div>
+    </div>
+      <!-- Left panel with character and speech bubble -->
+      <div class="left-panel">
+        <div id="context">
+          <p>
+            Let's learn subtraction by 'taking away'. Follow the instructions to
+            get started!
+          </p>
+        </div>
+        <div class="character-container">
+          <img
+            src="assets/JAXnormal.png"
+            id="character"
+            alt="Jax the character"
+            onerror="this.onerror=null;this.src='https://placehold.co/200x300/e0e0e0/000000?text=Jax';"
+          />
+        </div>
+      </div>
+
+      <!-- App container for the subtraction tool -->
+      <div class="app-container">
+
+        <header class="app-header">
+          <div class="problem-statement">
+            <h1></h1>
+          </div>
+        </header>
+
+        <main class="app-main">
+          <!-- UPDATED: Workspace now has a grid for tens and ones -->
+          <div id="subtraction-workspace">
+            <div class="column-header">Tens</div>
+            <div class="column-header">Ones</div>
+            <div class="column-header"></div>
+            <!-- For separator -->
+            <div class="column-header">P</div>
+            <div class="column-header">S</div>
+
+            <div id="tens-blocks-column" class="subtraction-column"></div>
+            <div id="ones-blocks-column" class="subtraction-column"></div>
+            <div id="separator-column"></div>
+            <div id="tens-numbers-column" class="subtraction-column"></div>
+            <div id="ones-numbers-column" class="subtraction-column"></div>
+          </div>
+          <div id="hand-ftue">
+            <img src="" alt="tapping hand" />
+          </div>
+        </main>
+
+        <footer class="app-footer">
+          <button class="next-button btn btn-primary"></button>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Template for the block section (left column) -->
+    <template id="block-section-template">
+      <div class="block-section">
+        <div class="grid-item-content">
+          <div class="block-placeholder">
+            <!-- UPDATED: Renamed for generic use (tens/ones) -->
+            <div class="blocks-grid"></div>
+          </div>
+        </div>
+        <div class="stepper">
+          <button class="stepper-btn plus">+</button
+          ><button class="stepper-btn minus">-</button>
+        </div>
+        <div class="corner-badge">0</div>
+      </div>
+    </template>
+
+    <!-- Template for the number section (right column) -->
+    <template id="number-section-template">
+      <div class="number-section">
+        <span class="number-display">0</span>
+      </div>
+    </template>
+
+    <script src="js/texts.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
