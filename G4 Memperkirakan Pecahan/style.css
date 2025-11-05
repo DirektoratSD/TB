@@ -1,0 +1,950 @@
+/*
+ * ==================================================================
+ * ====================== marquee styles ======================
+ * ==================================================================
+*/
+.marquee-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 4.5vh;
+  z-index: 50;
+  pointer-events: none;
+}
+
+.marquee {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee p {
+  color: white;
+  font-size: 1.5rem;
+  padding: 0 2rem;
+  margin: 0;
+  animation: marquee-scroll 30s linear infinite;
+}
+
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* Calculate marquee width: from right edge to logo's right edge */
+/* Logo is at left: 1% with width: 272.8px (on 1920px canvas) */
+/* Logo ends at approximately 15.21% of canvas width (1% + 272.8/1920*100% ≈ 15.21%) */
+/* Marquee should span from logo's right edge to screen's right edge */
+.marquee-container .marquee {
+  left: 15.21%;
+  width: 84.79%;
+}
+
+/*
+ * ==================================================================
+ * ====================== global & reset style ======================
+ * ==================================================================
+*/
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", "Segoe UI", sans-serif;
+}
+
+body {
+  background-color: #0a192f;
+  color: #e0e0e0;
+  overflow: hidden;
+}
+
+/*
+ * ===============================================================
+ * ====================== layout & scaling ======================
+ * ===============================================================
+*/
+.scale-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #0a192f;
+}
+
+.scale-wrapper {
+  transform-origin: center;
+}
+
+.applet-canvas {
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  background-image: url("assets/DarkBG.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.applet-container {
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: transparent;
+  border: 1px solid #2a2a2a;
+  border-radius: 16px;
+  position: relative;
+}
+
+.assets {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+.logo-container {
+  position: relative;
+  top: 1%;
+  left: 1%;
+  z-index: 150;
+}
+
+.logo-container .logo {
+  width: 272.8px;
+  height: auto;
+  /* max-width: calc(8vw + 8vh); */
+  /* max-height: calc(8vw + 8vh); */
+  object-fit: contain;
+}
+
+.workingArea-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background-color: transparent;
+  overflow: hidden;
+}
+
+.workingArea {
+  flex: 1;
+  border-radius: 16px;
+  margin: 8px 0;
+  position: relative;
+  display: flex;
+  padding: 0;
+  height: 100%;
+}
+
+/*
+ * ================================================================
+ * ====================== screen layout styles ======================
+ * ================================================================
+*/
+.content-screen {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.content-screen.active {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Layout 1: Centered content for start/end screens */
+.layout-1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  gap: 50px;
+}
+
+/* Layout 2: 65% left, 35% right */
+.layout-2 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.layout-2 .left-panel {
+  width: 65%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+}
+
+.layout-2 .right-panel {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Specific styling for screens 2 and 3 right panels */
+#screen2 .right-panel,
+#screen3 .right-panel {
+  justify-content: flex-start;
+  flex-direction: column;
+}
+
+/* Layout 3: Top section and two bottom panels */
+.layout-3 {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.layout-3 .top-section {
+  height: 25%;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+#question-screen .top-panel {
+  height: 30%;
+  display: flex;
+  padding: 20px;
+  position: relative;
+  align-items: center;
+  gap: 6px;
+}
+
+.layout-3 .bottom-section {
+  height: 60%;
+  display: flex;
+}
+
+.layout-3 .left-panel-question {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout-3 .right-panel-question {
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+/*
+ * ================================================================
+ * ====================== common elements ======================
+ * ================================================================
+*/
+.character-container {
+  display: flex;
+  justify-content: center;
+  top: 600px;
+}
+
+.character-container {
+  position: absolute;
+  left: 40px;
+  bottom: 0;
+}
+
+.character-container img {
+  height: 400px;
+  user-select: none;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.3));
+}
+
+#question-screen .character-container {
+  position: static;
+  width: 200px;
+  height: 200px;
+  margin-right: 20px;
+}
+
+#question-screen .character-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.speech-bubble {
+  position: absolute;
+  left: 230px;
+  top: 250px;
+  padding: 40px 40px;
+  border-radius: 30px;
+  width: 90%;
+  max-width: 800px;
+  margin-top: -120px;
+  z-index: 10;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  transition: background-color 0.4s ease, border-color 0.4s ease;
+  background: rgba(255, 255, 255, 0.95);
+  border: 3px solid #b3e5fc; /* Light Blue Border */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.speech-bubble p {
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+  color: #546e7a;
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  left: 15%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #b3e5fc;
+}
+
+#question-screen .speech-bubble {
+  position: relative;
+  left: auto;
+  top: auto;
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 1.5rem;
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: flex-start; /* Changed from center to flex-start */
+  border: 3px solid #b3e5fc;
+  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 0;
+  min-height: 0;
+  width: auto;
+  max-width: none;
+}
+
+#question-screen .speech-bubble p {
+  font-size: 37px;
+  line-height: 1.5;
+  color: #546e7a;
+  text-align: left;
+}
+
+#question-screen .speech-bubble::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -3rem;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border: 1.5rem solid transparent;
+  border-right-color: #b3e5fc;
+}
+
+#question-screen .speech-bubble::after {
+  display: none;
+}
+
+.speech-bubble.correct {
+  background: #e8f5e9; /* Light Green */
+  border-color: #81c784;
+}
+
+.speech-bubble.correct::after {
+  border-top-color: #81c784;
+}
+
+.speech-bubble.incorrect {
+  background: #ffebee; /* Light Red */
+  border-color: #e57373;
+}
+
+.speech-bubble.incorrect::after {
+  border-top-color: #e57373;
+}
+
+.btn {
+  padding: 1.2rem 3rem;
+  border: none;
+  border-radius: 3rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #ffb74d, #f57c00);
+  box-shadow: 0 10px 0px #bf360c;
+}
+
+.btn:hover:not([disabled]) {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+
+.btn.red {
+  background: #d32f2f;
+  box-shadow: 0 10px 0px #9a0007;
+}
+
+.btn.red:hover {
+  background: #e53935;
+  box-shadow: 0 10px 0px #9a0007;
+}
+
+.btn.red:active {
+  background: #c62828;
+  box-shadow: 0 10px 0px #9a0007;
+}
+
+.container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0px;
+  height: 75%;
+}
+
+/* Specific styling for screens 2 and 3 container wrappers */
+#screen2 .container-wrapper,
+#screen3 .container-wrapper {
+  height: 100%;
+  position: relative;
+  top: 200px;
+}
+
+.layout-3 .container-wrapper {
+  height: 100%;
+}
+
+.water-container-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.interactive-area {
+  display: flex;
+  gap: 50px;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Specific styling for screens 2 and 3 interactive areas */
+#screen2 .interactive-area,
+#screen3 .interactive-area {
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* Make interactive area in layout 2 take full height */
+.layout-2 .interactive-area {
+  height: 100%;
+  gap: 100px;
+}
+
+/* Make interactive area in layout 3 grow to fill space */
+.layout-3 .interactive-area {
+  flex-grow: 1;
+}
+
+.water-container {
+  position: relative;
+  width: 550px;
+  height: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  padding-top: 5%;
+  padding-bottom: 6%;
+  margin-bottom: 30px;
+}
+
+/* Specific styling for screens 2 and 3 water containers to match question screen */
+#screen2 .water-container,
+#screen3 .water-container {
+  height: 650px;
+}
+.water-container::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-image: url("assets/beaker2.png");
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  z-index: 4;
+}
+
+.water {
+  width: 80%;
+  margin: 0px 0px 0px 48px;
+  margin-top: 0px;
+  bottom: 0;
+  position: relative;
+  background-color: #005193;
+  height: 0%; /* Controlled by JS */
+  transition: height 0.3s ease-out;
+  border-radius: 19.2px 19.2px 48px 48px;
+  z-index: 0;
+}
+
+.water-container .number {
+  position: absolute;
+  top: 50%; /* Position at the vertical center */
+  left: 50%;
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Center both horizontally and vertically */
+  font-size: 38.4px; /* Revert to original division number font size */
+  color: #fff; /* White color */
+  z-index: 5; /* Ensure it's above other elements */
+}
+
+.water-container .screen2-marker,
+.water-container .screen3-marker {
+  position: absolute;
+  bottom: 90%; /* Default position for non-question screens */
+  left: 5px; /* Align with water's left edge */
+  width: 80%; /* Match water width */
+  border-top: 5.4px dashed #f59e0b; /* Dotted yellow line */
+  z-index: 5; /* Ensure it's above other elements */
+}
+
+/* For question screen, align exactly with the top of the fillable area */
+#question-screen .water-container .screen3-marker {
+  bottom: auto; /* Override default */
+  top: 13.5%; /* Matches .division-markers top offset */
+  z-index: 3; /* Place under beaker overlay (::before has z-index: 4) */
+}
+
+.custom-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  top: 60px; /* Moved up for question screen */
+}
+
+/* Specific styling for screen 3 slider container */
+#screen3 .custom-slider-container {
+  margin-top: 0;
+  position: relative;
+  top: 80px;
+}
+
+.slider-track {
+  width: 15px;
+  height: 450px;
+  background-color: #a2a2a2;
+  border-radius: 15px;
+  position: relative;
+  cursor: pointer;
+}
+
+.slider-thumb {
+  width: 48px;
+  height: 48px;
+  background-color: #f59e0b;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  cursor: grab;
+  border: 4px solid #fff;
+}
+
+.slider-thumb:active {
+  cursor: grabbing;
+}
+
+/* Specific styling for screen 3 slider track */
+#screen3 .custom-slider-container .slider-track {
+  height: 540px; /* New height for screen 3 slider */
+}
+
+.slider-thumb::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: -24px;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-radius: 10px;
+  border-top-color: #ffffff;
+  border-bottom: 0;
+  transform: rotate(90deg);
+  transition: all 0.3s ease;
+  z-index: 0;
+}
+
+#check-btn {
+  position: relative;
+  top: 110px; /* Adjust this value to move the button down */
+}
+
+/*
+ * ================================================================
+ * ====================== welcome screen styles ======================
+ * ================================================================
+*/
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 40px;
+}
+
+.welcome-container .character {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 50px; /* Adjusted to move character above speech bubble */
+}
+
+.welcome-container .character img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.welcome-container .speech-bubble {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 28.8px;
+  padding: 21.6px 28.8px;
+  max-width: 800px;
+  margin-bottom: 40px;
+  text-align: center;
+  border: 3px solid #b3e5fc;
+  box-shadow: 0 9.6px 19.2px rgba(0, 0, 0, 0.1);
+  position: relative; /* Override absolute positioning */
+  left: auto; /* Override left positioning */
+  top: auto; /* Override top positioning */
+  margin-top: 20px; /* Space below character */
+  align-self: center; /* Center horizontally */
+  width: 80%; /* Control width */
+}
+
+.welcome-container .speech-bubble::after {
+  content: "";
+  position: absolute;
+  top: -27px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border: 28.8px solid transparent;
+  border-bottom-color: #b3e5fc;
+  border-top: 0;
+}
+
+.welcome-container .speech-bubble h2 {
+  font-size: 3.5rem;
+  color: #0277bd;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.welcome-container .speech-bubble p {
+  font-size: 2.2rem;
+  line-height: 1.5;
+  color: #546e7a;
+}
+
+.btn-start {
+  padding: 1.2rem 3rem;
+  border: none;
+  border-radius: 2.5rem;
+  font-size: 2.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #ffb74d, #f57c00);
+  box-shadow: 0 10px 0px #bf360c;
+}
+
+.btn-start:hover:not([disabled]) {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+}
+
+.btn-start:disabled {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+
+/*
+ * ================================================================
+ * ====================== layout 3 specific ======================
+ * ================================================================
+*/
+
+.question-box {
+  width: 80%;
+  height: 60%;
+  border: 5px solid #ff6b9e;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  text-align: center;
+}
+
+.fraction {
+  display: inline-flex;
+  flex-direction: column;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0 5px;
+  /* REMOVED font-size from here */
+}
+
+.numerator {
+  display: inline-block; /* Keep inline-block for border-bottom */
+  border-bottom: 3px solid #0277bd;
+  padding: 0 5px;
+  color: #0277bd;
+  font-size: 2rem; /* Apply font-size directly here */
+  line-height: 1; /* Match Fractions Applet 2 for consistency */
+}
+
+.denominator {
+  padding: 0 5px;
+  color: #0277bd;
+  font-size: 2rem; /* Apply font-size directly here */
+  line-height: 1; /* Match Fractions Applet 2 for consistency */
+}
+
+/* Styles for fractions within the question text */
+#question-text .fraction .numerator {
+  color: #e0e0e0; /* White/light gray, matching "Estimate" text */
+  font-size: 4rem; /* Match question text size */
+  border-bottom-color: #e0e0e0; /* Match text color */
+}
+#question-text .fraction .denominator {
+  color: #e0e0e0; /* White/light gray, matching "Estimate" text */
+  font-size: 4rem; /* Match question text size */
+}
+
+/* Styles for fractions within the feedback speech bubble */
+#question-screen .speech-bubble .fraction .numerator {
+  color: #546e7a; /* Match speech bubble text color */
+  border-bottom-color: #546e7a; /* Match text color */
+}
+#question-screen .speech-bubble .fraction .denominator {
+  color: #546e7a; /* Match speech bubble text color */
+}
+
+.division-lines {
+  position: absolute;
+  width: 80%;
+  left: 48px;
+  bottom: 0;
+  height: 100%;
+  z-index: 1;
+}
+
+.division-lines .line {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: white;
+}
+
+.red-error-line {
+  position: absolute;
+  width: 80%;
+  height: 6px;
+  background-color: #ff0000;
+  border-radius: 3px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  left: 48px;
+  bottom: -40px; /* Added to move the line down */
+  display: none; /* Keep this for initial state */
+}
+
+.red-error-line.show {
+  display: block;
+  opacity: 1;
+}
+
+.green-correct-line {
+  position: absolute;
+  width: 80%;
+  height: 6px;
+  background-color: #00ff00; /* Green color */
+  border-radius: 3px;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5); /* Green shadow */
+  left: 48px;
+  bottom: -40px;
+  display: none;
+}
+
+.green-correct-line.show {
+  display: block;
+  opacity: 1;
+}
+
+/* New style for green fill highlight */
+.water-fill-highlight {
+  position: absolute;
+  width: 80%; /* Align with water */
+  margin-left: 48px; /* Align with water */
+  background-color: rgba(0, 255, 0, 0.2); /* Green with less opacity */
+  z-index: 0; /* Below water and markers */
+  pointer-events: none;
+  transition: height 0.3s ease-out, bottom 0.3s ease-out;
+}
+
+/* Styles for division markers and numbers, adapted from WaterContainer_Learning */
+.water-container .division-markers {
+  position: absolute;
+  width: 100%;
+  height: 84%;
+  top: 10%;
+  pointer-events: none;
+  /* Removed flex properties for absolute positioning of children */
+}
+
+.water-container .division-marker {
+  border-top: 5.4px dashed #f59e0b; /* Dotted yellow line */
+  position: absolute; /* Enable absolute positioning */
+  /* Removed flex-grow as it's not needed for absolute positioning */
+  display: flex; /* Keep flex for centering content within the marker */
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 48px;
+  font-weight: bold;
+  width: 80%; /* Reverted to original width */
+  margin: 0 auto; /* Default to centered */
+  margin-left: 48px; /* Align with water's left edge */
+}
+
+.water-container .division-marker.red {
+  border-top-color: red;
+}
+
+/* New styles for specific colored division markers */
+.water-container .division-marker.yellow-marker {
+  border-top-color: yellow;
+}
+
+.water-container .division-marker.white-marker {
+  border-top-color: white;
+}
+
+.water-container .division-numbers {
+  position: absolute;
+  width: 100%;
+  height: 84%;
+  top: 10%;
+  pointer-events: none;
+  z-index: 2;
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.water-container .division-number {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  font-size: 38.4px;
+  font-weight: bold;
+}
+
+.no-break {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+#end-speech-bubble {
+  left: 25%;
+  width: 60%;
+  max-width: 1000px;
+}
+
+#end-speech-bubble p {
+  font-size: 3.5rem;
+}
+/*
+ * ================================================================
+ * ====================== general & helpers ======================
+ * ================================================================
+*/
+.highlight {
+  animation: highlight-effect 1.5s ease-in-out;
+}
+
+@keyframes highlight-effect {
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 0, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 40px rgba(255, 255, 0, 1);
+  }
+}

@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Writing the Amount on a Cheque</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&family=Arial:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Fixed-size container and scaling wrapper */
+    .scale-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background-color: #121212;
+      margin: 0;
+      padding: 0;
+    }
+
+    .scale-wrapper {
+      transform-origin: center;
+      /* Scale will be set by JavaScript */
+    }
+
+    .applet-canvas {
+      width: 1920px;
+      height: 1080px;
+      position: relative;
+    }
+
+    /* 1) GLOBAL & BODY STYLES */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      background-color: #121212; /* Dark background */
+      width: 100vw; height: 100vh;
+      margin: 0; padding: 0;
+      overflow: hidden;
+      display: flex; justify-content: center; align-items: center;
+      color: #e0e0e0; /* Light text */
+    }
+
+    /* 2) APPLET CONTAINER (16:9) */
+    .applet-container {
+      width: 1920px;
+      height: 1080px;
+      display: flex; flex-direction: column;
+      margin: 0 auto;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background-color: #121212; /* Dark container */
+      border: 1px solid #2a2a2a; /* Add subtle border for better visibility */
+      border-radius: 16px; /* More rounded for kid-friendly look */
+      position: relative;
+    }
+
+    /* 3) TITLE BAR */
+    .titleBar {
+      background: linear-gradient(to right, #FF6B9E, #9C6AFF); /* Kid-friendly pink to purple gradient */
+      padding: calc(12px + 0.2vw) calc(20px + 0.5vw);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      z-index: 155; /* Above dimming overlay */
+      border-radius: calc(16px + 0.2vw) calc(16px + 0.2vw) 0 0; /* Rounded top corners */
+      position: relative;
+    }
+    .titleBar h1 { 
+      font-size: calc(3rem + 0.4vw);
+      font-weight: 600;
+      margin-bottom: calc(6px + 0.1vw);
+      text-align: center;
+    }
+    
+    /* Language toggle button */
+    #langToggle {
+      position: absolute;
+      top: calc(12px + 0.2vw);
+      right: calc(20px + 0.5vw);
+      background: #fff;
+      border: none;
+      border-radius: calc(4px + 0.1vw);
+      padding: calc(4px + 0.1vw) calc(8px + 0.2vw);
+      cursor: pointer;
+      font-size: calc(0.8rem + 0.3vw);
+      color: #FF6B9E;
+    }
+    #langToggle:hover { background: #f0f0f0; }
+
+    /* 4) ASSETS REGION */
+    .assets {
+      flex: 1;           
+      display: flex;     
+      flex-direction: column;
+      align-items: stretch;
+      overflow: hidden;
+      min-height: 400px;
+    }
+
+    /* 5) WORKING AREA CONTAINER */
+    .workingArea-container {
+      flex: 1; 
+      display: flex;
+      flex-direction: column; 
+      padding: 16px;
+      background-color: #1a1a1a; /* Dark background */
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* 6) WORKING AREA */
+    .workingArea {
+      flex: 1;
+      border: 3px solid #FF6B9E; /* Pink border */
+      border-radius: 16px;
+      background-image: url('assets/Cheque.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #FDF4D6; /* Light background for cheque */
+      box-shadow: 0 0 15px rgba(255, 107, 158, 0.3); /* Pink glow */
+      margin: 8px 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+      padding: clamp(20px, 2.5vw, 30px);
+      overflow: visible;
+      transition: all 0.3s ease;
+      min-height: 600px;
+    }
+
+    /* Amount display on cheque */
+    .amount-display {
+      position: absolute;
+      top: 71%;
+      right: 5%;
+      /*right: 5%;*/
+      font-size: calc(8rem + 0.3vw);
+      font-weight: 700;
+      color: #000;
+      /*background-color: rgba(255, 255, 255, 0.8);*/
+      /*padding: calc(6px + 0.1vw) calc(12px + 0.2vw);*/
+      /*border-radius: calc(6px + 0.1vw);*/
+      /*border: calc(2px + 0.1vw) solid #333;*/
+    }
+
+    /* Dropdown container */
+    .dropdown-container {
+      position: absolute;
+      top: 65%;
+      left: 4%;
+      right: 4%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      /*padding: calc(6px + 0.1vw);*/
+     /* border-radius: calc(6px + 0.1vw);
+      border: calc(2px + 0.1vw) solid #333;*/
+      /*height: calc(50px + 0.5vw);*/
+    }
+
+    /* Custom dropdown styling */
+    .custom-dropdown {
+      flex: 1;
+      margin: 0 calc(2px + 0.05vw);
+      position: relative;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+    }
+
+    .dropdown-button {
+      width: 100%;
+      padding: calc(8px + 0.2vw) 3px;
+      font-size: calc(1.9rem + 0.3vw);
+      font-weight: 600;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      border: calc(2px + 0.05vw) solid #333;
+      border-radius: calc(6px + 0.1vw);
+      background-color: white;
+      color: #000000;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      height: calc(44px + 0.4vw);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      position: relative;
+    }
+
+    .dropdown-button::after {
+      content: '▼';
+      position: absolute;
+      right: calc(8px + 0.1vw);
+      font-size: calc(1.9rem + 0.2vw);
+      color: #666;
+      transition: transform 0.2s ease;
+    }
+
+    .custom-dropdown.open .dropdown-button::after {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-content {
+      position: absolute;
+      top: -1100%;
+      left: 0;
+      right: 0;
+      background-color: white;
+      border: calc(2px + 0.05vw) solid #333;
+      border-radius: calc(6px + 0.1vw) calc(6px + 0.1vw) calc(6px + 0.1vw) calc(6px + 0.1vw);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      min-height: 800px;
+      /*overflow-y: none;*/
+      display: none;
+    }
+
+    .custom-dropdown.open .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-option {
+      padding: calc(8px + 0.2vw) calc(12px + 0.2vw);
+      font-size: calc(1.8rem + 0.25vw);
+      font-weight: 500;
+      color: #000000 !important;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-option:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-option:hover {
+      background-color: #f0f0f0;
+      color: #000000 !important;
+    }
+
+    .dropdown-option.selected {
+      background-color: #e3f2fd;
+      font-weight: 600;
+      color: #000000 !important;
+    }
+
+    /* Color coding for custom dropdowns */
+    .custom-dropdown.yellow .dropdown-button {
+      background-color: #FFE066;
+      border-color: #FFD700;
+    }
+
+    .custom-dropdown.pink .dropdown-button {
+      background-color: #FFB3D9;
+      border-color: #FF69B4;
+    }
+
+    .custom-dropdown.blue .dropdown-button {
+      background-color: #87CEEB;
+      border-color: #4169E1;
+    }
+
+    .custom-dropdown.green .dropdown-button {
+      background-color: #98FB98;
+      border-color: #32CD32;
+    }
+
+    .custom-dropdown:hover .dropdown-button {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .custom-dropdown.open .dropdown-button {
+      border-radius: calc(6px + 0.1vw) calc(6px + 0.1vw) 0 0;
+    }
+	
+    /* Final text display */
+    .final-text {
+      position: absolute;
+      top: 58%;
+      left: 15%;
+      right: 15%;
+      font-size: calc(5rem + 0.3vw);
+      font-weight: 700;
+      color: #000;
+      /*background-color: rgba(255, 255, 255, 0.9);*/
+      padding: calc(12px + 0.2vw);
+      /*border-radius: calc(6px + 0.1vw);
+      border: calc(2px + 0.1vw) solid #333;*/
+      text-align: center;
+      display: none;
+    }
+
+    /* Control buttons */
+    .control-buttons {
+      position: absolute;
+      bottom: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: calc(20px + 0.5vw);
+    }
+
+    .btn-submit, .btn-next {
+      background: linear-gradient(145deg, #27AE60, #229954);
+      color: white;
+      border: none;
+      border-radius: calc(12px + 0.2vw);
+      padding: calc(15px + 0.3vw) calc(40px + 0.8vw);
+      font-size: calc(1.8rem + 0.4vw);
+      font-weight: 600;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 0 rgba(34, 153, 84, 0.7), 0 0 12px rgba(39, 174, 96, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:hover, .btn-next:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 0 rgba(34, 153, 84, 0.7), 
+                  0 0 18px rgba(39, 174, 96, 0.7);
+    }
+
+    .btn-submit:disabled {
+      background: #444444;
+      color: #7a7a7a;
+      box-shadow: none;
+      transform: none;
+      cursor: not-allowed;
+      opacity: 0.4;
+    }
+
+    .btn-next {
+      background: linear-gradient(145deg, #fdbe35, #fba92d);
+      box-shadow: 0 6px 0 rgba(206, 141, 0, 0.6), 0 0 12px rgba(251, 169, 45, 0.5);
+      display: none;
+    }
+
+    /* Lower controls styling */
+    .lowerControls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 24px;
+      min-height: 80px;
+      z-index: 165;
+      background-color: transparent;
+      border-radius: 0 0 12px 12px;
+      transition: background-color 0.3s ease;
+    }
+
+    .lowerControls:hover {
+      background-color: rgba(255,255,255,0.03);
+    }
+
+    .btn-prev {
+      background-color: rgba(255,255,255,0.2);
+      color: #f0f0f0;
+      border-color: rgba(255,255,255,0.3);
+      font-size: 1.8rem;
+      font-weight: 600;
+      padding: 10px 30px;
+      min-height: 50px;
+      border-radius: 50px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-prev:hover {
+      background-color: rgba(255,255,255,0.3);
+      border-color: rgba(255,255,255,0.3);
+      box-shadow: none;
+    }
+
+    .btn-nav-next {
+      background: linear-gradient(145deg, #fdbe35, #fba92d);
+      box-shadow:
+        0 20px 20px rgba(251, 169, 45, 0.3),
+        inset 0 2px 1px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 3px rgba(0, 0, 0, 0.1),
+        0 4px 0px rgba(206, 141, 0, 0.6);
+      text-shadow: 0px 1px 2px rgba(175, 144, 5, 0.89);
+      color: #fff;
+      font-size: 1.8rem;
+      font-weight: 600;
+      padding: 10px 30px;
+      min-height: 50px;
+      border-radius: 50px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav-next[disabled] {
+      background: #444444 !important;
+      box-shadow: none !important;
+      text-shadow: none;
+      color: #7a7a7a !important;
+      transform: none !important;
+      opacity: 0.4;
+      border-color: #444444;
+    }
+
+    /* Progress indicator */
+    .progress-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background-color: rgba(0,0,0,0.15);
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      margin: 0 15px;
+    }
+
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .progress-dot.active {
+      background-color: #3498DB;
+      transform: scale(1.25);
+      box-shadow: 0 0 5px #3498DB;
+    }
+
+    .progress-dot:hover:not(.active) {
+      background-color: rgba(255,255,255,0.5);
+    }
+
+    .progress-dot.completed {
+      background-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+    /* Feedback styles */
+    .feedback {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      font-weight: bold;
+      padding: 20px 40px;
+      border-radius: 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 200;
+      text-align: center;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      animation: pop 0.5s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: translate(-50%, -50%) scale(0.5); }
+      70% { transform: translate(-50%, -50%) scale(1.1); }
+      100% { transform: translate(-50%, -50%) scale(1); }
+    }
+
+    .feedback-correct {
+      background-color: rgba(76, 175, 80, 0.9);
+      color: white;
+    }
+
+    .feedback-incorrect {
+      background-color: rgba(231, 76, 60, 0.9);
+      color: white;
+    }
+
+    /* ===== INTRO SCREEN STYLES ===== */
+    .intro-screen {
+      width: 1920px;
+      height: 1080px;
+      background: linear-gradient(135deg, #FFE5F1 0%, #E8F4FD 50%, #F0F8E8 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    }
+
+    /* Logo styling */
+    .logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 120px;
+      height: auto;
+      z-index: 101;
+    }
+
+    /* Marquee styling */
+    .top-marquee {
+      position: fixed;
+      top: 0;
+      right: 0;
+      height: 5vh;
+      background-color: rgba(0, 0, 0, 0.35);
+      color: white;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .marquee-content {
+      position: absolute;
+      white-space: nowrap;
+      animation: marquee-scroll 20s linear infinite;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      font-size: calc(1rem + 0.5vw);
+      padding: 0 20px;
+    }
+
+    @keyframes marquee-scroll {
+      0% {
+        transform: translateX(100%);
+      }
+      100% {
+        transform: translateX(-100%);
+      }
+    }
+
+    /* Intro language toggle button */
+    #introLangToggle {
+      position: absolute;
+      top: 40px;
+      right: 40px;
+      background: linear-gradient(145deg, #FF6B9E, #9C6AFF);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 24px;
+      font-weight: 600;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      box-shadow: 0 6px 0 rgba(156, 106, 255, 0.3), 0 0 20px rgba(255, 107, 158, 0.3);
+      transition: all 0.3s ease;
+      z-index: 100;
+    }
+
+    #introLangToggle:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 9px 0 rgba(156, 106, 255, 0.3), 0 0 25px rgba(255, 107, 158, 0.4);
+    }
+
+    #introLangToggle:active {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 0 rgba(156, 106, 255, 0.3), 0 0 15px rgba(255, 107, 158, 0.3);
+    }
+
+    /* Intro content container */
+    .intro-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 1600px;
+      padding: 40px;
+      animation: fadeInUp 1s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Main title */
+    .intro-title {
+      font-size: 120px;
+      font-weight: 700;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      background: linear-gradient(45deg, #FF6B9E, #9C6AFF, #4ECDC4, #45B7D1);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      animation: gradientShift 3s ease-in-out infinite;
+      line-height: 1.1;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Subtitle text */
+    .intro-subtitle {
+      font-size: 48px;
+      font-weight: 500;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      color: #2C3E50;
+      margin-bottom: 60px;
+      line-height: 1.3;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 1200px;
+    }
+
+    /* Character section */
+    .character-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 80px;
+      margin-bottom: 80px;
+      position: relative;
+    }
+
+    /* Character image */
+    .character-image {
+      width: 300px;
+      height: auto;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+      animation: float 3s ease-in-out infinite;
+      transition: transform 0.3s ease;
+    }
+
+    .character-image:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Speech bubble */
+    .speech-bubble {
+      position: relative;
+      background: linear-gradient(145deg, #FFFFFF, #F8F9FA);
+      border: 4px solid #FF6B9E;
+      border-radius: 30px;
+      padding: 40px 50px;
+      max-width: 600px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+      animation: bubblePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes bubblePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Speech bubble tail */
+    .speech-bubble::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 25px solid transparent;
+      border-bottom: 25px solid transparent;
+      border-right: 25px solid #FF6B9E;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      left: -12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-right: 20px solid #FFFFFF;
+    }
+
+    /* Speech bubble text */
+    .speech-bubble p {
+      font-size: 42px;
+      font-weight: 600;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      color: #2C3E50;
+      margin: 0;
+      line-height: 1.3;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    /* Start button */
+    .start-button {
+      background: linear-gradient(145deg, #4ECDC4, #45B7D1);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 30px 80px;
+      font-size: 64px;
+      font-weight: 700;
+      font-family: 'Baloo 2', 'Arial', sans-serif;
+      cursor: pointer;
+      box-shadow: 
+        0 12px 0 rgba(69, 183, 209, 0.4),
+        0 0 30px rgba(78, 205, 196, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      position: relative;
+      overflow: hidden;
+      animation: buttonBounce 2s ease-in-out infinite;
+    }
+
+    @keyframes buttonBounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .start-button:hover {
+      transform: translateY(-6px) scale(1.05);
+      box-shadow: 
+        0 18px 0 rgba(69, 183, 209, 0.4),
+        0 0 40px rgba(78, 205, 196, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+      animation: none;
+    }
+
+    .start-button:active {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 
+        0 8px 0 rgba(69, 183, 209, 0.4),
+        0 0 20px rgba(78, 205, 196, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Start button ripple effect */
+    .start-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .start-button:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .start-button span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Decorative elements */
+    .intro-screen::before {
+      content: '🏦';
+      position: absolute;
+      top: 100px;
+      left: 100px;
+      font-size: 80px;
+      opacity: 0.3;
+      animation: rotate 10s linear infinite;
+    }
+
+    .intro-screen::after {
+      content: '💰';
+      position: absolute;
+      bottom: 100px;
+      right: 100px;
+      font-size: 80px;
+      opacity: 0.3;
+      animation: rotate 8s linear infinite reverse;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Sparkle effects */
+    .intro-content::before {
+      content: '✨';
+      position: absolute;
+      top: 20%;
+      left: 10%;
+      font-size: 60px;
+      animation: sparkle 2s ease-in-out infinite;
+    }
+
+    .intro-content::after {
+      content: '⭐';
+      position: absolute;
+      top: 30%;
+      right: 15%;
+      font-size: 50px;
+      animation: sparkle 2.5s ease-in-out infinite 0.5s;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { 
+        opacity: 0.4;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    /* Responsive adjustments for intro screen */
+    @media (max-width: 1600px) {
+      .intro-title { font-size: 100px; }
+      .intro-subtitle { font-size: 40px; }
+      .speech-bubble p { font-size: 36px; }
+      .start-button { font-size: 56px; padding: 25px 70px; }
+      .character-image { width: 250px; }
+    }
+
+    @media (max-width: 1200px) {
+      .intro-title { font-size: 80px; }
+      .intro-subtitle { font-size: 32px; }
+      .speech-bubble p { font-size: 30px; }
+      .start-button { font-size: 48px; padding: 20px 60px; }
+      .character-image { width: 200px; }
+      .character-section { gap: 60px; }
+    }
+	
+	/* Special behaviour of place-value dropdowns */
+	.custom-dropdown.place-value .dropdown-content {
+	  height: auto;               /* let it size to content if less than 5 items */
+	  min-height: 250px;          /* ← adjust this to 5×(your row-height) */
+	  overflow-y: auto;           /* scroll once you hit 5 items */ 
+	  position: absolute;
+      top: -550%;
+      left: 0;
+      right: 0;
+	}
+	
+	/* Special font-size of "Place Value" */
+	.custom-dropdown.place-value .dropdown-button {
+	  font-size: calc(1.7rem + 0.1vw);
+	}
+  </style>
+</head>
+<body>
+  <!-- Logo - fixed at top left -->
+  <img src="assets/logo.png" alt="Logo" class="logo">
+  <!-- Marquee at top -->
+  <div class="top-marquee" id="topMarquee">
+    <div class="marquee-content">Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</div>
+  </div>
+  <div class="scale-container">
+    <div class="scale-wrapper">
+      <div class="applet-canvas">
+        <!-- INTRO SCREEN -->
+        <div class="intro-screen" id="introScreen">
+          <button id="introLangToggle">EN</button>
+          <div class="intro-content">
+            <h1 class="intro-title">Welcome to Number Bank!</h1>
+            <p class="intro-subtitle">You're at the bank, and your cheque is almost ready...<br>But there's one last thing to do —</p>
+            
+            <div class="character-section">
+              <img src="assets/jack_clap_ponytail.png" alt="Jack Character" class="character-image">
+              <div class="speech-bubble">
+                <p>Write the number in words, just like real grown-ups do!</p>
+              </div>
+            </div>
+            
+            <button class="start-button" id="startButton">
+              <span>Start</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="applet-container" id="mainApplet" style="display: none;">
+          <!-- TITLE BAR -->
+          <div class="titleBar">
+            <h1>Writing the Amount on a Cheque</h1>
+            <button id="langToggle">EN</button>
+          </div>
+          
+          <!-- ASSETS REGION -->
+          <div class="assets">
+            <!-- WORKING AREA CONTAINER -->
+            <div class="workingArea-container">
+              <!-- WORKING AREA -->
+              <div class="workingArea" id="workingArea">
+                <!-- Amount display -->
+                <div class="amount-display" id="amountDisplay">Rp. 1250</div>
+                
+                <!-- Dropdown container -->
+                <div class="dropdown-container" id="dropdownContainer">
+                  <div class="custom-dropdown yellow" id="dropdown1">
+                    <div class="dropdown-button" data-placeholder="Number">Number</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Number</div>
+                      <div class="dropdown-option" data-value="Zero">Zero</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Two">Two</div>
+                      <div class="dropdown-option" data-value="Three">Three</div>
+                      <div class="dropdown-option" data-value="Four">Four</div>
+                      <div class="dropdown-option" data-value="Five">Five</div>
+                      <div class="dropdown-option" data-value="Six">Six</div>
+                      <div class="dropdown-option" data-value="Seven">Seven</div>
+                      <div class="dropdown-option" data-value="Eight">Eight</div>
+                      <div class="dropdown-option" data-value="Nine">Nine</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown yellow place-value" id="dropdown2">
+                    <div class="dropdown-button" data-placeholder="Place Value">Place Value</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Place Value</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Ten">Ten</div>
+                      <div class="dropdown-option" data-value="Hundred">Hundred</div>
+                      <div class="dropdown-option" data-value="Thousand">Thousand</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown pink" id="dropdown3">
+                    <div class="dropdown-button" data-placeholder="Number">Number</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Number</div>
+                      <div class="dropdown-option" data-value="Zero">Zero</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Two">Two</div>
+                      <div class="dropdown-option" data-value="Three">Three</div>
+                      <div class="dropdown-option" data-value="Four">Four</div>
+                      <div class="dropdown-option" data-value="Five">Five</div>
+                      <div class="dropdown-option" data-value="Six">Six</div>
+                      <div class="dropdown-option" data-value="Seven">Seven</div>
+                      <div class="dropdown-option" data-value="Eight">Eight</div>
+                      <div class="dropdown-option" data-value="Nine">Nine</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown pink place-value" id="dropdown4">
+                    <div class="dropdown-button" data-placeholder="Place Value">Place Value</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Place Value</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Ten">Ten</div>
+                      <div class="dropdown-option" data-value="Hundred">Hundred</div>
+                      <div class="dropdown-option" data-value="Thousand">Thousand</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown blue" id="dropdown5">
+                    <div class="dropdown-button" data-placeholder="Number">Number</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Number</div>
+                      <div class="dropdown-option" data-value="Zero">Zero</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Two">Two</div>
+                      <div class="dropdown-option" data-value="Three">Three</div>
+                      <div class="dropdown-option" data-value="Four">Four</div>
+                      <div class="dropdown-option" data-value="Five">Five</div>
+                      <div class="dropdown-option" data-value="Six">Six</div>
+                      <div class="dropdown-option" data-value="Seven">Seven</div>
+                      <div class="dropdown-option" data-value="Eight">Eight</div>
+                      <div class="dropdown-option" data-value="Nine">Nine</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown blue place-value" id="dropdown6">
+                    <div class="dropdown-button" data-placeholder="Place Value">Place Value</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Place Value</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Ten">Ten</div>
+                      <div class="dropdown-option" data-value="Hundred">Hundred</div>
+                      <div class="dropdown-option" data-value="Thousand">Thousand</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown green" id="dropdown7">
+                    <div class="dropdown-button" data-placeholder="Number">Number</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Number</div>
+                      <div class="dropdown-option" data-value="Zero">Zero</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Two">Two</div>
+                      <div class="dropdown-option" data-value="Three">Three</div>
+                      <div class="dropdown-option" data-value="Four">Four</div>
+                      <div class="dropdown-option" data-value="Five">Five</div>
+                      <div class="dropdown-option" data-value="Six">Six</div>
+                      <div class="dropdown-option" data-value="Seven">Seven</div>
+                      <div class="dropdown-option" data-value="Eight">Eight</div>
+                      <div class="dropdown-option" data-value="Nine">Nine</div>
+                    </div>
+                  </div>
+                  
+                  <div class="custom-dropdown green place-value" id="dropdown8">
+                    <div class="dropdown-button" data-placeholder="Place Value">Place Value</div>
+                    <div class="dropdown-content">
+                      <div class="dropdown-option" data-value="">Place Value</div>
+                      <div class="dropdown-option" data-value="One">One</div>
+                      <div class="dropdown-option" data-value="Ten">Ten</div>
+                      <div class="dropdown-option" data-value="Hundred">Hundred</div>
+                      <div class="dropdown-option" data-value="Thousand">Thousand</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Final text display -->
+                <div class="final-text" id="finalText">One thousand two hundred fifty</div>
+                
+                <!-- Control buttons -->
+                <div class="control-buttons">
+                  <button class="btn-submit" id="submitButton" disabled>Submit</button>
+                  <button class="btn-next" id="nextQuestionButton">Next</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- NAVIGATION CONTROLS -->
+            <div class="lowerControls">
+              <button class="btn-prev" id="prevButton">&#9664; Prev</button>
+              <!-- Progress indicator -->
+              <div class="progress-container">
+                <div class="progress-dot active" data-index="0"></div>
+                <div class="progress-dot" data-index="1"></div>
+                <div class="progress-dot" data-index="2"></div>
+                <div class="progress-dot" data-index="3"></div>
+                <div class="progress-dot" data-index="4"></div>
+                <div class="progress-dot" data-index="5"></div>
+                <div class="progress-dot" data-index="6"></div>
+                <div class="progress-dot" data-index="7"></div>
+                <div class="progress-dot" data-index="8"></div>
+                <div class="progress-dot" data-index="9"></div>
+              </div>
+              <button class="btn-nav-next" id="navNextButton">Next &#9654;</button>
+            </div>
+          </div>
+        </div>
+        <!-- Feedback overlay -->
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global AudioContext
+    let globalAudioContext = null;
+    
+    // Function to initialize AudioContext on user interaction
+    function initAudioContext() {
+      if (globalAudioContext === null) {
+        try {
+          globalAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+          console.log('AudioContext initialized successfully');
+        } catch (e) {
+          console.error('Failed to initialize AudioContext:', e);
+          globalAudioContext = 'unavailable';
+        }
+      }
+      return globalAudioContext !== 'unavailable' ? globalAudioContext : null;
+    }
+    
+    // ==== Bilingual Text Setup ====
+    let lang = 'id'; // Default to Indonesian
+    const enableLangToggle = false;
+    const langText = {
+      en: {
+        title: 'Pick Number and Place Value to Write the Cheque Amount',
+        submit: 'Submit',
+        next: 'Next',
+        goodJob: 'Good job!',
+        tryAgain: 'Try again!',
+        previous: '&#9664; Prev',
+        navNext: 'Next &#9654;',
+        number: 'Number',
+        placeValue: 'Place Value',
+        numbers: ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'],
+        placeValues: ['One', 'Ten', 'Hundred', 'Thousand'],
+        // Intro screen text
+        introTitle: 'Welcome to Number Bank!',
+        introSubtitle: 'You\'re at the bank, and your cheque is almost ready...<br>But there\'s one last thing to do —',
+        speechBubble: 'Write the number in words, just like real grown-ups do!',
+        startButton: 'Start',
+        numberWords: {
+          0: 'Zero', 1: 'One', 2: 'Two', 3: 'Three', 4: 'Four', 5: 'Five', 
+          6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten',
+          11: 'Eleven', 12: 'Twelve', 13: 'Thirteen', 14: 'Fourteen', 15: 'Fifteen',
+          16: 'Sixteen', 17: 'Seventeen', 18: 'Eighteen', 19: 'Nineteen',
+          20: 'Twenty', 30: 'Thirty', 40: 'Forty', 50: 'Fifty', 60: 'Sixty',
+          70: 'Seventy', 80: 'Eighty', 90: 'Ninety', 100: 'Hundred', 1000: 'Thousand'
+        }
+      },
+      id: {
+        title: 'Pilih angka dan nilai tempat untuk menulis jumlah cek',
+        submit: 'Kirim',
+        next: 'Selanjutnya',
+        goodJob: 'Bagus sekali!',
+        tryAgain: 'Coba lagi!',
+        previous: '&#9664; Sebelumnya',
+        navNext: 'Selanjutnya &#9654;',
+        number: 'Angka',
+        placeValue: 'Nilai Tempat',
+        numbers: ['Nol', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan'],
+        placeValues: ['Satu', 'Puluh', 'Ratus', 'Ribu'],
+        // Intro screen text
+        introTitle: 'Selamat Datang di Bank Angka!',
+        introSubtitle: 'Kamu sedang di bank, dan cekmu hampir siap...<br>Tapi ada satu hal terakhir yang harus dilakukan',
+        speechBubble: 'Tulis bilangan-bilangan tersebut dalam bentuk kata, perhatikan juga nilai tempatnya!',
+        startButton: 'Mulai',
+        numberWords: {
+          0: 'Nol', 1: 'Satu', 2: 'Dua', 3: 'Tiga', 4: 'Empat', 5: 'Lima',
+          6: 'Enam', 7: 'Tujuh', 8: 'Delapan', 9: 'Sembilan', 10: 'Sepuluh',
+          11: 'Sebelas', 12: 'Dua Belas', 13: 'Tiga Belas', 14: 'Empat Belas', 15: 'Lima Belas',
+          16: 'Enam Belas', 17: 'Tujuh Belas', 18: 'Delapan Belas', 19: 'Sembilan Belas',
+          20: 'Dua Puluh', 30: 'Tiga Puluh', 40: 'Empat Puluh', 50: 'Lima Puluh', 60: 'Enam Puluh',
+          70: 'Tujuh Puluh', 80: 'Delapan Puluh', 90: 'Sembilan Puluh', 100: 'Seratus', 1000: 'Seribu'
+        }
+      }
+    };
+
+    // Audio Functions
+    function playSound(frequency, duration = 200, type = 'sine') {
+      // Use the global AudioContext or try to initialize it
+      const audioContext = globalAudioContext || initAudioContext();
+      
+      // If AudioContext is not available, just log and return
+      if (!audioContext) {
+        console.log('Audio not available');
+        return;
+      }
+      
+      try {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        oscillator.type = type;
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration / 1000);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + duration / 1000);
+      } catch (e) {
+        console.log('Error playing sound:', e);
+      }
+    }
+    
+    function playClickSound() {
+      playSound(600, 40, 'sine');
+      setTimeout(() => playSound(800, 20, 'sine'), 40);
+    }
+    
+    function playCorrectSound() {
+      playSound(784, 80, 'triangle');
+      playSound(988, 80, 'triangle');
+      setTimeout(() => playSound(1319, 200, 'triangle'), 160);
+      
+      setTimeout(() => {
+        for (let i = 0; i < 4; i++) {
+          setTimeout(() => {
+            playSound(1500 + (i * 200), 60, 'triangle');
+          }, i * 60);
+        }
+      }, 360);
+    }
+    
+    function playIncorrectSound() {
+      playSound(392, 100, 'sine');
+      setTimeout(() => playSound(330, 300, 'sine'), 100);
+      
+      setTimeout(() => {
+        playSound(349, 80, 'sine');
+      }, 400);
+    }
+
+    // Question data
+    const questions = [
+      {
+        amount: "1250",
+        correct: ["One", "Thousand", "Two", "Hundred", "Five", "Ten", "Zero", "One"],
+        finalText: "One thousand two hundred fifty"
+      },
+      {
+        amount: "2300",
+        correct: ["Two", "Thousand", "Three", "Hundred", "Zero", "Ten", "Zero", "One"],
+        finalText: "Two thousand three hundred"
+      },
+      {
+        amount: "3999",
+        correct: ["Three", "Thousand", "Nine", "Hundred", "Nine", "Ten", "Nine", "One"],
+        finalText: "Three thousand nine hundred ninety-nine"
+      },
+      {
+        amount: "450",
+        correct: ["Zero", "Thousand", "Four", "Hundred", "Five", "Ten", "Zero", "One"],
+        finalText: "Four hundred fifty"
+      },
+      {
+        amount: "5875",
+        correct: ["Five", "Thousand", "Eight", "Hundred", "Seven", "Ten", "Five", "One"],
+        finalText: "Five thousand eight hundred seventy-five"
+      },
+      {
+        amount: "6020",
+        correct: ["Six", "Thousand", "Zero", "Hundred", "Two", "Ten", "Zero", "One"],
+        finalText: "Six thousand twenty"
+      },
+      {
+        amount: "715",
+        correct: ["Zero", "Thousand", "Seven", "Hundred", "One", "Ten", "Five", "One"],
+        finalText: "Seven hundred fifteen"
+      },
+      {
+        amount: "8440",
+        correct: ["Eight", "Thousand", "Four", "Hundred", "Four", "Ten", "Zero", "One"],
+        finalText: "Eight thousand four hundred forty"
+      },
+      {
+        amount: "9975",
+        correct: ["Nine", "Thousand", "Nine", "Hundred", "Seven", "Ten", "Five", "One"],
+        finalText: "Nine thousand nine hundred seventy-five"
+      },
+      {
+        amount: "999",
+        correct: ["Zero", "Thousand", "Nine", "Hundred", "Nine", "Ten", "Nine", "One"],
+        finalText: "Nine hundred ninety-nine"
+      }
+    ];
+
+    // Game state
+    let currentQuestion = 0;
+    let completedQuestions = new Array(10).fill(false);
+    let questionStates = new Array(10).fill(null).map(() => ({
+      dropdownValues: new Array(8).fill(''),
+      isCompleted: false,
+      finalText: ''
+    }));
+
+    // DOM elements
+    const amountDisplayEl = document.getElementById('amountDisplay');
+    const dropdownContainerEl = document.getElementById('dropdownContainer');
+    const finalTextEl = document.getElementById('finalText');
+    const submitButtonEl = document.getElementById('submitButton');
+    const nextQuestionButtonEl = document.getElementById('nextQuestionButton');
+    const prevButtonEl = document.getElementById('prevButton');
+    const navNextButtonEl = document.getElementById('navNextButton');
+    const progressDots = document.querySelectorAll('.progress-dot');
+    const feedbackEl = document.getElementById('feedback');
+    const dropdowns = [];
+
+    // Initialize dropdowns array
+    for (let i = 1; i <= 8; i++) {
+      dropdowns.push(document.getElementById(`dropdown${i}`));
+    }
+
+    // Initialize the applet
+    document.addEventListener('DOMContentLoaded', () => {
+      setupIntroScreen();
+      setupEventListeners();
+      loadQuestion(currentQuestion);
+      updateProgressDots();
+      updateNavigationButtons();
+      initializeLanguageSystem();
+      
+      // Add event listeners to initialize AudioContext on first user interaction
+      document.addEventListener('click', function initAudioOnFirstInteraction() {
+        initAudioContext();
+        // Remove this listener after first interaction
+        document.removeEventListener('click', initAudioOnFirstInteraction);
+      }, { once: true });
+    });
+
+    // ===== INTRO SCREEN FUNCTIONALITY =====
+    function setupIntroScreen() {
+      const startButton = document.getElementById('startButton');
+      // Remove introLangToggle functionality and hide the button
+      const introLangToggle = document.getElementById('introLangToggle');
+      if (introLangToggle) introLangToggle.style.display = 'none';
+      const introScreen = document.getElementById('introScreen');
+      const mainApplet = document.getElementById('mainApplet');
+
+      // Start button functionality
+      startButton.addEventListener('click', () => {
+        // Initialize AudioContext if not already done
+        initAudioContext();
+        playClickSound();
+        
+        // Add exit animation to intro screen
+        introScreen.style.animation = 'fadeOutDown 0.8s ease-in-out forwards';
+        
+        setTimeout(() => {
+          // Hide intro screen and show main applet
+          introScreen.style.display = 'none';
+          mainApplet.style.display = 'flex';
+          
+          // Add entrance animation to main applet
+          mainApplet.style.animation = 'fadeInUp 0.8s ease-out';
+        }, 800);
+      });
+      // Remove intro language toggle functionality
+      // Initialize intro text
+      updateIntroText();
+    }
+
+    // Function to update intro screen text based on current language
+    function updateIntroText() {
+      const introTitle = document.querySelector('.intro-title');
+      const introSubtitle = document.querySelector('.intro-subtitle');
+      const speechBubbleText = document.querySelector('.speech-bubble p');
+      const startButtonText = document.querySelector('.start-button span');
+
+      introTitle.textContent = langText[lang].introTitle;
+      introSubtitle.innerHTML = langText[lang].introSubtitle;
+      speechBubbleText.textContent = langText[lang].speechBubble;
+      startButtonText.textContent = langText[lang].startButton;
+    }
+
+    // Add CSS animations for screen transitions
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes fadeOutDown {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    `;
+    document.head.appendChild(style);
+
+    function setupEventListeners() {
+      // Custom dropdown events
+      dropdowns.forEach((dropdown, index) => {
+        const button = dropdown.querySelector('.dropdown-button');
+        const content = dropdown.querySelector('.dropdown-content');
+        const options = dropdown.querySelectorAll('.dropdown-option');
+
+        // Toggle dropdown on button click
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playClickSound();
+          
+          // Close all other dropdowns
+          dropdowns.forEach((otherDropdown, otherIndex) => {
+            if (otherIndex !== index) {
+              otherDropdown.classList.remove('open');
+            }
+          });
+          // Toggle current dropdown
+          dropdown.classList.toggle('open');
+        });
+
+        // Handle option selection
+        options.forEach(option => {
+          option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            playClickSound();
+            
+            const value = option.getAttribute('data-value');
+            const text = option.textContent;
+            
+            // Update button text
+            if (value === '') {
+              button.textContent = button.getAttribute('data-placeholder');
+            } else {
+              button.textContent = text;
+            }
+            
+            // Update selected state
+            options.forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+            
+            // Store value and update game state
+            questionStates[currentQuestion].dropdownValues[index] = value;
+            dropdown.setAttribute('data-value', value);
+            
+            // Close dropdown
+            dropdown.classList.remove('open');
+            
+            updateSubmitButton();
+          });
+        });
+      });
+
+      // Close dropdowns when clicking outside
+      document.addEventListener('click', () => {
+        dropdowns.forEach(dropdown => {
+          dropdown.classList.remove('open');
+        });
+      });
+
+      // Submit button
+      submitButtonEl.addEventListener('click', checkAnswer);
+
+      // Next question button
+      nextQuestionButtonEl.addEventListener('click', () => {
+        playClickSound();
+        if (currentQuestion < 9) {
+          currentQuestion++;
+          loadQuestion(currentQuestion);
+          updateProgressDots();
+          updateNavigationButtons();
+        }
+      });
+
+      // Navigation buttons
+      prevButtonEl.addEventListener('click', () => {
+        playClickSound();
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          loadQuestion(currentQuestion);
+          updateProgressDots();
+          updateNavigationButtons();
+        }
+      });
+
+      navNextButtonEl.addEventListener('click', () => {
+        playClickSound();
+        if (currentQuestion < 9 && completedQuestions[currentQuestion]) {
+          currentQuestion++;
+          loadQuestion(currentQuestion);
+          updateProgressDots();
+          updateNavigationButtons();
+        }
+      });
+
+      // Progress dots
+      progressDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          playClickSound();
+          currentQuestion = index;
+          loadQuestion(currentQuestion);
+          updateProgressDots();
+          updateNavigationButtons();
+        });
+      });
+    }
+
+    function loadQuestion(questionIndex) {
+      const question = questions[questionIndex];
+      const state = questionStates[questionIndex];
+      
+      // Update amount display
+      amountDisplayEl.textContent = question.amount;
+      
+      if (state.isCompleted) {
+        // Show completed state
+        dropdownContainerEl.style.display = 'none';
+        finalTextEl.style.display = 'block';
+        finalTextEl.textContent = state.finalText;
+        submitButtonEl.style.display = 'none';
+        nextQuestionButtonEl.style.display = 'none';
+      } else {
+        // Show dropdown state
+        dropdownContainerEl.style.display = 'flex';
+        finalTextEl.style.display = 'none';
+        submitButtonEl.style.display = 'block';
+        nextQuestionButtonEl.style.display = 'none';
+        
+        // Restore dropdown values for custom dropdowns
+        dropdowns.forEach((dropdown, index) => {
+          const button = dropdown.querySelector('.dropdown-button');
+          const options = dropdown.querySelectorAll('.dropdown-option');
+          const savedValue = state.dropdownValues[index];
+          
+          // Reset all options
+          options.forEach(opt => opt.classList.remove('selected'));
+          
+          if (savedValue === '') {
+            // Reset to placeholder
+            button.textContent = button.getAttribute('data-placeholder');
+            dropdown.setAttribute('data-value', '');
+          } else {
+            // Find and select the correct option
+            const selectedOption = Array.from(options).find(opt => 
+              opt.getAttribute('data-value') === savedValue
+            );
+            if (selectedOption) {
+              button.textContent = selectedOption.textContent;
+              selectedOption.classList.add('selected');
+              dropdown.setAttribute('data-value', savedValue);
+            }
+          }
+          
+          // Close dropdown
+          dropdown.classList.remove('open');
+        });
+        
+        updateSubmitButton();
+      }
+    }
+
+    function updateSubmitButton() {
+      const allSelected = questionStates[currentQuestion].dropdownValues.every(value => value !== '');
+      submitButtonEl.disabled = !allSelected;
+    }
+
+    function checkAnswer() {
+      playClickSound();
+      
+      const userAnswers = questionStates[currentQuestion].dropdownValues;
+      const correctAnswers = questions[currentQuestion].correct;
+      
+      let isCorrect = true;
+      for (let i = 0; i < 8; i++) {
+        if (userAnswers[i] !== correctAnswers[i]) {
+          isCorrect = false;
+          break;
+        }
+      }
+      
+      if (isCorrect) {
+        // Correct answer
+        playCorrectSound();
+        showFeedback(langText[lang].goodJob, true);
+        
+        // Mark question as completed
+        questionStates[currentQuestion].isCompleted = true;
+        questionStates[currentQuestion].finalText = questions[currentQuestion].finalText;
+        completedQuestions[currentQuestion] = true;
+        
+        setTimeout(() => {
+          // Show final text
+          dropdownContainerEl.style.display = 'none';
+          finalTextEl.style.display = 'block';
+          
+          // Get translated text and display it
+          const originalText = questions[currentQuestion].finalText;
+          const translatedText = translateFinalText(originalText);
+          finalTextEl.textContent = translatedText;
+          questionStates[currentQuestion].finalText = translatedText;
+          
+          // Hide both submit and next buttons - user should use navigation controls
+          submitButtonEl.style.display = 'none';
+          nextQuestionButtonEl.style.display = 'none';
+          
+          updateProgressDots();
+          updateNavigationButtons();
+          
+          // Read out the final answer with a slight delay
+          setTimeout(() => {
+            speakText(translatedText);
+          }, 500);
+        }, 1500);
+      } else {
+        // Incorrect answer
+        playIncorrectSound();
+        showFeedback(langText[lang].tryAgain, false);
+        
+        // Clear all dropdowns
+        questionStates[currentQuestion].dropdownValues = new Array(8).fill('');
+        dropdowns.forEach(dropdown => {
+          const button = dropdown.querySelector('.dropdown-button');
+          const options = dropdown.querySelectorAll('.dropdown-option');
+          
+          // Reset to placeholder
+          button.textContent = button.getAttribute('data-placeholder');
+          dropdown.setAttribute('data-value', '');
+          
+          // Remove selected state from all options
+          options.forEach(opt => opt.classList.remove('selected'));
+          
+          // Close dropdown
+          dropdown.classList.remove('open');
+        });
+        
+        updateSubmitButton();
+      }
+    }
+
+    function showFeedback(message, isCorrect) {
+      feedbackEl.textContent = message;
+      feedbackEl.className = `feedback ${isCorrect ? 'feedback-correct' : 'feedback-incorrect'} show`;
+      
+      setTimeout(() => {
+        feedbackEl.classList.remove('show');
+      }, 1500);
+    }
+
+    function updateProgressDots() {
+      progressDots.forEach((dot, index) => {
+        dot.classList.remove('active', 'completed');
+        
+        if (index === currentQuestion) {
+          dot.classList.add('active');
+        } else if (completedQuestions[index]) {
+          dot.classList.add('completed');
+        }
+      });
+    }
+
+    function updateNavigationButtons() {
+      prevButtonEl.disabled = currentQuestion === 0;
+      navNextButtonEl.disabled = currentQuestion === 9 || !completedQuestions[currentQuestion];
+    }
+
+    // Dynamic scale factor calculation for the scale-wrapper
+    function calculateScale() {
+      const container = document.querySelector('.scale-container');
+      const wrapper = document.querySelector('.scale-wrapper');
+      
+      // Get container dimensions
+      const containerWidth = container.clientWidth;
+      const containerHeight = container.clientHeight;
+      
+      // Calculate scale factors
+      const scaleX = containerWidth / 1920;
+      const scaleY = containerHeight / 1080;
+      
+      // Use the smaller scale factor to ensure the entire app fits
+      const scale = Math.min(scaleX, scaleY);
+      
+      // Apply the scale transform
+      wrapper.style.transform = `scale(${scale})`;
+    }
+
+    // Run on load
+    window.addEventListener('load', () => {
+      calculateScale();
+    });
+
+    // Recalculate on window resize
+    window.addEventListener('resize', () => {
+      calculateScale();
+      updateMarqueePosition();
+    });
+
+    // Update marquee position based on logo position
+    function updateMarqueePosition() {
+      const marquee = document.getElementById('topMarquee');
+      const logos = document.querySelectorAll('.logo');
+      let maxLogoRight = 0;
+
+      logos.forEach(logo => {
+        const rect = logo.getBoundingClientRect();
+        const logoRight = rect.right;
+        if (logoRight > maxLogoRight) {
+          maxLogoRight = logoRight;
+        }
+      });
+
+      if (maxLogoRight > 0) {
+        marquee.style.left = maxLogoRight + 'px';
+      } else {
+        // Fallback: use calculated position based on logo size (120px + 20px margin = 140px scaled)
+        const scaleContainer = document.querySelector('.scale-container');
+        const scaleWrapper = document.querySelector('.scale-wrapper');
+        if (scaleContainer && scaleWrapper) {
+          const containerRect = scaleContainer.getBoundingClientRect();
+          const wrapperRect = scaleWrapper.getBoundingClientRect();
+          const scaleX = wrapperRect.width / 1920;
+          const logoRightEdge = containerRect.left + (wrapperRect.left - containerRect.left) + (20 + 120) * scaleX;
+          marquee.style.left = logoRightEdge + 'px';
+        }
+      }
+    }
+
+    // Update marquee position after page loads and scale is calculated
+    window.addEventListener('load', () => {
+      setTimeout(updateMarqueePosition, 100);
+    });
+
+    // ===== Language Toggle Functionality =====
+    function initializeLanguageSystem() {
+      // Always hide language toggle
+      document.getElementById('langToggle').style.display = 'none';
+      // Initialize all text with the current language
+      updateAllText();
+      // Remove language toggle event listener
+    }
+
+    // Global variable to store the keep-alive interval
+    let speechSynthesisKeepAlive = null;
+
+    // Text-to-speech function with keep-alive mechanism
+    function speakText(txt) {
+      if ('speechSynthesis' in window) {
+        // Cancel any ongoing speech
+        speechSynthesis.cancel();
+        
+        // Clear any existing keep-alive interval
+        if (speechSynthesisKeepAlive) {
+          clearInterval(speechSynthesisKeepAlive);
+          speechSynthesisKeepAlive = null;
+        }
+        
+        const msg = new SpeechSynthesisUtterance(txt);
+        msg.lang = lang === 'en' ? "en-US" : "id-ID";
+        msg.rate = 0.8; // Slightly slower for clarity
+        msg.volume = 0.8;
+        
+        // Add event listeners to handle speech lifecycle
+        msg.onend = function() {
+          if (speechSynthesisKeepAlive) {
+            clearInterval(speechSynthesisKeepAlive);
+            speechSynthesisKeepAlive = null;
+          }
+        };
+        
+        msg.onerror = function() {
+          if (speechSynthesisKeepAlive) {
+            clearInterval(speechSynthesisKeepAlive);
+            speechSynthesisKeepAlive = null;
+          }
+        };
+        
+        // Small delay to ensure speech synthesis is ready
+        setTimeout(() => {
+          speechSynthesis.speak(msg);
+          
+          // Set up the keep-alive interval
+          speechSynthesisKeepAlive = setInterval(() => {
+            // Check if speaking
+            if (speechSynthesis.speaking) {
+              // Pause and resume to keep the speech alive
+              speechSynthesis.pause();
+              speechSynthesis.resume();
+            } else {
+              // Clear interval if speech has finished
+              clearInterval(speechSynthesisKeepAlive);
+              speechSynthesisKeepAlive = null;
+            }
+          }, 250); // Check every 250ms
+        }, 100);
+      }
+    }
+    
+    // Handle page visibility changes to maintain speech
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible' && speechSynthesis.paused) {
+        speechSynthesis.resume();
+      }
+    });
+
+    // Function to convert English final text to Indonesian
+    function translateFinalText(englishText) {
+      if (lang === 'en') return englishText;
+      
+      // Simple translation mapping for the final answers
+      const translations = {
+        'One thousand two hundred fifty': 'Seribu dua ratus lima puluh',
+        'Two thousand three hundred': 'Dua ribu tiga ratus',
+        'Three thousand nine hundred ninety-nine': 'Tiga ribu sembilan ratus sembilan puluh sembilan',
+        'Four hundred fifty': 'Empat ratus lima puluh',
+        'Five thousand eight hundred seventy-five': 'Lima ribu delapan ratus tujuh puluh lima',
+        'Six thousand twenty': 'Enam ribu dua puluh',
+        'Seven hundred fifteen': 'Tujuh ratus lima belas',
+        'Eight thousand four hundred forty': 'Delapan ribu empat ratus empat puluh',
+        'Nine thousand nine hundred seventy-five': 'Sembilan ribu sembilan ratus tujuh puluh lima',
+        'Nine hundred ninety-nine': 'Sembilan ratus sembilan puluh sembilan'
+      };
+      
+      return translations[englishText] || englishText;
+    }
+
+    // Function to update all text elements based on current language
+    function updateAllText() {
+      // Update title
+      document.querySelector('.titleBar h1').textContent = langText[lang].title;
+      
+      // Update navigation buttons
+      prevButtonEl.innerHTML = langText[lang].previous;
+      navNextButtonEl.innerHTML = langText[lang].navNext;
+      
+      // Update submit and next buttons
+      submitButtonEl.textContent = langText[lang].submit;
+      nextQuestionButtonEl.textContent = langText[lang].next;
+      
+      // Update dropdown options completely
+      updateDropdownOptions();
+      
+      // Update final text if currently displayed
+      if (finalTextEl.style.display === 'block') {
+        const originalText = questions[currentQuestion].finalText;
+        const translatedText = translateFinalText(originalText);
+        finalTextEl.textContent = translatedText;
+        questionStates[currentQuestion].finalText = translatedText;
+      }
+    }
+
+    // Function to update all dropdown options based on current language
+    function updateDropdownOptions() {
+      const numberDropdowns = [0, 2, 4, 6]; // Indices for number dropdowns
+      const placeValueDropdowns = [1, 3, 5, 7]; // Indices for place value dropdowns
+      
+      // Update number dropdowns
+      numberDropdowns.forEach(index => {
+        const dropdown = dropdowns[index];
+        const button = dropdown.querySelector('.dropdown-button');
+        const content = dropdown.querySelector('.dropdown-content');
+        const currentValue = dropdown.getAttribute('data-value') || '';
+        
+        // Update placeholder
+        button.setAttribute('data-placeholder', langText[lang].number);
+        if (currentValue === '') {
+          button.textContent = langText[lang].number;
+        }
+        
+        // Clear and rebuild options
+        content.innerHTML = '';
+        
+        // Add placeholder option
+        const placeholderOption = document.createElement('div');
+        placeholderOption.className = 'dropdown-option';
+        placeholderOption.setAttribute('data-value', '');
+        placeholderOption.textContent = langText[lang].number;
+        content.appendChild(placeholderOption);
+        
+        // Add number options
+        langText[lang].numbers.forEach((numberText, numberIndex) => {
+          const option = document.createElement('div');
+          option.className = 'dropdown-option';
+          option.setAttribute('data-value', langText['en'].numbers[numberIndex]); // Keep English values for logic
+          option.textContent = numberText;
+          
+          // Mark as selected if it matches current value
+          if (langText['en'].numbers[numberIndex] === currentValue) {
+            option.classList.add('selected');
+            button.textContent = numberText;
+          }
+          
+          content.appendChild(option);
+        });
+        
+        // Re-attach event listeners for new options
+        attachOptionListeners(dropdown, index);
+      });
+      
+      // Update place value dropdowns
+      placeValueDropdowns.forEach(index => {
+        const dropdown = dropdowns[index];
+        const button = dropdown.querySelector('.dropdown-button');
+        const content = dropdown.querySelector('.dropdown-content');
+        const currentValue = dropdown.getAttribute('data-value') || '';
+        
+        // Update placeholder
+        button.setAttribute('data-placeholder', langText[lang].placeValue);
+        if (currentValue === '') {
+          button.textContent = langText[lang].placeValue;
+        }
+        
+        // Clear and rebuild options
+        content.innerHTML = '';
+        
+        // Add placeholder option
+        const placeholderOption = document.createElement('div');
+        placeholderOption.className = 'dropdown-option';
+        placeholderOption.setAttribute('data-value', '');
+        placeholderOption.textContent = langText[lang].placeValue;
+        content.appendChild(placeholderOption);
+        
+        // Add place value options
+        langText[lang].placeValues.forEach((placeText, placeIndex) => {
+          const option = document.createElement('div');
+          option.className = 'dropdown-option';
+          option.setAttribute('data-value', langText['en'].placeValues[placeIndex]); // Keep English values for logic
+          option.textContent = placeText;
+          
+          // Mark as selected if it matches current value
+          if (langText['en'].placeValues[placeIndex] === currentValue) {
+            option.classList.add('selected');
+            button.textContent = placeText;
+          }
+          
+          content.appendChild(option);
+        });
+        
+        // Re-attach event listeners for new options
+        attachOptionListeners(dropdown, index);
+      });
+    }
+
+    // Helper function to attach event listeners to dropdown options
+    function attachOptionListeners(dropdown, index) {
+      const options = dropdown.querySelectorAll('.dropdown-option');
+      
+      options.forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.stopPropagation();
+          playClickSound();
+          
+          const value = option.getAttribute('data-value');
+          const text = option.textContent;
+          const button = dropdown.querySelector('.dropdown-button');
+          
+          // Update button text
+          if (value === '') {
+            button.textContent = button.getAttribute('data-placeholder');
+          } else {
+            button.textContent = text;
+          }
+          
+          // Update selected state
+          options.forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          
+          // Store value and update game state
+          questionStates[currentQuestion].dropdownValues[index] = value;
+          dropdown.setAttribute('data-value', value);
+          
+          // Close dropdown
+          dropdown.classList.remove('open');
+          
+          updateSubmitButton();
+        });
+      });
+    }
+  </script>
+</body>
+</html>

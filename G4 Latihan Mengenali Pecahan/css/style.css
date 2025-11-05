@@ -1,0 +1,543 @@
+/********************************************
+ * 1) GLOBAL & BODY STYLES
+ *********************************************/
+:root {
+  --bg-color: #e0f7fa; /* Light Cyan */
+  --panel-bg: #ffffff;
+  --text-dark: #fafafa; /* Blue Grey 800 */
+  --text-light: #546e7a;
+  --text-accent: #10adf6; /* Blue Grey 600 */
+  --primary-accent: #ffb74d; /* Orange 300 */
+  --primary-shadow: #e63600; /* Orange 900 */
+  --secondary-accent: #1bd024; /* Green 300 */
+  --secondary-shadow: #2e7d32; /* Green 800 */
+  --incorrect-accent: #d74343; /* Red 300 */
+  --incorrect-shadow: #c62828; /* Red 800 */
+  --highlight-glow: #ffc977; /* Yellow Glow */
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "Roboto", "Segoe UI", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+.logo {
+  position: fixed;
+  bottom: 1vw;
+  left: 1vw;
+  width: clamp(80px, 12vw, 150px);
+  height: auto;
+  z-index: 1001;
+}
+.top-marquee {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4vh;
+  background-color: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+  z-index: 999;
+  white-space: nowrap;
+}
+.marquee-text {
+  color: white;
+  font-size: calc(0.5rem + 1vw);
+  padding: 0 2vw;
+  display: inline-block;
+  animation: marquee-scroll 30s linear infinite;
+}
+@keyframes marquee-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+@media (max-width: 768px) {
+  .logo {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: clamp(60px, 15vw, 120px);
+  }
+}
+@media (max-width: 480px) {
+  .logo {
+    bottom: 0.5rem;
+    left: 0.5rem;
+    width: clamp(50px, 20vw, 100px);
+  }
+}
+.titleBar {
+  display: none;
+}
+/********************************************
+ * 2) APPLET CONTAINER & LAYOUT
+ *********************************************/
+.applet-container {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+  max-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: 0 1vh 3vw rgba(0, 0, 0, 0.15);
+  background-image: url("../assets/DarkBG.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  gap: 1vw;
+  padding: 1vw;
+}
+.main-layout {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  gap: 1vw;
+}
+/* Panels */
+.left-panel-anchor {
+  width: 30%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1vh;
+  justify-content: flex-end;
+}
+.right-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  -webkit-backdrop-filter: blur(0.1vw);
+    backdrop-filter: blur(0.1vw);
+  border-radius: 2vw;
+  overflow: hidden;
+}
+/* Initial State: Character centered */
+.initial-state .right-panel-content {
+  display: none;
+}
+.initial-state .main-layout {
+  justify-content: center;
+  align-items: center;
+}
+.initial-state .left-panel-anchor {
+  width: 60%;
+  max-width: 60vw;
+  height: 100%;
+  justify-content: center;
+  flex-direction: row;
+  align-items: center;
+}
+.initial-state .speech-bubble-container {
+  max-height: 60%;
+  width: 40%;
+  transform: scale(1.1);
+}
+.initial-state .character-display {
+  height: 60%;
+  width: 60%;
+}
+.initial-state .contextBox::after {
+  top: 15%;
+  right: -2vw;
+  rotate: -90deg;
+}
+.initial-state .lowerControls {
+    position: absolute;
+    bottom: 8vh;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+/********************************************
+ * 3) CHARACTER & SPEECH BUBBLE
+ *********************************************/
+.character-display {
+  width: 100%;
+  height: 44%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: -2vh;
+}
+#characterImageElement {
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+.speech-bubble-container {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  max-height: 48%;
+}
+.contextBox {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2vh 1.5vw;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1.5vw;
+  box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.1);
+  border: 3px solid #b3e5fc; /* Light Blue Border */
+  transition: all 0.3s ease;
+}
+.contextBox::after {
+  content: "";
+  position: absolute;
+  bottom: -2.5vh;
+  right: 45%;
+  width: 0;
+  height: 0;
+  border: 1.5vw solid transparent;
+  border-top-color: #b3e5fc;
+  border-bottom: 0;
+  transition: all 0.3s ease;
+}
+.contextBox.correct {
+  background: #e8f5e9; /* Light Green */
+  border-color: var(--secondary-accent);
+}
+.contextBox.correct::after {
+  border-top-color: var(--secondary-accent);
+}
+.contextBox.incorrect {
+  background: #ffebee; /* Light Red */
+  border-color: var(--incorrect-accent);
+}
+.contextBox.incorrect::after {
+  border-top-color: var(--incorrect-accent);
+}
+.contextBox .context-section h2 {
+  font-size: calc(0.25rem + 1.5vw);
+  color: #0277bd; /* Dark Blue */
+  margin-bottom: 1vh;
+  font-weight: 700;
+}
+.contextBox .context-section p {
+  font-size: calc(0.25rem + 1.2vw);
+  color: var(--text-light);
+}
+.vertical-fraction {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: inherit;
+  margin: 0 0.5vw;
+  vertical-align: middle;
+  font-weight: bold;
+  color: var(--text-accent);
+  text-shadow: 1px 1px 1px rgba(0,0,0,0.1);
+}
+.vertical-fraction::before {
+  content: attr(data-numerator);
+  border-bottom: 0.2vw solid currentColor;
+  padding-bottom: 0.3vw;
+  line-height: 1;
+}
+.vertical-fraction::after {
+  content: attr(data-denominator);
+  padding-top: 0.25vw;
+  line-height: 1;
+}
+/********************************************
+ * 4) WORKING AREA & CONTROLS
+ *********************************************/
+.workingArea-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+  gap: 2vh;
+  height: 100%;
+}
+#activity-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2vw;
+  overflow: hidden;
+}
+.lower-activity-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 12vh;
+    gap: 1vh;
+}
+.feedback-text {
+    font-size: calc(0.25rem + 1.2vw);
+    color: var(--text-accent);
+    font-weight: 500;
+    text-align: center;
+    width: 100%;
+    visibility: hidden;
+    padding: 1vh 4vw;
+    opacity: 0;
+    transition: opacity 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    background: rgba(10, 25, 47, 0.5);
+    -webkit-backdrop-filter: blur(0.1vw);
+    backdrop-filter: blur(0.1vw);
+    border-radius: 1.5vw;
+    border: 0.2vh solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.feedback-text.visible {
+    visibility: visible;
+    opacity: 1;
+}
+.feedback-text.correct {
+  color: var(--secondary-accent);
+  border-color: rgba(129, 199, 132, 0.7);
+  box-shadow: 0 0 1.5vh rgba(129, 199, 132, 0.5);
+}
+.feedback-text.incorrect {
+  color: var(--incorrect-accent);
+  border-color: rgba(229, 115, 115, 0.7);
+  box-shadow: 0 0 1.5vh rgba(229, 115, 115, 0.5);
+}
+/********************************************
+ * 5) APPLET SPECIFIC ELEMENTS
+ *********************************************/
+.image-container, .fraction-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Frosted glass effect */
+    background: rgba(10, 25, 47, 0.25);
+    -webkit-backdrop-filter: blur(0.1vw);
+    backdrop-filter: blur(0.1vw);
+    border-radius: 1.5vw;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+.image-container {
+    width: 75%;
+    flex-direction: column;
+    padding: 1.5vw;
+}
+.fraction-container {
+    width: 25%;
+    flex-direction: column;
+    gap: 1vh;
+    padding: 1vw;
+}
+.question-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 1vw;
+    box-shadow: 0 0.5vw 1vw rgba(0, 0, 0, 0.2);
+}
+.stepper-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+    width: 100%;
+}
+.stepper-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1vw;
+    width: 100%;
+}
+.stepper-button {
+    width: 4vw;
+    height: 4vw;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--primary-accent), #f57c00);
+    color: white;
+    font-size: 2vw;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 0.3vh 0px var(--primary-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.stepper-button:hover:not([disabled]) {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+.stepper-button:active {
+    transform: translateY(0);
+    box-shadow: 0 0.1vh 0px var(--primary-shadow);
+}
+.stepper-button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+.numerator-box, .denominator-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 8vw;
+    height: 7vw;
+    font-size: 4.5vw;
+    font-weight: bold;
+    color: var(--text-dark);
+    background: rgba(255, 255, 255, 0.1);
+    border: 0.15vw dashed rgba(255, 255, 255, 0.2);
+    border-radius: 0.5vw;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+.numerator-box.correct, .denominator-box.correct {
+    border: 0.15vw solid var(--secondary-accent);
+    color: var(--secondary-accent);
+    background-color: rgba(129, 199, 132, 0.2);
+    box-shadow: 0 0 2vh var(--secondary-accent);
+}
+.numerator-box.incorrect, .denominator-box.incorrect {
+    border: 0.15vw solid var(--incorrect-accent);
+    color: var(--incorrect-accent);
+    background-color: rgba(229, 115, 115, 0.2);
+    box-shadow: 0 0 2vh var(--incorrect-accent);
+    animation: shake 0.5s ease-in-out;
+}
+.fraction-line {
+  width: 80%;
+  height: 0.25vw;
+  background-color: var(--text-dark);
+  margin: 1vh 0;
+  border-radius: 1vw;
+}
+/********************************************
+ * 6) BUTTONS
+ *********************************************/
+.btn {
+  padding: 1.2vh 3vw;
+  border: none;
+  border-radius: 3vw;
+  font-size: calc(0.5rem + 1.25vw);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, var(--primary-accent), #f57c00);
+  box-shadow: 0 0.5vh 0px #bf360c;
+}
+.btn:hover:not([disabled]) {
+  transform: translateY(-3px);
+  filter: brightness(1.05);
+}
+.btn[disabled] {
+  cursor: not-allowed;
+  transform: none;
+  opacity: 0.5;
+  filter: grayscale(50%);
+}
+/********************************************
+ * 7) FTUE & ANIMATIONS
+ *********************************************/
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-8px); }
+}
+#hand-ftue {
+  position: fixed;
+  width: 5vw;
+  height: auto;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  display: none;
+  transform: translate(-30%, -20%);
+  transition: top 0.3s ease, left 0.3s ease, opacity 0.3s;
+}
+#hand-ftue img {
+  width: 100%;
+}
+.hand-animating {
+  display: block !important;
+  animation: hand-tap-animation 1.5s ease-in-out infinite;
+}
+@keyframes hand-tap-animation {
+  0%, 100% { opacity: 0; transform: translate(-30%, -20%) scale(1.1); }
+  20%, 80% { opacity: 1; transform: translate(-30%, -20%) scale(1.1); }
+  50% { transform: translate(-30%, -20%) scale(0.95); }
+}
+/********************************************
+ * 8) QUESTION VIEW LAYOUT
+ *********************************************/
+/* When this class is active, layout switches to top-down */
+.question-view-layout .main-layout {
+  flex-direction: column;
+  gap: 0.5vw;
+}
+/* Top bar containing character and context */
+.question-view-layout .left-panel-anchor {
+  width: 100%;
+  height: 20%;
+  max-width: 100%;
+  flex-direction: row-reverse;
+  align-items: center;
+  justify-content: flex-start;
+  flex-basis: 15%;
+  gap: 1.5vw;
+}
+/* Character head is now on the left of the top bar */
+.question-view-layout .character-display {
+  height: 100%;
+  width: auto;
+  flex-basis: 7%;
+  align-items: center;
+  justify-content: flex-end;
+}
+.question-view-layout #characterImageElement {
+  height: 90%;
+}
+/* Speech bubble takes the rest of the top bar */
+.question-view-layout .speech-bubble-container {
+  flex: 1;
+  max-height: 100%;
+  height: 100%;
+}
+.question-view-layout .contextBox {
+  height: 100%;
+}
+.question-view-layout .contextBox::after {
+  display: none; /* No tail needed in this layout */
+}
+/* Start button is not needed in this view */
+.question-view-layout .lowerControls {
+    display: none;
+}
+/* The right panel becomes the bottom panel, taking remaining space */
+.question-view-layout .right-panel-content {
+  width: 100%;
+  flex: 1; /* Fills remaining vertical space */
+}

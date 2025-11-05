@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Water Container Learning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+
+  <body>
+    <div class="scale-container">
+      <div class="applet-canvas">
+        <div class="applet-container">
+
+            <!-- ✅ TemanBelajar Logo -->
+      <div class="tb-logo">
+        <img src="assets/temanbelajarsingeline2.png" alt="Teman Belajar" />
+      </div>
+
+      <!-- Marquee Banner -->
+      <div class="marquee-banner">
+        <marquee>Temukan konten dan modul lengkap menggunakan PID, lewat aplikasi Teman Belajar</marquee>
+      </div>
+          <!-- Main content -->
+          <div class="assets">
+            <div class="workingArea-container">
+              <div class="workingArea">
+                <!-- Screen 1: Welcome Screen -->
+                <div class="content-screen active" id="screen1">
+                  <div class="welcome-container">
+                    <div class="character">
+                      <img
+                        id="start-character"
+                        src="assets/Deete_Neutral_Q.png"
+                        alt="Character"
+                      />
+                    </div>
+                    <div class="speech-bubble">
+                      <h2 id="welcome-title"></h2>
+                      <p id="start-dialogue-text">
+                        Let's estimate how full the container is and use our
+                        understanding of numerators and denominators to choose
+                        the correct fraction.
+                      </p>
+                    </div>
+                    <button class="btn-start" id="startButton">Start</button>
+                  </div>
+                </div>
+
+                <!-- Screen 2: Introduction to Container -->
+                <div class="content-screen" id="screen2">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="character-img"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="dialogue-box">
+                      <p id="dialogue-text">
+                        The container has
+                        <span class="icon-text icon-text-plus">+</span> and
+                        <span class="icon-text icon-text-minus">-</span>
+                        buttons below it.<br />
+                        When you click
+                        <span class="icon-text icon-text-plus">+</span>, the
+                        entire container is divided into equal parts. Give it a
+                        try!
+                      </p>
+                      <button
+                        class="dialogue-btn next-style"
+                        id="nextButton"
+                        style="display: none"
+                        >Next</button
+                      >
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <!-- Water Container -->
+                    <div class="container-wrapper">
+                      <div class="water-container">
+                        <div class="water" id="water"></div>
+                        <div
+                          class="division-markers"
+                          id="division-markers"
+                        ></div>
+                        <div
+                          class="division-numbers"
+                          id="division-numbers"
+                        ></div>
+                      </div>
+
+                      <!-- Number Selector -->
+                      <div class="stepper-container">
+                        <button
+                          class="stepper-btn subtract-btn"
+                          id="subtract-btn"
+                          >-</button
+                        >
+                        <div class="stepper-display" id="number-display">1</div>
+                        <button class="stepper-btn add-btn" id="add-btn"
+                          >+</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 3: Divide into 3 Equal Parts -->
+                <div class="content-screen" id="screen3">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="character-img3"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="dialogue-box3">
+                      <p id="dialogue-text3">
+                        Now, let's divide the container into 3 equal parts.
+                      </p>
+                      <button
+                        class="dialogue-btn next-style"
+                        id="nextButton3"
+                        style="display: none"
+                        >Next</button
+                      >
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <!-- Water Container -->
+                    <div class="container-wrapper">
+                      <div class="water-container">
+                        <div class="water" id="water3"></div>
+                        <div
+                          class="division-markers"
+                          id="division-markers3"
+                        ></div>
+                        <div
+                          class="division-numbers"
+                          id="division-numbers3"
+                        ></div>
+                      </div>
+
+                      <!-- Number Selector -->
+                      <div class="stepper-container">
+                        <button
+                          class="stepper-btn subtract-btn"
+                          id="subtract-btn3"
+                          >-</button
+                        >
+                        <div class="stepper-display" id="number-display3"
+                          >1</div
+                        >
+                        <button class="stepper-btn add-btn" id="add-btn3"
+                          >+</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 4: Fill One Part -->
+                <div class="content-screen" id="screen4">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="character-img4"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="dialogue-box4">
+                      <p id="dialogue-text4">
+                        Now, move the slider to fill one of the three equal
+                        parts, then click <strong>Check</strong>.
+                      </p>
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <div class="interactive-area">
+                      <!-- Water Container -->
+                      <div class="container-wrapper">
+                        <div class="water-container">
+                          <div class="water" id="water4"></div>
+                          <div
+                            class="division-markers"
+                            id="division-markers4"
+                          ></div>
+                          <div
+                            class="division-numbers"
+                            id="division-numbers4"
+                          ></div>
+                          <div
+                            class="red-division-line"
+                            id="red-division-line4"
+                          ></div>
+                        </div>
+
+                        <!-- Number Selector -->
+                        <div class="stepper-container">
+                          <button
+                            class="stepper-btn subtract-btn"
+                            id="subtract-btn4"
+                            disabled
+                            >-</button
+                          >
+                          <div class="stepper-display" id="number-display4"
+                            >3</div
+                          >
+                          <button
+                            class="stepper-btn add-btn"
+                            id="add-btn4"
+                            disabled
+                            >+</button
+                          >
+                        </div>
+                      </div>
+
+                      <!-- Slider and Button Wrapper -->
+                      <div class="slider-button-wrapper">
+                        <!-- Custom Vertical Slider -->
+                        <div class="custom-slider-container">
+                          <div class="slider-track" id="slider-track4">
+                            <div class="slider-thumb" id="slider-thumb4"></div>
+                          </div>
+                        </div>
+
+                        <!-- Check Button -->
+                        <button class="check-btn" id="check-btn4">Check</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 5: Choose Fraction -->
+                <div class="content-screen" id="screen5">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="character-img5"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="dialogue-box5">
+                      <p id="dialogue-text5">
+                        Well done! One out of three equal parts is filled.<br />
+                        Now, choose the fraction that shows this.
+                      </p>
+                      <div
+                        id="screen5-feedback-message"
+                        class="feedback-message"
+                      ></div>
+                      <div class="fraction-buttons">
+                        <button class="fraction-btn" id="fraction-btn1">
+                          <div class="fraction-display">
+                            <div class="numerator">1</div>
+                            <div class="fraction-line"></div>
+                            <div class="denominator">2</div>
+                          </div>
+                        </button>
+                        <button class="fraction-btn" id="fraction-btn2">
+                          <div class="fraction-display">
+                            <div class="numerator">1</div>
+                            <div class="fraction-line"></div>
+                            <div class="denominator">3</div>
+                          </div>
+                        </button>
+                        <button class="fraction-btn" id="fraction-btn3">
+                          <div class="fraction-display">
+                            <div class="numerator">3</div>
+                            <div class="fraction-line"></div>
+                            <div class="denominator">3</div>
+                          </div>
+                        </button>
+                      </div>
+                      <button
+                        class="dialogue-btn next-style"
+                        id="nextButton5"
+                        style="display: none"
+                        >Next</button
+                      >
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <!-- Water Container -->
+                    <div class="container-wrapper">
+                      <div class="water-container">
+                        <div class="water" id="water5"></div>
+                        <div class="red-water-fill" id="red-water-fill5"></div>
+                        <div class="red-water-line" id="red-water-line5"></div>
+                        <div
+                          class="division-markers"
+                          id="division-markers5"
+                        ></div>
+                        <div
+                          class="division-numbers"
+                          id="division-numbers5"
+                        ></div>
+                      </div>
+
+                      <!-- Number Selector -->
+                      <div class="stepper-container">
+                        <button
+                          class="stepper-btn subtract-btn"
+                          id="subtract-btn5"
+                          disabled
+                          >-</button
+                        >
+                        <div class="stepper-display" id="number-display5"
+                          >3</div
+                        >
+                        <button
+                          class="stepper-btn add-btn"
+                          id="add-btn5"
+                          disabled
+                          >+</button
+                        >
+                      </div>
+                    </div>
+                    <!-- External Division Numbers Container -->
+                    <div
+                      class="external-division-numbers"
+                      id="external-division-numbers5"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- Screen 6: Fraction Form -->
+                <div class="content-screen" id="screen6">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="character-img6"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="dialogue-box6">
+                      <div class="fraction-formula">
+                        <div class="fraction-display large">
+                          <div class="numerator blue">1</div>
+                          <div class="fraction-line_1"></div>
+                          <div class="denominator"><span>3</span></div>
+                        </div>
+                        <span class="equals">=</span>
+                        <div class="formula-text">
+                          <span class="blue">Parts filled</span>
+                          <span class="formula-divider"></span>
+                          <span>Parts the whole is split into</span>
+                        </div>
+                      </div>
+                      <button class="dialogue-btn next-style" id="nextButton6"
+                        >Next</button
+                      >
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <div class="interactive-area">
+                      <!-- Water Container -->
+                      <div class="container-wrapper">
+                        <div class="water-container">
+                          <div class="water" id="water6"></div>
+                          <div
+                            class="division-markers"
+                            id="division-markers6"
+                          ></div>
+                          <div
+                            class="division-numbers"
+                            id="division-numbers6"
+                          ></div>
+                        </div>
+
+                        <!-- Number Selector -->
+                        <div class="stepper-container">
+                          <button
+                            class="stepper-btn subtract-btn"
+                            id="subtract-btn6"
+                            disabled
+                            >-</button
+                          >
+                          <div class="stepper-display" id="number-display6"
+                            >3</div
+                          >
+                          <button
+                            class="stepper-btn add-btn"
+                            id="add-btn6"
+                            disabled
+                            >+</button
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 7: Introduction to Practice -->
+                <div class="content-screen" id="screen7">
+                  <div class="start-container">
+                    <div class="character-container">
+                      <img
+                        id="character-img"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+                    <div class="speech-bubble">
+                      <p id="practice-dialogue-text">
+                        Now that you know how to divide the container into equal
+                        parts and fill the correct fraction, let's try a few on
+                        your own.
+                      </p>
+                    </div>
+                    <button class="btn-start" id="practiceButton">Next</button>
+                  </div>
+                </div>
+
+                <!-- Screen 8: Question Template (will be used for all 4 questions) -->
+                <div class="content-screen" id="question-screen">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="question-character"
+                        src="assets/Deete_Neutral.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="question-dialogue-box">
+                      <p id="question-dialogue-text">
+                        Can you create the fraction
+                        <span id="target-fraction"></span>?<br />
+                        Click <span class="icon-text">+</span> to set the
+                        denominator.
+                      </p>
+                      <div id="correct-feedback" style="display: none">
+                        <p
+                          id="correct-feedback-line1"
+                          style="margin-bottom: 10px"
+                        ></p>
+                        <p id="correct-feedback-line2"></p>
+                      </div>
+                      <button
+                        class="dialogue-btn next-style"
+                        id="question-next-btn"
+                        style="display: none"
+                        >Next</button
+                      >
+                    </div>
+                    <div id="feedback-message" class="feedback-message"></div>
+                    <div
+                      id="incorrect-feedback-message"
+                      class="feedback-message"
+                    ></div>
+                  </div>
+                  <div class="right-pane">
+                    <div class="interactive-area">
+                      <!-- Water Container -->
+                      <div class="container-wrapper">
+                        <div class="water-container">
+                          <div class="water" id="question-water"></div>
+                          <div
+                            class="division-markers"
+                            id="question-division-markers"
+                          ></div>
+                          <div
+                            class="division-numbers"
+                            id="question-division-numbers"
+                          ></div>
+                          <div
+                            class="red-division-line"
+                            id="red-division-line-question"
+                          ></div>
+                          <div
+                            class="green-division-line"
+                            id="green-division-line-question"
+                          ></div>
+                        </div>
+
+                        <!-- Number Selector -->
+                        <div class="stepper-container">
+                          <button
+                            class="stepper-btn subtract-btn"
+                            id="question-subtract-btn"
+                            >-</button
+                          >
+                          <div
+                            class="stepper-display"
+                            id="question-number-display"
+                            >1</div
+                          >
+                          <button
+                            class="stepper-btn add-btn"
+                            id="question-add-btn"
+                            >+</button
+                          >
+                        </div>
+                      </div>
+
+                      <!-- Slider and Button Wrapper -->
+                      <div class="slider-button-wrapper">
+                        <!-- Custom Vertical Slider (Initially Hidden) -->
+                        <div
+                          class="custom-slider-container"
+                          id="question-slider-container"
+                          style="display: none"
+                        >
+                          <div class="slider-track" id="question-slider-track">
+                            <div
+                              class="slider-thumb"
+                              id="question-slider-thumb"
+                            ></div>
+                          </div>
+                        </div>
+
+                        <!-- Check Button -->
+                        <button
+                          class="check-btn"
+                          id="question-check-btn"
+                          style="display: none"
+                          >Check</button
+                        >
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 9: Final Summary -->
+                <div class="content-screen" id="summary-screen">
+                  <div class="left-pane">
+                    <!-- Character -->
+                    <div class="character-container">
+                      <img
+                        id="summary-character"
+                        src="assets/Deete_Happy.png"
+                        alt="Character"
+                      />
+                    </div>
+
+                    <!-- Dialogue Box (Speech Bubble) -->
+                    <div class="dialogue-box" id="summary-dialogue-box">
+                      <div class="fraction-formula">
+                        <div class="fraction-display large">
+                          <div class="numerator blue">5</div>
+                          <div class="fraction-line_1"></div>
+                          <div class="denominator"><span>5</span></div>
+                        </div>
+                        <span class="equals">=</span>
+                        <div class="formula-text">
+                          <span class="blue">Parts filled</span>
+                          <span class="formula-divider"></span>
+                          <span>Parts the whole is split into</span>
+                        </div>
+                      </div>
+                      <p class="summary-text">That makes 1 whole container</p>
+                      <button
+                        class="dialogue-btn next-style"
+                        id="summary-next-btn"
+                        >Next</button
+                      >
+                    </div>
+                  </div>
+                  <div class="right-pane">
+                    <div class="container-comparison">
+                      <!-- Filled Container -->
+                      <div class="container-wrapper small">
+                        <div class="water-container">
+                          <div
+                            class="water"
+                            id="summary-water1"
+                            style="height: 92%"
+                          ></div>
+                          <div
+                            class="division-markers"
+                            id="summary-division-markers1"
+                          ></div>
+                          <div
+                            class="division-numbers"
+                            id="summary-division-numbers1"
+                          ></div>
+                        </div>
+
+                        <!-- Number Selector -->
+                        <div class="stepper-container">
+                          <button class="stepper-btn subtract-btn" disabled
+                            >-</button
+                          >
+                          <div class="stepper-display">5</div>
+                          <button class="stepper-btn add-btn" disabled
+                            >+</button
+                          >
+                        </div>
+                      </div>
+
+                      <!-- Empty Container -->
+                      <div class="container-wrapper small">
+                        <div class="water-container">
+                          <div
+                            class="water"
+                            id="summary-water2"
+                            style="height: 92%"
+                          ></div>
+                          <div
+                            class="division-markers"
+                            id="summary-division-markers2"
+                          ></div>
+                          <div
+                            class="division-numbers"
+                            id="summary-division-numbers2"
+                          ></div>
+                        </div>
+
+                        <!-- Number Selector -->
+                        <div class="stepper-container">
+                          <button class="stepper-btn subtract-btn" disabled
+                            >-</button
+                          >
+                          <div class="stepper-display">1</div>
+                          <button class="stepper-btn add-btn" disabled
+                            >+</button
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Screen 10: End Screen -->
+                <div class="content-screen" id="end-screen">
+                  <div class="welcome-container">
+                    <div class="character">
+                      <img
+                        id="end-character"
+                        src="assets/Deete_Happy_Q.png"
+                        alt="Character"
+                      />
+                    </div>
+                    <div class="speech-bubble">
+                      <h2 id="end-title"></h2>
+                      <p id="end-dialogue-text">
+                        Great job, math detective!<br /><br />
+                        You've learned how to divide a whole into equal parts,
+                        estimate how much is filled, and represent the amount as
+                        a fraction.
+                      </p>
+                    </div>
+                    <button class="btn-start" id="endButton"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <audio
+      id="waterfilling-audio"
+      src="sfx/waterfilling.mp3"
+      preload="auto"
+      loop
+      style="display: none"
+    ></audio>
+
+    <script src="texts.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
