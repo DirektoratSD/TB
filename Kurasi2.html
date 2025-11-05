@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Kurasi Konten Profesional</title>
+    <title>Sistem Kurasi Konten Dinamis</title>
     
     <!-- Memuat Font Google 'Inter' -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,6 +22,9 @@
             --light-bg: #F9FAFB;      /* Gray 50 */
             --card-bg: #FFFFFF;
             --border-color: #E5E7EB;   /* Gray 200 */
+            --sidebar-bg: #1F2937; /* Gray 800 */
+            --sidebar-text: #D1D5DB; /* Gray 300 */
+            --sidebar-active: #4F46E5;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
@@ -31,34 +34,107 @@
             margin: 0;
             padding: 0;
             background-color: var(--light-bg);
-            color: #1F2937; /* Gray 800 */
+            color: #1F2937;
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
+        
+        /* == STRUKTUR LAYOUT BARU (SIDEBAR + KONTEN) == */
+        .page-container {
+            display: flex;
+            min-height: 100vh;
+        }
 
-        /* == Header Profesional == */
-        header {
-            background: linear-gradient(90deg, var(--primary-color) 0%, #818CF8 100%);
-            color: white;
-            padding: 2rem;
+        /* == Sidebar == */
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 1.5rem 0;
+            flex-shrink: 0; /* Mencegah sidebar menyusut */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            border-bottom: 1px solid #374151; /* Gray 700 */
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-
-        header h1 {
+        
+        .sidebar-header h1 {
             margin: 0;
-            font-size: 2.25rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            color: white;
+        }
+        
+        .sidebar-nav {
+            list-style: none;
+            margin: 0;
+            padding: 1.5rem 0;
+            flex-grow: 1;
+        }
+        
+        .sidebar-nav li {
+            margin: 0;
         }
 
-        /* == Konten Utama & Grid Kartu == */
-        main {
-            max-width: 1400px;
-            margin: 2.5rem auto;
-            padding: 0 1.5rem;
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0.9rem 1.5rem;
+            text-decoration: none;
+            color: var(--sidebar-text);
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .sidebar-nav a:hover {
+            background-color: #374151; /* Gray 700 */
+            color: white;
+        }
+        
+        .sidebar-nav a.active {
+            background-color: var(--sidebar-active);
+            color: white;
+            border-left-color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .sidebar-nav a i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* == Area Konten Utama == */
+        .content-area {
+            flex-grow: 1;
+            padding: 2.5rem;
+            overflow-y: auto; /* Jika konten panjang, bisa di-scroll */
+        }
+        
+        /* == Header (sekarang di dalam content-area) == */
+        header {
+            /* Dihapus, diganti sidebar header */
+        }
+        
+        /* Tampilan (View) yang bisa disembunyikan */
+        .view {
+            display: none; /* Sembunyi secara default */
             animation: fadeIn 0.5s ease-out;
+        }
+        
+        .view.active {
+            display: block; /* Tampil jika aktif */
+        }
+
+        /* Konten Utama & Grid Kartu */
+        main {
+            /* Dihapus, diganti .content-area */
         }
 
         h2 {
@@ -68,32 +144,105 @@
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 0.75rem;
             margin-bottom: 2rem;
+            margin-top: 0; /* Hapus margin atas */
+        }
+        
+        /* == Filter Dropdown untuk Kurator == */
+        .kurator-filter {
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .kurator-filter label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary-hover);
+        }
+        
+        #kurator-select {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            border: 1px solid #D1D5DB; /* Gray 300 */
+            border-radius: 8px;
+            background-color: white;
         }
 
-        /* Grid Responsif untuk Kartu */
+        /* Grid Responsif untuk Kartu (Hanya untuk Kurator) */
         .content-grid {
             display: grid;
-            /* Buat kolom otomatis: minimal 320px, 1fr (sisanya) */
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.75rem; /* Jarak antar kartu */
+            gap: 1.75rem;
         }
 
-        /* == Desain Kartu Konten == */
+        /* == STYLING BARU: Tabel Admin == */
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .admin-table th,
+        .admin-table td {
+            padding: 1rem 1.25rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table th {
+            background-color: var(--light-bg);
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .admin-table tbody tr:hover {
+            background-color: #F9FAFB; /* Gray 50 */
+        }
+        
+        .admin-table td:first-child {
+            font-weight: 600;
+            color: var(--primary-hover);
+        }
+        
+        .admin-table .assign-dropdown {
+            margin: -5px 0; /* Rapikan dropdown di dalam sel */
+        }
+
+
+        /* == Desain Kartu Konten (Hanya Kurator) == */
         .content-card {
             background: var(--card-bg);
-            border-radius: 12px; /* Sudut lebih bulat */
+            border-radius: 12px;
             box-shadow: var(--shadow);
             overflow: hidden;
             display: flex;
-            flex-direction: column; /* Agar footer menempel di bawah */
+            flex-direction: column;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         .content-card:hover {
-            transform: translateY(-8px) scale(1.02); /* Efek terangkat */
+            transform: translateY(-8px) scale(1.02);
             box-shadow: var(--shadow-lg);
         }
-
+        
+        /* ... (Styling .card-header, .card-body, .card-detail tetap sama) ... */
         .card-header {
             padding: 1.25rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
@@ -108,9 +257,9 @@
 
         .card-body {
             padding: 1.5rem;
-            flex-grow: 1; /* Mendorong footer ke bawah */
+            flex-grow: 1;
         }
-
+        
         .card-detail {
             display: flex;
             align-items: center;
@@ -131,9 +280,32 @@
             font-weight: 500;
             color: #374151; /* Gray 700 */
         }
+        
+        /* == FITUR BARU: Dropdown Assignment di Admin Card == */
+        .card-assignment {
+            padding: 0 1.5rem 1.25rem 1.5rem;
+        }
+        
+        .card-assignment label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 6px;
+        }
+        
+        .assign-dropdown {
+            width: 100%;
+            padding: 8px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            border: 1px solid #D1D5DB;
+            border-radius: 6px;
+            background-color: #F9FAFB;
+        }
 
         .card-footer {
-            background-color: #F9FAFB; /* Gray 50 */
+            background-color: #F9FAFB;
             padding: 1.25rem 1.5rem;
             border-top: 1px solid var(--border-color);
             text-align: right;
@@ -148,12 +320,12 @@
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 50px; /* Bentuk pil */
+            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);
         }
-
+        /* ... (Styling tombol lainnya tetap sama) ... */
         .curate-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 7px 15px rgba(99, 102, 241, 0.4);
@@ -168,6 +340,7 @@
             margin-right: 8px;
         }
 
+
         /* == Struktur Modal (Lebih Animatif) == */
         .modal {
             display: none; /* Diubah ke 'flex' oleh JS */
@@ -178,24 +351,22 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.7); /* Backdrop lebih gelap */
+            background-color: rgba(0, 0, 0, 0.7);
             animation: fadeIn 0.3s ease-out;
-            /* Menggunakan flex untuk menengahkan modal */
             justify-content: center;
-            align-items: flex-start; /* Mulai dari atas */
-            padding-top: 5vh; /* Jarak dari atas */
+            align-items: flex-start;
+            padding-top: 5vh;
         }
-
+        /* ... (Styling modal lainnya tetap sama) ... */
         .modal-content {
             background-color: #fefefe;
             padding: 30px;
             border: 1px solid #888;
             width: 90%; 
             max-width: 1300px;
-            border-radius: 15px; /* Sudut modal lebih bulat */
+            border-radius: 15px;
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
             position: relative;
-            /* Animasi meluncur dari atas */
             animation: slideDownFadeIn 0.4s ease-out forwards;
         }
 
@@ -218,7 +389,6 @@
             text-decoration: none;
         }
         
-        /* == Layout 2 Kolom Modal == */
         .modal-body {
             display: flex;
             flex-wrap: wrap; /* Responsif */
@@ -227,12 +397,12 @@
         }
 
         .modal-left {
-            flex: 2; /* Kolom kiri (embed) lebih besar */
+            flex: 2;
             min-width: 300px;
         }
 
         .modal-right {
-            flex: 1; /* Kolom kanan (form) */
+            flex: 1;
             min-width: 300px;
             background-color: var(--light-bg);
             padding: 25px;
@@ -240,7 +410,6 @@
             border: 1px solid var(--border-color);
         }
 
-        /* == Konten Modal == */
         .modal-header {
             border-bottom: 2px solid var(--border-color);
             padding-bottom: 1rem;
@@ -253,7 +422,6 @@
             color: var(--primary-hover);
         }
 
-        /* Sematan Web (Iframe) */
         .embed-container {
             position: relative;
             padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
@@ -273,7 +441,6 @@
             border: 0;
         }
 
-        /* Formulir Kurasi (Lebih Rapi) */
         #curationForm .form-group {
             margin-bottom: 1.3rem;
         }
@@ -309,7 +476,6 @@
             min-height: 130px;
         }
 
-        /* Tombol Submit Form */
         .submit-btn {
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
@@ -353,17 +519,45 @@
         
         /* == Media Query untuk Responsif == */
         @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: static;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .sidebar-header {
+                display: none; /* Sembunyikan header sidebar di HP */
+            }
+            .sidebar-nav {
+                display: flex;
+                flex-direction: row;
+            }
+            .sidebar-nav a {
+                padding: 0.8rem 1rem;
+                border-left: none;
+                border-bottom: 4px solid transparent;
+            }
+            .sidebar-nav a.active {
+                border-left: none;
+                border-bottom-color: var(--primary-color);
+            }
+            
+            .page-container {
+                flex-direction: column;
+            }
+            
+            .content-area {
+                padding: 1.5rem;
+            }
+            
             .modal-body {
-                flex-direction: column; /* Tumpuk kolom modal di HP */
+                flex-direction: column;
             }
             
             .modal-content {
-                margin: 5% auto; /* Kurangi margin atas di HP */
+                margin: 5% auto;
                 padding: 20px;
-            }
-            
-            header h1 {
-                font-size: 1.8rem;
             }
             
             h2 {
@@ -375,125 +569,87 @@
 </head>
 <body>
 
-    <header>
-        <h1><i class="fas fa-drafting-compass"></i> Dasbor Kurasi Konten</h1>
-    </header>
-
-    <main>
-        <h2><i class="fas fa-stream"></i> Alur Konten (Siap Dikurasi)</h2>
+    <div class="page-container">
         
-        <div class="content-grid">
-            
-            <!-- CONTOH KARTU 1 (DIPERBARUI) -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3>G1 Pengenalan Penjumlahan</h3>
-                </div>
-                <div class="card-body">
-                    <div class="card-detail">
-                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>1</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-layer-group"></i> Fase: <span>A</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-user-clock"></i> Kurator: <span>(Belum Dikurasi)</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button class="curate-btn" 
-                            data-title="G1 Pengenalan Penjumlahan" 
-                            data-url="https://direktoratsd.github.io/TB/G1%20Pengenalan%20Penjumlahan/">
-                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
-                    </button>
+        <!-- ====================== SIDEBAR ====================== -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1><i class="fas fa-drafting-compass"></i> Kurasi</h1>
+            </div>
+            <ul class="sidebar-nav">
+                <li>
+                    <a href="#admin" id="nav-admin" class="nav-link active">
+                        <i class="fas fa-user-shield"></i> Admin
+                    </a>
+                </li>
+                <li>
+                    <a href="#kurator" id="nav-kurator" class="nav-link">
+                        <i class="fas fa-user-edit"></i> Kurator
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- ====================== AREA KONTEN ====================== -->
+        <div class="content-area">
+
+            <!-- == TAMPILAN ADMIN == -->
+            <div id="admin-view" class="view active">
+                <h2><i class="fas fa-tasks"></i> Manajemen Penugasan Konten</h2>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Judul Konten</th>
+                                <th>Tugaskan ke Kurator</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-table-body">
+                            <!-- Baris tabel Admin akan dibuat oleh JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <!-- CONTOH KARTU 2 -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3>Siklus Air dan Cuaca</h3>
+            <!-- == TAMPILAN KURATOR == -->
+            <div id="kurator-view" class="view">
+                <h2><i class="fas fa-stream"></i> Alur Konten (Tugas Anda)</h2>
+                
+                <div class="kurator-filter">
+                    <label for="kurator-select"><i class="fas fa-user-check"></i> Pilih Nama Kurator:</label>
+                    <select id="kurator-select">
+                        <option value="">-- Pilih Nama Anda --</option>
+                        <!-- Nama kurator akan diisi oleh JavaScript -->
+                    </select>
                 </div>
-                <div class="card-body">
-                    <div class="card-detail">
-                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>4</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-layer-group"></i> Fase: <span>B</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-user-check"></i> Kurator: <span>Siti Aminah</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button class="curate-btn" 
-                            data-title="Siklus Air dan Cuaca" 
-                            data-url="https://belajar.kemdikbud.go.id/sumber-belajar/tve/play/493">
-                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
-                    </button>
-                </div>
-            </div>
-
-            <!-- CONTOH KARTU 3 -->
-            <div class="content-card">
-                <div class="card-header">
-                    <h3>Sejarah Kemerdekaan Indonesia</h3>
-                </div>
-                <div class="card-body">
-                    <div class="card-detail">
-                        <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>5</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-layer-group"></i> Fase: <span>C</span>
-                    </div>
-                    <div class="card-detail">
-                        <i class="fas fa-user-clock"></i> Kurator: <span>(Belum Dikurasi)</span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                     <button class="curate-btn" 
-                            data-title="Sejarah Kemerdekaan Indonesia" 
-                            data-url="https://id.wikipedia.org/wiki/Proklamasi_Kemerdekaan_Indonesia">
-                        <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
-                    </button>
+                
+                <div class="content-grid" id="kurator-content-grid">
+                    <!-- Konten kurator akan muncul di sini SETELAH memilih -->
+                    <p>Silakan pilih nama Anda di atas untuk melihat tugas...</p>
                 </div>
             </div>
             
-            <!-- Ulangi .content-card di atas untuk konten lainnya -->
-
         </div>
-    </main>
+    </div>
 
-    <!-- 
-    ===================================================
-    MODAL KURASI (Tersembunyi secara default)
-    ===================================================
-    -->
+
+    <!-- ===================================================
+    MODAL KURASI (Tetap sama, tidak berubah)
+    =================================================== -->
     <div id="curationModal" class="modal">
         <div class="modal-content">
-            <!-- Tombol Close Modal -->
             <span class="close-btn">&times;</span>
-
             <div class="modal-header">
                 <h3 id="modalTitle">Formulir Kurasi: [Judul Konten]</h3>
             </div>
-
             <div class="modal-body">
-                
-                <!-- KOLOM KIRI: SEMATAN WEB -->
                 <div class="modal-left">
                     <h4><i class="fas fa-link"></i> Pratinjau Konten</h4>
                     <div class="embed-container">
-                        <iframe id="contentEmbed" 
-                                src="" 
-                                title="Konten yang Dikurasi" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
+                        <iframe id="contentEmbed" src="" title="Konten yang Dikurasi" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
                         </iframe>
                     </div>
                 </div>
-
-                <!-- KOLOM KANAN: FORMULIR PERTANYAAN -->
                 <div class="modal-right">
                     <h4><i class="fas fa-clipboard-check"></i> Lembar Penilaian</h4>
                     <form id="curationForm">
@@ -508,7 +664,6 @@
                                 <option value="5">5 - Sangat Sesuai</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="q2">2. Kejelasan dan Kualitas Penyampaian Konten?</label>
                             <select id="q2" name="q2" required>
@@ -520,7 +675,6 @@
                                 <option value="5">5 - Sangat Baik</option>
                             </select>
                         </div>
-
                         <div class="form-group">
                             <label for="q3">3. Apakah Konten Bebas dari Bias/SARA?</label>
                             <select id="q3" name="q3" required>
@@ -529,87 +683,347 @@
                                 <option value="0">0 - Tidak (Perlu Tinjauan)</option>
                             </select>
                         </div>
-                        
                         <div class="form-group">
                             <label for="analysis">Analisis dan Keterangan Kurasi:</label>
                             <textarea id="analysis" name="analysis" rows="6" placeholder="Tuliskan catatan, analisis, atau perbaikan yang diperlukan..."></textarea>
                         </div>
-
                         <button type="submit" class="submit-btn"><i class="fas fa-save"></i> Simpan Hasil Kurasi</button>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
 
     <script>
-        // === Logika untuk Mengelola Modal ===
-        // (Logika JavaScript ini sebagian besar sama, hanya menargetkan elemen baru)
+        // === SIMULASI DATABASE ===
+        
+        // Daftar Kurator (Bisa ditambahkan)
+        const allCurators = [
+            "(Belum Dikurasi)",
+            "Andi Wijaya",
+            "Siti Aminah",
+            "Budi Hartono",
+            "Dewi Lestari"
+        ];
 
+        // Daftar Semua Konten (Diambil dari HTML sebelumnya)
+        const allContent = [
+            { id: 'g1-penjumlahan', title: 'G1 Pengenalan Penjumlahan', url: 'https://direktoratsd.github.io/TB/G1%20Pengenalan%20Penjumlahan', kelas: '1', fase: 'A' },
+            { id: 'g1-latihan-10', title: 'G1 Latihan Penjumlahan Hingga 10', url: 'https://direktoratsd.github.io/TB/G1%20Latihan%20Penjumlahan%20Hingga%2010', kelas: '1', fase: 'A' },
+            { id: 'g2-jembatan', title: 'G2 Jembatan Pengetahuan Pengurangan 2 Angka', url: 'https://direktoratsd.github.io/TB/G2%20Jembatan%20Pengetahuan%20Pengurangan%202%20Angka', kelas: '2', fase: 'A' },
+            { id: 'g2-bilangan-50', title: 'G2 Membuat Bilangan Hingga 50', url: 'https://direktoratsd.github.io/TB/G2%20Membuat%20Bilangan%20Hingga%2050', kelas: '2', fase: 'A' },
+            { id: 'g5-pohon-faktor', title: 'G5 Membangun Pohon Faktor untuk Bilangan', url: 'https://direktoratsd.github.io/TB/G5%20Membangun%20Pohon%20Faktor%20untuk%20Bilangan', kelas: '5', fase: 'C' },
+            { id: 'g5-kpk', title: 'G5 Mengingat Kembali KPK', url: 'https://direktoratsd.github.io/TB/G5%20Mengingat%20Kembali%20KPK', kelas: '5', fase: 'C' },
+            { id: 'g2-membandingkan', title: 'G2 Membandingkan Lebih dari Dua Bilangan', url: 'https://direktoratsd.github.io/TB/G2%20Membandingkan%20Lebih%20dari%20Dua%20Bilangan', kelas: '2', fase: 'A' },
+            { id: 'g5-tantangan-uang', title: 'G5 Tantangan Pengurangan Dengan Menggunakan Uang', url: 'https://direktoratsd.github.io/TB/G5%20Tantangan%20Pengurangan%20Dengan%20Menggunakan%20Uang', kelas: '5', fase: 'C' },
+            { id: 'g5-prima-100', title: 'G5 Mengenali Bilangan Prima Hingga 100', url: 'https.direktoratsd.github.io/TB/G5%20Mengenali%20Bilangan%20Prima%20Hingga%20100', kelas: '5', fase: 'C' },
+            { id: 'g4-latihan-pecahan', title: 'G4 Latihan Mengenali Pecahan', url: 'https://direktoratsd.github.io/TB/G4%20Latihan%20Mengenali%20Pecahan', kelas: '4', fase: 'B' },
+            { id: 'g4-nilai-tempat-cek', title: 'G4 Pakai Nilai Tempat untuk Menyatakan Jumlah Pada Cek', url: 'https://direktoratsd.github.io/TB/G4%20Pakai%20Nilai%20Tempat%20untuk%20Menyatakan%20Jumlah%20Pada%20Cek', kelas: '4', fase: 'B' },
+            { id: 'g4-pecahan-visual-air', title: 'G4 Menyatakan Pecahan Secara Visual sebagai Bagian dari Wadah yang Terisi Air', url: 'https://direktoratsd.github.io/TB/G4%20Menyatakan%20Pecahan%20Secara%20Visual%20sebagai%20Bagian%20dari%20Wadah%20yang%20Terisi%20Air', kelas: '4', fase: 'B' },
+            { id: 'g4-cari-pecahan', title: 'G4 Cari Pecahan dengan Melihat Bagian-Bagiannya', url: 'https://direktoratsd.github.io/TB/G4%20Cari%20Pecahan%20dengan%20Melihat%20Bagian-Bagiannya', kelas: '4', fase: 'B' },
+            { id: 'g4-memperkirakan-pecahan', title: 'G4 Memperkirakan Pecahan', url: 'https://direktoratsd.github.io/TB/G4%20Memperkirakan%20Pecahan', kelas: '4', fase: 'B' },
+            { id: 'g4-penjumlahan-visual', title: 'G4 Belajar Penjumlahan Bersusun Panjang dengan Visual', url: 'https://direktoratsd.github.io/TB/G4%20Belajar%20Penjumlahan%20Bersusun%20Panjang%20dengan%20Visual', kelas: '4', fase: 'B' },
+            { id: 'g4-penjumlahan-angka', title: 'G4 Belajar Penjumlahan Bersusun Panjang dengan Angka', url: 'https://direktoratsd.github.io/TB/G4%20Belajar%20Penjumlahan%20Bersusun%20Panjang%20dengan%20Angka', kelas: '4', fase: 'B' },
+            { id: 'g5-latihan-pohon-faktor', title: 'G5 Latihan Metode Pohon Faktor', url: 'https://direktoratsd.github.io/TB/G5%20Latihan%20Metode%20Pohon%20Faktor', kelas: '5', fase: 'C' },
+            { id: 'g5-faktorisasi-prima', title: 'G5 Faktorisasi Prima Bilangan', url: 'https.direktoratsd.github.io/TB/G5%20Faktorisasi%20Prima%20Bilangan', kelas: '5', fase: 'C' },
+            { id: 'g4-tantangan-penjumlahan', title: 'G4 Tantangan Penjumlahan', url: 'https://direktoratsd.github.io/TB/G4%20Tantangan%20Penjumlahan', kelas: '4', fase: 'B' },
+            { id: 'g3-konsep-meminjam', title: 'G3 Memahami Konsep Meminjam pada Pengurangan', url: 'https.direktoratsd.github.io/TB/G3%20Memahami%20Konsep%20Meminjam%20pada%20Pengurangan', kelas: '3', fase: 'B' },
+            { id: 'g4-pecahan-keseluruhan', title: 'G4 Belajar Bagaimana Pecahan Menyatakan Bagian dari Keseluruhan', url: 'https.direktoratsd.github.io/TB/G4%20Belajar%20Bagaimana%20Pecahan%20Menyatakan%20Bagian%20dari%20Keseluruhan', kelas: '4', fase: 'B' },
+            { id: 'g3-perkalian-bilangan', title: 'G3 Memahami Perkalian sebagai Penjumlahan Berulang dengan Bilangan', url: 'https.direktoratsd.github.io/TB/G3%20Memahami%20Perkalian%20sebagai%20Penjumlahan%20Berulang%20dengan%20Bilangan', kelas: '3', fase: 'B' },
+            { id: 'g3-visualisasi-nilai-tempat', title: 'G3 Menyatakan Bilangan dengan Visualisasi Nilai Tempat', url: 'https.direktoratsd.github.io/TB/G3%20Menyatakan%20Bilangan%20dengan%20Visualisasi%20Nilai%20Tempat', kelas: '3', fase: 'B' },
+            { id: 'g4-penulisan-pecahan', title: 'G4 Belajar Cara Penulisan Pecahan', url: 'https.direktoratsd.github.io/TB/G4%20Belajar%20Cara%20Penulisan%20Pecahan', kelas: '4', fase: 'B' },
+            { id: 'g4-pengurangan-visual', title: 'G4 Belajar Pengurangan Bersusun Panjang dengan Visual', url: 'https.direktoratsd.github.io/TB/G4%20Belajar%20Pengurangan%20Bersusun%20Panjang%20dengan%20Visual', kelas: '4', fase: 'B' },
+            { id: 'g3-konsep-menyimpan', title: 'G3 Memahami Konsep Menyimpan pada Penjumlahan', url: 'https.direktoratsd.github.io/TB/G3%20Memahami%20Konsep%20Menyimpan%20pada%20Penjumlahan', kelas: '3', fase: 'B' },
+            { id: 'g3-perkalian-objek', title: 'G3 Memahami Perkalian sebagai Penjumlahan Berulang dengan Objek', url: 'https.direktoratsd.github.io/TB/G3%20Memahami%20Perkalian%20sebagai%20Penjumlahan%20Berulang%20dengan%20Objek', kelas: '3', fase: 'B' },
+            { id: 'g4-bandingkan-pecahan', title: 'G4 Bandingkan Pecahan', url: 'https.direktoratsd.github.io/TB/G4%20Bandingkan%20Pecahan', kelas: '4', fase: 'B' },
+            { id: 'g2-bilangan-10', title: 'G2 Membuat Bilangan Lebih dari 10', url: 'https.direktoratsd.github.io/TB/G2%20Membuat%20Bilangan%20Lebih%20dari%2010', kelas: '2', fase: 'A' }
+        ].sort((a, b) => a.title.localeCompare(b.title)); // <-- DATA DIURUTKAN DI SINI
+
+        // Objek untuk menyimpan data penugasan (Simulasi Database)
+        // (contentId: curatorName)
+        let contentAssignments = {};
+
+        // === LOGIKA APLIKASI ===
+        
+        document.addEventListener("DOMContentLoaded", () => {
+            // Inisialisasi aplikasi
+            initializeAssignments();
+            populateCuratorDropdowns();
+            
+            // Render tampilan default (Admin)
+            renderAdminView();
+            
+            // Setup listener navigasi
+            setupNavigation();
+            
+            // Setup listener modal (global)
+            setupModalGlobalListeners();
+            
+            // Setup listener filter kurator
+            document.getElementById('kurator-select').addEventListener('change', (e) => {
+                renderKuratorView(e.target.value);
+            });
+        });
+
+        // 1. Inisialisasi: Tugaskan semua ke "(Belum Dikurasi)"
+        function initializeAssignments() {
+            allContent.forEach(content => {
+                contentAssignments[content.id] = "(Belum Dikurasi)";
+            });
+            
+            // Contoh: Tugaskan beberapa secara default untuk demo
+            contentAssignments['g1-penjumlahan'] = "Andi Wijaya";
+            contentAssignments['g5-kpk'] = "Andi Wijaya";
+            contentAssignments['g2-jembatan'] = "Siti Aminah";
+        }
+
+        // 2. Isi dropdown filter kurator
+        function populateCuratorDropdowns() {
+            const select = document.getElementById('kurator-select');
+            select.innerHTML = '<option value="">-- Pilih Nama Anda --</option>'; // Reset
+            
+            allCurators.forEach(curator => {
+                if (curator !== "(Belum Dikurasi)") { // Jangan tampilkan ini di filter
+                    const option = document.createElement('option');
+                    option.value = curator;
+                    option.textContent = curator;
+                    select.appendChild(option);
+                }
+            });
+        }
+        
+        // 3. Setup Navigasi Sidebar
+        function setupNavigation() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const views = document.querySelectorAll('.view');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    
+                    // Hapus aktif dari semua link
+                    navLinks.forEach(l => l.classList.remove('active'));
+                    // Tambah aktif ke link yg diklik
+                    link.classList.add('active');
+                    
+                    const targetViewId = link.id.replace('nav-', '') + '-view';
+                    
+                    // Sembunyikan semua view
+                    views.forEach(v => v.classList.remove('active'));
+                    // Tampilkan view target
+                    document.getElementById(targetViewId).classList.add('active');
+                    
+                    // Render ulang view jika diperlukan
+                    if (targetViewId === 'admin-view') {
+                        renderAdminView();
+                    } else if (targetViewId === 'kurator-view') {
+                        // Reset dan render
+                        document.getElementById('kurator-select').value = "";
+                        renderKuratorView(""); // Panggil dengan string kosong
+                    }
+                });
+            });
+        }
+
+        // 4. Render Tampilan Admin (Semua Konten + Dropdown Tugaskan)
+        function renderAdminView() {
+            const tableBody = document.getElementById('admin-table-body');
+            tableBody.innerHTML = ""; // Kosongkan tabel
+            
+            allContent.forEach(content => {
+                const currentCurator = contentAssignments[content.id];
+                const rowHTML = createAdminTableRowHTML(content, currentCurator);
+                tableBody.innerHTML += rowHTML;
+            });
+            
+            // Setelah HTML dibuat, pasang listener
+            attachAdminListeners();
+            attachModalListeners('#admin-table-body'); // Pasang listener modal ke tabel
+        }
+        
+        // 5. Render Tampilan Kurator (Konten Terfilter)
+        function renderKuratorView(selectedCurator) {
+            const grid = document.getElementById('kurator-content-grid');
+            grid.innerHTML = ""; // Kosongkan grid
+            
+            // JIKA TIDAK ADA KURATOR TERPILIH (Default state)
+            if (!selectedCurator) {
+                grid.innerHTML = `<p>Silakan pilih nama Anda di atas untuk melihat tugas...</p>`;
+                return; // Berhenti di sini
+            }
+            
+            // Filter HANYA jika kurator dipilih
+            let filteredContent = allContent.filter(content => {
+                return contentAssignments[content.id] === selectedCurator;
+            });
+
+            if (filteredContent.length === 0) {
+                grid.innerHTML = `<p>Tidak ada tugas yang ditugaskan untuk ${selectedCurator}.</p>`;
+                return;
+            }
+            
+            // Render kartu untuk konten yang difilter
+            filteredContent.forEach(content => {
+                const cardHTML = createKuratorCardHTML(content);
+                grid.innerHTML += cardHTML;
+            });
+            
+            attachModalListeners('#kurator-content-grid'); // Pasang listener modal ke grid
+        }
+        
+        // 6. Buat HTML untuk Baris Tabel Admin
+        function createAdminTableRowHTML(content, currentCurator) {
+            // Buat opsi dropdown
+            let optionsHTML = allCurators.map(curator => 
+                `<option value="${curator}" ${curator === currentCurator ? 'selected' : ''}>
+                    ${curator}
+                </option>`
+            ).join('');
+
+            return `
+                <tr class="admin-row-container" data-content-id="${content.id}">
+                    <td>
+                        <strong>${content.title}</strong>
+                        <div style="font-size: 0.85rem; color: #6B7280;">
+                            (Kelas: ${content.kelas} | Fase: ${content.fase})
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Dropdown Penugasan -->
+                        <div class="card-assignment" style="padding: 0;">
+                            <select id="assign-${content.id}" class="assign-dropdown" data-content-id="${content.id}" style="width: 250px;">
+                                ${optionsHTML}
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // 7. Buat HTML untuk Kartu Kurator (lebih simpel)
+        function createKuratorCardHTML(content) {
+            const assignedCurator = contentAssignments[content.id] || "(N/A)";
+            
+            return `
+                <div class="content-card kurator-card-container" data-content-id="${content.id}">
+                    <div class="card-header">
+                        <h3>${content.title}</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-detail">
+                            <i class="fas fa-chalkboard-teacher"></i> Kelas: <span>${content.kelas}</span>
+                        </div>
+                        <div class="card-detail">
+                            <i class="fas fa-layer-group"></i> Fase: <span>${content.fase}</span>
+                        </div>
+                        <div class="card-detail">
+                            <i class="fas fa-user-check"></i> Kurator: <span>${assignedCurator}</span>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="curate-btn" 
+                                data-title="${content.title}" 
+                                data-url="${content.url}">
+                            <i class="fas fa-pen-ruler"></i> Kurasi Sekarang
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // 8. Pasang Listener untuk Dropdown Assignment (Hanya di Admin)
+        function attachAdminListeners() {
+            const adminTableBody = document.getElementById('admin-table-body');
+            adminTableBody.addEventListener('change', (e) => {
+                if (e.target.classList.contains('assign-dropdown')) {
+                    const contentId = e.target.dataset.contentId;
+                    const newCurator = e.target.value;
+                    
+                    // Update "database" simulasi
+                    contentAssignments[contentId] = newCurator;
+                    
+                    console.log(`Konten ${contentId} ditugaskan ke ${newCurator}`);
+                    // Di aplikasi nyata, ini akan menyimpan ke database
+                }
+            });
+        }
+        
+
+        // === LOGIKA MODAL (Sebagian besar tidak berubah) ===
+        
         const modal = document.getElementById("curationModal");
-        const closeBtn = document.querySelector(".close-btn");
-        const allCurateButtons = document.querySelectorAll(".curate-btn");
         const modalTitle = document.getElementById("modalTitle");
         const contentEmbed = document.getElementById("contentEmbed");
         const curationForm = document.getElementById("curationForm");
 
-        // 2. Fungsi untuk membuka modal
-        allCurateButtons.forEach(button => {
-            button.addEventListener("click", function() {
-                const title = this.getAttribute("data-title");
-                const url = this.getAttribute("data-url");
+        // 9. Pasang Listener Tombol "Kurasi Sekarang"
+        //    Fungsi ini dipanggil setiap kali kartu/tabel di-render ulang
+        function attachModalListeners(containerSelector) {
+            const container = document.querySelector(containerSelector);
+            if (!container) return;
 
-                modalTitle.textContent = `Formulir Kurasi: ${title}`;
-                contentEmbed.src = url;
-
-                modal.style.display = "flex"; // Gunakan flex untuk menampilkan
+            const allCurateButtons = container.querySelectorAll(".curate-btn");
+            
+            allCurateButtons.forEach(button => {
+                // Hapus listener lama jika ada (untuk mencegah duplikat)
+                button.replaceWith(button.cloneNode(true));
             });
-        });
-
-        // 3. Fungsi untuk menutup modal (klik tombol 'x')
-        closeBtn.onclick = function() {
-            closeModal();
+            
+            // Pasang listener baru ke tombol yg di-clone
+            // (CATATAN: Di Admin View, tombolnya tidak ada, jadi ini hanya akan
+            //  berfungsi di Kurator View, yang memang kita inginkan)
+            container.querySelectorAll(".curate-btn").forEach(button => {
+                button.addEventListener("click", function() {
+                    const title = this.getAttribute("data-title");
+                    const url = this.getAttribute("data-url");
+                    
+                    modalTitle.textContent = `Formulir Kurasi: ${title}`;
+                    contentEmbed.src = url;
+                    modal.style.display = "flex";
+                });
+            });
         }
 
-        // 4. Fungsi untuk menutup modal (klik di luar area modal)
-        window.onclick = function(event) {
-            if (event.target == modal) {
+        // 10. Listener Global untuk Modal (Close, Submit)
+        function setupModalGlobalListeners() {
+            const closeBtn = document.querySelector(".close-btn");
+
+            closeBtn.onclick = function() {
                 closeModal();
             }
+
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    closeModal();
+                }
+            }
+            
+            curationForm.addEventListener("submit", function(event) {
+                event.preventDefault(); 
+                const formData = new FormData(curationForm);
+                const data = Object.fromEntries(formData.entries());
+                
+                console.log("Data Kurasi Siap Dikirim:", data);
+                
+                // Di sini kita bisa update status 'Kurator' di card
+                // Tapi untuk sekarang, kita tutup saja
+                
+                closeModal();
+            });
         }
         
-        // 5. Fungsi saat formulir di-submit
-        curationForm.addEventListener("submit", function(event) {
-            event.preventDefault(); 
-            
-            const formData = new FormData(curationForm);
-            const data = Object.fromEntries(formData.entries());
-            
-            console.log("Data Kurasi Siap Dikirim:", data);
-            
-            // Di sini Anda bisa menambahkan notifikasi modal kustom (bukan alert)
-            // Untuk saat ini, kita tutup saja modalnya.
-            
-            closeModal();
-        });
-        
-        // 6. Fungsi utama untuk menutup modal (membersihkan iframe)
+        // 11. Fungsi utama untuk menutup modal
         function closeModal() {
-            // Tambahkan animasi fade-out sebelum menutup
             modal.style.animation = "fadeOut 0.3s ease-out forwards";
-            
-            // Tunggu animasi selesai sebelum benar-benar menyembunyikan
-            // dan membersihkan konten
             setTimeout(() => {
                 modal.style.display = "none";
-                modal.style.animation = "fadeIn 0.3s ease-out"; // Reset animasi
-                contentEmbed.src = ""; // Hentikan video/konten
+                modal.style.animation = "fadeIn 0.3s ease-out";
+                contentEmbed.src = "";
                 curationForm.reset();
-            }, 300); // 300ms = durasi animasi fadeOut
+            }, 300);
         }
         
-        // Tambahkan keyframe untuk fadeOut di CSS (opsional tapi bagus)
+        // 12. Tambahkan keyframe untuk fadeOut di CSS
         const styleSheet = document.styleSheets[0];
         styleSheet.insertRule(`
             @keyframes fadeOut {
@@ -622,4 +1036,6 @@
 
 </body>
 </html>
+
+
 
